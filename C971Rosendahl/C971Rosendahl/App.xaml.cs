@@ -1,4 +1,5 @@
-﻿using System;
+﻿using C971Rosendahl.Views;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +11,9 @@ namespace C971Rosendahl
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            var degreePlan = new DegreePlan();
+            var navPage = new NavigationPage(degreePlan);
+            MainPage = navPage;
         }
 
         protected override void OnStart()

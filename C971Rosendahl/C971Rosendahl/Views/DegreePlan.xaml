@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="C971Rosendahl.Views.DegreePlan"
+             Title="Degree Plan">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Frame Margin="0,10">
+                    <Label Text="Student info"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="CenterAndExpand"/>
+                </Frame>
+                <StackLayout x:Name="termList">
+                        <StackLayout x:Name="term1">
+                            <Frame Margin="0,15">
+                            <Grid x:Name="term1Box">
+                                <Label Text="Term maybe?"
+                                           FontSize="Medium"
+                                           VerticalOptions="Start"
+                                           HorizontalOptions="Start"/>
+                                    <Label Grid.Row="1"
+                                           Text="Dates maybe?"
+                                           FontSize="Medium"
+                                           VerticalOptions="End"
+                                           HorizontalOptions="Start"/>
+                                    <Label x:Name="term1Edit"
+                                           Grid.Row="1"
+                                           Grid.Column="1"
+                                           Text="Edit maybe?"
+                                           FontSize="Medium"
+                                           VerticalOptions="End"
+                                           HorizontalOptions="End">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="TermEdit_Clicked"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                            </Frame>
+                            <StackLayout>
+                                <Frame Margin="25,3">
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="CourseView_Clicked"/>
+                                    </Grid.GestureRecognizers>
+                                        <Label Text="Course maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Row="1"
+                                               Text="Dates maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Column="1"
+                                               Text="Status maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="End"/>
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="Edit maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="End">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="CourseEdit_Clicked"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    </Grid>
+                                </Frame>
+                                <Frame Margin="25,3">
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="CourseView_Clicked"/>
+                                    </Grid.GestureRecognizers>
+                                    <Label Text="Course maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Row="1"
+                                               Text="Dates maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Column="1"
+                                               Text="Status maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="End"/>
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="Edit maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="End">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="CourseEdit_Clicked"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    </Grid>
+                                </Frame>
+                                <Frame Margin="25,3">
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="CourseView_Clicked"/>
+                                    </Grid.GestureRecognizers>
+                                    <Label Text="Course maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Row="1"
+                                               Text="Dates maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Column="1"
+                                               Text="Status maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="End"/>
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="Edit maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="End">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="CourseEdit_Clicked"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    </Grid>
+                                </Frame>
+                                <Frame Margin="25,3">
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="CourseView_Clicked"/>
+                                    </Grid.GestureRecognizers>
+                                    <Label Text="Course maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Row="1"
+                                               Text="Dates maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Column="1"
+                                               Text="Status maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="End"/>
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="Edit maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="End">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="CourseEdit_Clicked"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    </Grid>
+                                </Frame>
+                                <Frame Margin="25,3">
+                                <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="CourseView_Clicked"/>
+                                    </Grid.GestureRecognizers>
+                                    <Label Text="Course maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Row="1"
+                                               Text="Dates maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Column="1"
+                                               Text="Status maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="End"/>
+                                        <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="Edit maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="End">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="CourseEdit_Clicked"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    </Grid>
+                                </Frame>
+                                <Frame Margin="25,3">
+                                    <Grid>
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="CourseView_Clicked"/>
+                                    </Grid.GestureRecognizers>
+                                        <Label Text="Course maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Row="1"
+                                               Text="Dates maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="Start"/>
+                                        <Label Grid.Column="1"
+                                               Text="Status maybe?"
+                                               VerticalOptions="Start"
+                                               HorizontalOptions="End"/>
+                                    <Label Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="Edit maybe?"
+                                               VerticalOptions="End"
+                                               HorizontalOptions="End">
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="CourseEdit_Clicked"/>
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                </Grid>
+                                </Frame>
+                            </StackLayout>
+                        </StackLayout>
+                    <Frame Margin="0,10">
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="NewTerm_Clicked"/>
+                        </Frame.GestureRecognizers>
+                        <Label Text="Add new term"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="C971Rosendahl.Views.Course"
+             Title="Course Name">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit Course" Clicked="CourseEdit_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Frame Margin="0,10">
+                    <Label Text="Student info"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="CenterAndExpand"/>
+                </Frame>
+                <Frame Margin="0,10">
+                    <Label Text="Course Name"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="CenterAndExpand"/>
+                </Frame>
+                <Frame Margin="0,10">
+                    <Grid>
+                        <Label Text="Start/end date"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="Start"/>
+                        <Label Grid.Column="1"
+                               Text="Notifications"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="End">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="CourseDateNotifications_Clicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                </Frame>
+                <Frame Margin="0,10">
+                    <Label Text="Course info"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="CenterAndExpand"/>
+                </Frame>
+                <Frame Margin="0,10">
+                    <Label Text="Instructor info"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="CenterAndExpand"/>
+                </Frame>
+                <Frame Margin="0,10">
+                    <Grid>
+                    <Label Text="Notes"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="CenterAndExpand"/>
+                    </Grid>
+                </Frame>
+                <Frame Margin="0,10">
+                    <Grid>
+                        <Label Text="Objective Assessment 1"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="Start"/>
+                        <Label Grid.Column="1"
+                               Text="Notifications"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="End">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OANotifications_Clicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Grid.Row="1"
+                               Text="Dates"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="Start"/>
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
+                               Text="Edit"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="End">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="EditOA_Clicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                </Frame>
+                <Frame Margin="0,10">
+                    <Grid>
+                        <Label Text="Objective Assessment 1"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="Start"/>
+                        <Label Grid.Column="1"
+                               Text="Notifications"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="End">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PANotifications_Clicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Grid.Row="1"
+                               Text="Dates"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="Start"/>
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
+                               Text="Edit"
+                               FontSize="Medium"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="End">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="EditPA_Clicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
