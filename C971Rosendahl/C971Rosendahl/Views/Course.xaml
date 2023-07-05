@@ -92,7 +92,7 @@
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>
-                        <Label Text="Objective Assessment 1"
+                        <Label Text="Performance Assessment 1"
                                FontSize="Medium"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"/>
