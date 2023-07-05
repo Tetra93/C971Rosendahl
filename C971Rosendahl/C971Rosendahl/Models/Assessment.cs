@@ -10,9 +10,9 @@ namespace C971Rosendahl.Models
     public class Assessment
     {
         [PrimaryKey, AutoIncrement]
-        public int ID { get; set; }
+        public int AssessmentId { get; set; }
 
-        public int CourseID { get; set; }
+        public int CourseId { get; set; }
 
         public string Name { get; set; }
 

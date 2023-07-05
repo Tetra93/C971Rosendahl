@@ -8,9 +8,7 @@ namespace C971Rosendahl.Models
     public class Instructor
     {
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-
-        public int CourseID { get; set; }
+        public int InstructorId { get; set; }
 
         public string Name { set; get; }
 

@@ -10,7 +10,9 @@ namespace C971Rosendahl.Models
         [PrimaryKey, AutoIncrement]
         public int CourseId { get; set; }
 
-        public int TermID { get; set; }
+        public int TermId { get; set; }
+
+        public int InstructorId { get; set; }
 
         public string Name { set; get; }
 
@@ -21,10 +23,6 @@ namespace C971Rosendahl.Models
         public bool DateNotifications { set; get; }
         
         public string Description { set; get; }
-
-        public string Notes { set; get; }
-
-
 
     }
 }

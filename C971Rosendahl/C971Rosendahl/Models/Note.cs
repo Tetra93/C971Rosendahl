@@ -5,10 +5,10 @@ using SQLite;
 
 namespace C971Rosendahl.Models
 {
-    public class Notes
+    public class Note
     {
         [PrimaryKey, AutoIncrement]
-        public int ID { get; set; }
+        public int NoteId { get; set; }
 
         public int CourseID { get; set; }
 
