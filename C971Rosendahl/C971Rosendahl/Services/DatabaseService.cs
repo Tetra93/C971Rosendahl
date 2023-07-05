@@ -307,6 +307,37 @@ namespace C971Rosendahl.Services
 
         #endregion
 
+        #region Load Sample Data
+
+        public static async void LoadSampleData()
+        {
+            await Init();
+
+            Term term1 = new Term
+            {
+                Name = "Term 1",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now
+
+            };
+
+            await _db.InsertAsync(term1);
+        }
+
+        public static async Task ClearSampleData()
+        {
+            await Init();
+
+            await _db.DropTableAsync<Term>();
+            await _db.DropTableAsync<Course>();
+            await _db.DropTableAsync<Assessment>();
+            await _db.DropTableAsync<Instructor>();
+            await _db.DropTableAsync<Note>();
+
+            _db = null;
+        }
+        #endregion
+
         static async Task Init()
         {
             if (_db != null)

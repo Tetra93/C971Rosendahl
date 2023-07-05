@@ -1,4 +1,5 @@
-﻿using C971Rosendahl.Views;
+﻿using C971Rosendahl.Services;
+using C971Rosendahl.Views;
 using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,6 +11,8 @@ namespace C971Rosendahl
         public App()
         {
             InitializeComponent();
+
+            DatabaseService.LoadSampleData();
 
             var degreePlan = new DegreePlan();
             var navPage = new NavigationPage(degreePlan);

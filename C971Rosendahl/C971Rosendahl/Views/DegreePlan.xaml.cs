@@ -1,4 +1,6 @@
-﻿using System;
+﻿using C971Rosendahl.Models;
+using C971Rosendahl.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,7 @@ namespace C971Rosendahl.Views
         public DegreePlan()
         {
             InitializeComponent();
+
         }
 
         private async void TermEdit_Clicked(object sender, EventArgs e)
