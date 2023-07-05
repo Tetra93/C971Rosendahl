@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace C971Rosendahl.Models
 {
-    internal class Term
+    public class Term
     {
-        public static string Name { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int Id { get; set; }
 
-        public static DateTime StartDate { get; set; }
+        public string Name { get; set; }
 
-        public static DateTime EndDate { get; set;}
+        public DateTime StartDate { get; set; }
 
-
+        public DateTime EndDate { get; set;}
     }
 }

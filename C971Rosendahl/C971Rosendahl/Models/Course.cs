@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace C971Rosendahl.Models
 {
-    internal class Course
+    public class Course
     {
-        public static string Name { set; get; }
+        [PrimaryKey, AutoIncrement]
+        public int CourseId { get; set; }
 
-        public static DateTime StartDate { set; get; }
+        public int TermID { get; set; }
 
-        public static DateTime EndDate { set; get; }
+        public string Name { set; get; }
 
-        public static bool DateNotifications { set; get; }
+        public DateTime StartDate { set; get; }
+
+        public DateTime EndDate { set; get; }
+
+        public bool DateNotifications { set; get; }
         
-        public static string Description { set; get; }
+        public string Description { set; get; }
 
-        public static string Notes { set; get; }
+        public string Notes { set; get; }
 
 
 

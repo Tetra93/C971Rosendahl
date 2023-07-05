@@ -3,25 +3,31 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
+using SQLite;
 
 namespace C971Rosendahl.Models
 {
-    internal class Assessment
+    public class Assessment
     {
-        public static string Name { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int ID { get; set; }
 
-        public static string Description { get; set; }
+        public int CourseID { get; set; }
 
-        public static DateTime StartDate { get; set; }
+        public string Name { get; set; }
 
-        public static DateTime EndDate { get; set;}
+        public string Type { get; set; }
 
-        public static bool Notifications { get; set; }
+        public string Description { get; set; }
 
-        public static string SubmissionStatus { get; set; }
+        public DateTime StartDate { get; set; }
 
-        public static string CompletionStatus { get; set; }
+        public DateTime EndDate { get; set;}
 
+        public bool Notifications { get; set; }
 
+        public string SubmissionStatus { get; set; }
+
+        public string CompletionStatus { get; set; }
     }
 }

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using SQLite;
 
 namespace C971Rosendahl.Models
 {
-    internal class Notes
+    public class Notes
     {
-        public static string Name { get; set; }
+        [PrimaryKey, AutoIncrement]
+        public int ID { get; set; }
 
-        public static string Contents { get; set; }
+        public int CourseID { get; set; }
 
-        
+        public string Name { get; set; }
+
+        public string Contents { get; set; }        
     }
 }
