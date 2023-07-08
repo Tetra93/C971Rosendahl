@@ -15,11 +15,12 @@ namespace C971Rosendahl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DegreePlan : ContentPage
     {
+        public static int objectCount;
 
         public DegreePlan()
         {
             InitializeComponent();
-
+            objectCount = termList.Children.Count;
         }
 
         private void Term_Clicked(object sender, EventArgs e)
@@ -112,7 +113,7 @@ namespace C971Rosendahl.Views
 
         private async void NewTerm_Clicked(object sender, EventArgs e)
         {
-            StackLayout stackLayout = new StackLayout();
+            StackLayout stackLayout = new StackLayout();            
             Frame frame = new Frame
             {
                 Margin = new Thickness(0, 10)
@@ -126,7 +127,7 @@ namespace C971Rosendahl.Views
             grid.ColumnDefinitions.Add(column1);
             Label termName = new Label()
             {
-                Text = "Term " + (termList.Children.Count + 1).ToString(),
+                Text = "New Term",
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -175,7 +176,7 @@ namespace C971Rosendahl.Views
             TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
             tapGestureRecognizer.Tapped += TermEdit_Clicked;
             termEditButton.GestureRecognizers.Add(tapGestureRecognizer);
-            Grid.SetRow(termEditButton, 1);
+            Grid.SetRow(termEditButton, 0);
             Grid.SetColumn(termEditButton, 1);
             grid.Children.Add(termEditButton);
             Entry entry = new Entry()
@@ -222,7 +223,7 @@ namespace C971Rosendahl.Views
             TapGestureRecognizer tapGestureRecognizer1 = new TapGestureRecognizer();
             tapGestureRecognizer1.Tapped += TermSave_Clicked;
             saveButton.GestureRecognizers.Add(tapGestureRecognizer1);
-            Grid.SetRow(saveButton , 1);
+            Grid.SetRow(saveButton , 0);
             Grid.SetColumn (saveButton , 1);
             grid.Children.Add (saveButton);
             Label cancelButton = new Label()
@@ -236,9 +237,23 @@ namespace C971Rosendahl.Views
             TapGestureRecognizer tapGestureRecognizer2 = new TapGestureRecognizer();
             tapGestureRecognizer2.Tapped += TermCancel_Clicked;
             cancelButton.GestureRecognizers.Add(tapGestureRecognizer2);
-            Grid.SetRow(cancelButton , 2);
+            Grid.SetRow(cancelButton , 1);
             Grid.SetColumn (cancelButton , 1);
             grid.Children.Add(cancelButton);
+            Label deleteButton = new Label()
+            {
+                Text = "Delete",
+                FontSize = 18,
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.End,
+                IsVisible = false
+            };
+            TapGestureRecognizer tapGestureRecognizer3 = new TapGestureRecognizer();
+            tapGestureRecognizer3.Tapped += DeleteTerm_Clicked;
+            deleteButton.GestureRecognizers.Add (tapGestureRecognizer3);
+            Grid.SetRow (deleteButton , 2);
+            Grid.SetColumn(deleteButton , 1);
+            grid.Children.Add(deleteButton);
             frame.Content = grid;
             stackLayout.Children.Add(frame);
             termList.Children.Add(stackLayout);
@@ -306,6 +321,15 @@ namespace C971Rosendahl.Views
                     child.IsVisible = true;
                 }
             }
+        }
+
+        private void DeleteTerm_Clicked(object sender, EventArgs e)
+        {
+            Label delete = (Label)sender;
+            Grid container = (Grid)delete.Parent;
+            Frame frame = (Frame)container.Parent;
+            StackLayout stackLayout = (StackLayout)frame.Parent;
+            stackLayout.Children.Remove(frame);
         }
     }
 
