@@ -16,32 +16,76 @@
                     <StackLayout x:Name="term1">
                         <Frame Margin="0,15">
                             <Grid x:Name="term1Box">
-                                <Label x:Name="term1Name"
+                                <Label x:Name="term1NameLabel"
                                            Text="Term maybe?"
                                            FontSize="Medium"
                                            VerticalOptions="Start"
                                            HorizontalOptions="Start"/>
+                                <Entry x:Name="term1NameEntry"
+                                       Text="Change text here"
+                                       FontSize="Medium"
+                                       VerticalOptions="Start"
+                                       HorizontalOptions="Start"
+                                       IsVisible="False"/>
                                 <Label x:Name="term1StartDate"
                                            Grid.Row="1"
                                            Text="Dates maybe?"
                                            FontSize="Medium"
                                            VerticalOptions="End"
                                            HorizontalOptions="Start"/>
+                                <DatePicker x:Name="term1StartDateChange"
+                                                Grid.Row="1"
+                                                Date="07/07/2023"
+                                                FontSize="Medium"
+                                                VerticalOptions="End"
+                                                HorizontalOptions="Start"
+                                                IsVisible="False"/>
                                 <Label x:Name="term1EndDate"
                                            Grid.Row="2"
                                            Text="Dates maybe?"
                                            FontSize="Medium"
                                            VerticalOptions="End"
                                            HorizontalOptions="Start"/>
+                                <DatePicker x:Name="term1EndDateChange"
+                                                Grid.Row="2"
+                                                Date="07/19/2023"
+                                                FontSize="Medium"
+                                                VerticalOptions="End"
+                                                HorizontalOptions="Start"
+                                                IsVisible="False"/>
                                 <Label x:Name="term1Edit"
                                            Grid.Row="1"
                                            Grid.Column="1"
-                                           Text="Edit maybe?"
+                                           Text="Edit"
                                            FontSize="Medium"
                                            VerticalOptions="End"
                                            HorizontalOptions="End">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="TermEdit_Clicked"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label x:Name="term1Save"
+                                           Grid.Row="1"
+                                           Grid.Column="1"
+                                           Text="Save"
+                                           FontSize="Medium"
+                                           VerticalOptions="End"
+                                           HorizontalOptions="End"
+                                           IsVisible="False">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TermSave_Clicked"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label x:Name="term1Cancel"
+                                           Grid.Row="2"
+                                           Grid.Column="1"
+                                           Text="Cancel"
+                                           FontSize="Medium"
+                                           VerticalOptions="End"
+                                           HorizontalOptions="End"
+                                           IsVisible="False">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TermCancel_Clicked"/>
                                     </Label.GestureRecognizers>
                                 </Label>
                             </Grid>
