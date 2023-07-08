@@ -16,6 +16,10 @@
                     <StackLayout x:Name="term1">
                         <Frame Margin="0,15">
                             <Grid x:Name="term1Box">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
                                 <Label x:Name="term1NameLabel"
                                            Text="Term maybe?"
                                            FontSize="Medium"
@@ -27,13 +31,19 @@
                                        VerticalOptions="Start"
                                        HorizontalOptions="Start"
                                        IsVisible="False"/>
+                                <Grid Grid.Row="1" HorizontalOptions="Start">
+                                    <Label Text="Start Date: "
+                                       FontSize="Medium"
+                                       VerticalOptions="End"
+                                       HorizontalOptions="Start"/>
                                 <Label x:Name="term1StartDate"
-                                           Grid.Row="1"
-                                           Text="Dates maybe?"
+                                           Grid.Column="1"
+                                           Text="07/07/2023"
                                            FontSize="Medium"
                                            VerticalOptions="End"
                                            HorizontalOptions="Start"/>
-                                <DatePicker x:Name="term1StartDateChange"
+                            </Grid>
+                            <DatePicker x:Name="term1StartDateChange"
                                                 Grid.Row="1"
                                                 Date="07/07/2023"
                                                 FontSize="Medium"
@@ -42,7 +52,7 @@
                                                 IsVisible="False"/>
                                 <Label x:Name="term1EndDate"
                                            Grid.Row="2"
-                                           Text="Dates maybe?"
+                                           Text="12/07/2023"
                                            FontSize="Medium"
                                            VerticalOptions="End"
                                            HorizontalOptions="Start"/>

@@ -2,6 +2,7 @@
 using C971Rosendahl.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,18 +63,23 @@ namespace C971Rosendahl.Views
                         column2 = Grid.GetColumn(child2);                   
                     if (row1 == row2 && column1 == column2)
                     {
-                        if (child is Label Child && child2 is Entry Child2)
+                        if (child is Label Child)
                         {
                             string childText = Child.Text;
-                            Child2.Text = childText;
-                            break;
+
+                            if (child2 is Entry entry)
+                            {
+                                entry.Text = childText;
+                                break;
+                            }
+                            else if (child2 is DatePicker datePicker)
+                            {
+                                datePicker.Date = DateTime.ParseExact(childText, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                                break;
+
+                            }
                         }
                     }
-                    //else if (row1 == row2 && column1 == column2 && (child2 is DatePicker))
-                    //{
-                    //    DatePicker Child2 = (DatePicker)child2;
-                    //    Child2.Date = 
-                    //}
                 }
                 if (child.IsVisible == true)
                 {
@@ -112,30 +118,47 @@ namespace C971Rosendahl.Views
                 Margin = new Thickness(0, 10)
             };
             Grid grid = new Grid();
+            ColumnDefinition column0 = new ColumnDefinition();
+            ColumnDefinition column1 = new ColumnDefinition();
+            column0.Width = new GridLength(3, GridUnitType.Star);
+            column1.Width = new GridLength(1, GridUnitType.Star);
+            grid.ColumnDefinitions.Add(column0);
+            grid.ColumnDefinitions.Add(column1);
             Label termName = new Label()
             {
                 Text = "Term " + (termList.Children.Count + 1).ToString(),
-                FontSize = 17,
+                FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
             Grid.SetRow(termName, 0);
             Grid.SetColumn(termName, 0);
             grid.Children.Add(termName);
+            Grid grid1 = new Grid();
+            Grid.SetRow(grid1, 1);
+            grid1.HorizontalOptions = LayoutOptions.Start;
             Label termStartDate = new Label()
             {
-                Text = DateTime.Now.ToString(),
-                FontSize = 17,
+                Text = "Start Date: ",
+                FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
-            Grid.SetRow(termStartDate, 1);
-            Grid.SetColumn(termStartDate, 0);
-            grid.Children.Add(termStartDate);
+            grid1.Children.Add(termStartDate);
+            Label termStartDate1 = new Label()
+            {
+                Text = DateTime.Now.Date.ToString("MM/dd/yyyy"),
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start
+            };
+            Grid.SetColumn(termStartDate1, 1);
+            grid1.Children.Add(termStartDate1);
+            grid.Children.Add(grid1);
             Label termEndDate = new Label()
             {
-                Text = DateTime.Now.AddDays(7).ToString(),
-                FontSize = 17,
+                Text = DateTime.Now.Date.AddDays(7).ToString("MM/dd/yyyy"),
+                FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
@@ -145,7 +168,7 @@ namespace C971Rosendahl.Views
             Label termEditButton = new Label()
             {
                 Text = "Edit",
-                FontSize = 17,
+                FontSize = 18,
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.End                
             };
@@ -158,7 +181,7 @@ namespace C971Rosendahl.Views
             Entry entry = new Entry()
             {
                 Text = string.Empty,
-                FontSize = 17,
+                FontSize = 18,
                 HorizontalOptions = LayoutOptions.Start,
                 VerticalOptions = LayoutOptions.Start,
                 IsVisible = false
@@ -169,7 +192,7 @@ namespace C971Rosendahl.Views
             DatePicker startDatePicker = new DatePicker()
             {
                 Date = DateTime.Now,
-                FontSize= 17,
+                FontSize= 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions= LayoutOptions.Start,
                 IsVisible= false
@@ -180,7 +203,7 @@ namespace C971Rosendahl.Views
             DatePicker endDatePicker = new DatePicker()
             {
                 Date = DateTime.Now.AddDays(14),
-                FontSize= 17,
+                FontSize= 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions= LayoutOptions.Start,
                 IsVisible= false
@@ -191,7 +214,7 @@ namespace C971Rosendahl.Views
             Label saveButton = new Label()
             {
                 Text = "Save",
-                FontSize = 17,
+                FontSize = 18,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.End,
                 IsVisible = false
@@ -205,7 +228,7 @@ namespace C971Rosendahl.Views
             Label cancelButton = new Label()
             {
                 Text = "Cancel",
-                FontSize = 17,
+                FontSize = 18,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.End,
                 IsVisible = false
