@@ -89,6 +89,9 @@
                                     </Label.GestureRecognizers>
                                 </Label>
                             </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Term_Clicked"/>
+                            </Frame.GestureRecognizers>
                         </Frame>
                         <StackLayout>
                             <Frame Margin="25,3">
