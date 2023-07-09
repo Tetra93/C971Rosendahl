@@ -75,7 +75,6 @@
                                     </Label.GestureRecognizers>
                                 </Label>
                                 <Label x:Name="term1Save"
-                                           Grid.Row="1"
                                            Grid.Column="1"
                                            Text="Save"
                                            FontSize="Medium"
@@ -87,7 +86,7 @@
                                     </Label.GestureRecognizers>
                                 </Label>
                                 <Label x:Name="term1Cancel"
-                                           Grid.Row="2"
+                                           Grid.Row="1"
                                            Grid.Column="1"
                                            Text="Cancel"
                                            FontSize="Medium"
@@ -96,7 +95,18 @@
                                            IsVisible="False">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="TermCancel_Clicked"/>
-                                    </Label.GestureRecognizers>
+                                    </Label.GestureRecognizers>                                    
+                                </Label>
+                                <Label Grid.Row="2"
+                                       Grid.Column="1"
+                                       Text="Delete"
+                                       FontSize="Medium"
+                                       VerticalOptions="End"
+                                       HorizontalOptions="End"
+                                       IsVisible="False">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="DeleteTerm_Clicked"/>
+                                    </Label.GestureRecognizers>                                    
                                 </Label>
                             </Grid>
                             <Frame.GestureRecognizers>
