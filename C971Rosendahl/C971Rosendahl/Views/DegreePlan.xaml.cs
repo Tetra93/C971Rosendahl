@@ -43,7 +43,7 @@ namespace C971Rosendahl.Views
             }
         }
 
-        private async void TermEdit_Clicked(object sender, EventArgs e)
+        private void TermEdit_Clicked(object sender, EventArgs e)
         {
             Label edit = (Label)sender;
             Grid container = (Grid)edit.Parent;
@@ -61,7 +61,8 @@ namespace C971Rosendahl.Views
                 foreach (View child2 in container.Children)
                 {
                         row2 = Grid.GetRow(child2);
-                        column2 = Grid.GetColumn(child2);                   
+                        column2 = Grid.GetColumn(child2);  
+                    
                     if (row1 == row2 && column1 == column2)
                     {
                         if (child is Label Child)
@@ -111,7 +112,7 @@ namespace C971Rosendahl.Views
 
         }
 
-        private async void NewTerm_Clicked(object sender, EventArgs e)
+        private void NewTerm_Clicked(object sender, EventArgs e)
         {
             StackLayout stackLayout = new StackLayout();            
             Frame frame = new Frame
@@ -156,16 +157,27 @@ namespace C971Rosendahl.Views
             Grid.SetColumn(termStartDate1, 1);
             grid1.Children.Add(termStartDate1);
             grid.Children.Add(grid1);
+            Grid grid2 = new Grid();
+            Grid.SetRow(grid2, 2);
+            grid2.HorizontalOptions = LayoutOptions.Start;
             Label termEndDate = new Label()
+            {
+                Text = "End Date: ",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start
+            };
+            grid2.Children.Add(termEndDate);
+            Label termEndDate1 = new Label()
             {
                 Text = DateTime.Now.Date.AddDays(7).ToString("MM/dd/yyyy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
-            Grid.SetRow(termEndDate, 2);
-            Grid.SetColumn(termEndDate, 0);
-            grid.Children.Add(termEndDate);
+            Grid.SetColumn(termEndDate1, 1);
+            grid2.Children.Add(termEndDate1);
+            grid.Children.Add(grid2);
             Label termEditButton = new Label()
             {
                 Text = "Edit",
@@ -278,20 +290,24 @@ namespace C971Rosendahl.Views
                 {
                     row2 = Grid.GetRow(child2);
                     column2 = Grid.GetColumn(child2);
+
                     if (row1 == row2 && column1 == column2)
                     {
-                        if (child is Label Child && child2 is Entry Child2)
+                        if (child is Label Child && child2 is Entry entry)
                         {
-                            string child2Text = Child2.Text;
-                            Child.Text = child2Text;
+                            Child.Text = entry.Text;
                             break;
                         }
+                        else if (child is Grid grid)
+                        {
+                            if (grid.Children[1] is Label child3 && child2 is DatePicker datePicker)
+                            {
+
+                                child3.Text = datePicker.Date.ToString("MM/dd/yyyy");
+                                break;
+                            }                        
+                        }
                     }
-                    //else if (row1 == row2 && column1 == column2 && (child2 is DatePicker))
-                    //{
-                    //    DatePicker Child2 = (DatePicker)child2;
-                    //    Child2.Date = 
-                    //}
                 }
                 if (child.IsVisible == true)
                 {
@@ -305,7 +321,7 @@ namespace C971Rosendahl.Views
 
         }
 
-        private async void TermCancel_Clicked(object sender, EventArgs e)
+        private void TermCancel_Clicked(object sender, EventArgs e)
         {
             Label edit = (Label)sender;
             Grid container = (Grid)edit.Parent;
