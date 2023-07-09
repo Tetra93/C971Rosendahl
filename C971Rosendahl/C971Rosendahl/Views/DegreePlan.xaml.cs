@@ -23,98 +23,11 @@ namespace C971Rosendahl.Views
             objectCount = termList.Children.Count;
         }
 
-        private void Term_Clicked(object sender, EventArgs e)
-        {
-            Frame term = (Frame)sender;
-            StackLayout container = (StackLayout)term.Parent;
-            foreach (View child in container.Children)
-            {
-                if (child != term)
-                {
-                    if (child.IsVisible)
-                    {
-                        child.IsVisible = false;
-                    }
-                    else if (!child.IsVisible)
-                    {
-                        child.IsVisible = true;
-                    }
-                }
-            }
-        }
-
-        private void TermEdit_Clicked(object sender, EventArgs e)
-        {
-            Label edit = (Label)sender;
-            Grid container = (Grid)edit.Parent;
-            int row1 = -1;
-            int row2 = -1;
-            int column1 = -1;
-            int column2 = -1;
-            string value = string.Empty;
-
-            foreach (View child in container.Children)
-            {
-                    row1 = Grid.GetRow(child);
-                    column1 = Grid.GetColumn(child);  
-
-                foreach (View child2 in container.Children)
-                {
-                        row2 = Grid.GetRow(child2);
-                        column2 = Grid.GetColumn(child2);  
-                    
-                    if (row1 == row2 && column1 == column2)
-                    {
-                        if (child is Label Child)
-                        {
-                            string childText = Child.Text;
-
-                            if (child2 is Entry entry)
-                            {
-                                entry.Text = childText;
-                                break;
-                            }
-                            else if (child2 is DatePicker datePicker)
-                            {
-                                datePicker.Date = DateTime.ParseExact(childText, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                                break;
-
-                            }
-                        }
-                    }
-                }
-                if (child.IsVisible == true)
-                {
-                    child.IsVisible = false;
-                }
-                else if (child.IsVisible == false)
-                {
-                    child.IsVisible = true;
-                }
-            }
-            
-        }
-
-        private async void CourseView_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushAsync(new Course());
-        }
-
-        public async void CourseEdit_Clicked(object sender, EventArgs e)
-        {
-            await DisplayAlert("Clicked", "Course Edit Clicked", "OK");
-            //List<Term> terms = (List<Term>)await DatabaseService.GetTerms();
-            //await DisplayAlert("Clicked", $"{terms[0].ToString()}", "OK");
-            //term1NameLabel.Text = terms[0].Name;
-            //term1NameEntry.Text = terms[0].Name;
-
-            //await DatabaseService.ClearSampleData();
-
-        }
+        #region Term methods
 
         private void NewTerm_Clicked(object sender, EventArgs e)
         {
-            StackLayout stackLayout = new StackLayout();            
+            StackLayout stackLayout = new StackLayout();
             Frame frame = new Frame
             {
                 Margin = new Thickness(0, 10)
@@ -183,11 +96,11 @@ namespace C971Rosendahl.Views
                 Text = "Edit",
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.End,
-                HorizontalOptions = LayoutOptions.End                
+                HorizontalOptions = LayoutOptions.End
             };
-            TapGestureRecognizer tapGestureRecognizer = new TapGestureRecognizer();
-            tapGestureRecognizer.Tapped += TermEdit_Clicked;
-            termEditButton.GestureRecognizers.Add(tapGestureRecognizer);
+            TapGestureRecognizer EditTerm = new TapGestureRecognizer();
+            EditTerm.Tapped += TermEdit_Clicked;
+            termEditButton.GestureRecognizers.Add(EditTerm);
             Grid.SetRow(termEditButton, 0);
             Grid.SetColumn(termEditButton, 1);
             grid.Children.Add(termEditButton);
@@ -205,10 +118,10 @@ namespace C971Rosendahl.Views
             DatePicker startDatePicker = new DatePicker()
             {
                 Date = DateTime.Now,
-                FontSize= 18,
+                FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
-                HorizontalOptions= LayoutOptions.Start,
-                IsVisible= false
+                HorizontalOptions = LayoutOptions.Start,
+                IsVisible = false
             };
             Grid.SetRow(startDatePicker, 1);
             Grid.SetColumn(startDatePicker, 0);
@@ -216,13 +129,13 @@ namespace C971Rosendahl.Views
             DatePicker endDatePicker = new DatePicker()
             {
                 Date = DateTime.Now.AddDays(14),
-                FontSize= 18,
+                FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
-                HorizontalOptions= LayoutOptions.Start,
-                IsVisible= false
+                HorizontalOptions = LayoutOptions.Start,
+                IsVisible = false
             };
             Grid.SetRow(endDatePicker, 2);
-            Grid.SetColumn(endDatePicker , 0);
+            Grid.SetColumn(endDatePicker, 0);
             grid.Children.Add(endDatePicker);
             Label saveButton = new Label()
             {
@@ -232,12 +145,12 @@ namespace C971Rosendahl.Views
                 VerticalOptions = LayoutOptions.End,
                 IsVisible = false
             };
-            TapGestureRecognizer tapGestureRecognizer1 = new TapGestureRecognizer();
-            tapGestureRecognizer1.Tapped += TermSave_Clicked;
-            saveButton.GestureRecognizers.Add(tapGestureRecognizer1);
-            Grid.SetRow(saveButton , 0);
-            Grid.SetColumn (saveButton , 1);
-            grid.Children.Add (saveButton);
+            TapGestureRecognizer SaveTerm = new TapGestureRecognizer();
+            SaveTerm.Tapped += TermSave_Clicked;
+            saveButton.GestureRecognizers.Add(SaveTerm);
+            Grid.SetRow(saveButton, 0);
+            Grid.SetColumn(saveButton, 1);
+            grid.Children.Add(saveButton);
             Label cancelButton = new Label()
             {
                 Text = "Cancel",
@@ -246,11 +159,11 @@ namespace C971Rosendahl.Views
                 VerticalOptions = LayoutOptions.End,
                 IsVisible = false
             };
-            TapGestureRecognizer tapGestureRecognizer2 = new TapGestureRecognizer();
-            tapGestureRecognizer2.Tapped += TermCancel_Clicked;
-            cancelButton.GestureRecognizers.Add(tapGestureRecognizer2);
-            Grid.SetRow(cancelButton , 1);
-            Grid.SetColumn (cancelButton , 1);
+            TapGestureRecognizer CancelTermEdit = new TapGestureRecognizer();
+            CancelTermEdit.Tapped += TermCancel_Clicked;
+            cancelButton.GestureRecognizers.Add(CancelTermEdit);
+            Grid.SetRow(cancelButton, 1);
+            Grid.SetColumn(cancelButton, 1);
             grid.Children.Add(cancelButton);
             Label deleteButton = new Label()
             {
@@ -260,15 +173,100 @@ namespace C971Rosendahl.Views
                 VerticalOptions = LayoutOptions.End,
                 IsVisible = false
             };
-            TapGestureRecognizer tapGestureRecognizer3 = new TapGestureRecognizer();
-            tapGestureRecognizer3.Tapped += DeleteTerm_Clicked;
-            deleteButton.GestureRecognizers.Add (tapGestureRecognizer3);
-            Grid.SetRow (deleteButton , 2);
-            Grid.SetColumn(deleteButton , 1);
+            TapGestureRecognizer DeleteTerm = new TapGestureRecognizer();
+            DeleteTerm.Tapped += DeleteTerm_Clicked;
+            deleteButton.GestureRecognizers.Add(DeleteTerm);
+            Grid.SetRow(deleteButton, 2);
+            Grid.SetColumn(deleteButton, 1);
             grid.Children.Add(deleteButton);
             frame.Content = grid;
             stackLayout.Children.Add(frame);
             termList.Children.Add(stackLayout);
+            Frame frame1 = new Frame();
+            frame1.Margin = new Thickness(25, 3);
+            Label newCourse = new Label()
+            {
+                Text = "Add New Course",
+                FontSize = 18,
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+            };
+            TapGestureRecognizer AddCourse = new TapGestureRecognizer();
+            AddCourse.Tapped += CourseAdd_Clicked;
+            newCourse.GestureRecognizers.Add(AddCourse);
+            stackLayout.Children.Add(newCourse);
+        }
+
+        private void Term_Clicked(object sender, EventArgs e)
+        {
+            Frame term = (Frame)sender;
+            StackLayout container = (StackLayout)term.Parent;
+            foreach (View child in container.Children)
+            {
+                if (child != term)
+                {
+                    if (child.IsVisible)
+                    {
+                        child.IsVisible = false;
+                    }
+                    else if (!child.IsVisible)
+                    {
+                        child.IsVisible = true;
+                    }
+                }
+            }
+        }
+
+        private void TermEdit_Clicked(object sender, EventArgs e)
+        {
+            Label edit = (Label)sender;
+            Grid container = (Grid)edit.Parent;
+            int row1 = -1;
+            int row2 = -1;
+            int column1 = -1;
+            int column2 = -1;
+            string value = string.Empty;
+
+            foreach (View child in container.Children)
+            {
+                row1 = Grid.GetRow(child);
+                column1 = Grid.GetColumn(child);
+
+                foreach (View child2 in container.Children)
+                {
+                    row2 = Grid.GetRow(child2);
+                    column2 = Grid.GetColumn(child2);
+
+                    if (row1 == row2 && column1 == column2)
+                    {
+                        if (child is Label Child)
+                        {
+                            string childText = Child.Text;
+
+                            if (child2 is Entry entry)
+                            {
+                                entry.Text = childText;
+                                break;
+                            }
+                            else if (child2 is DatePicker datePicker)
+                            {
+                                datePicker.Date = DateTime.ParseExact(childText, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                                break;
+
+                            }
+                        }
+                    }
+                }
+                if (child.IsVisible == true)
+                {
+                    child.IsVisible = false;
+                }
+                else if (child.IsVisible == false)
+                {
+                    child.IsVisible = true;
+                }
+            }
+
         }
 
         private async void TermSave_Clicked(object sender, EventArgs e)
@@ -305,7 +303,7 @@ namespace C971Rosendahl.Views
 
                                 child3.Text = datePicker.Date.ToString("MM/dd/yyyy");
                                 break;
-                            }                        
+                            }
                         }
                     }
                 }
@@ -345,8 +343,37 @@ namespace C971Rosendahl.Views
             Grid container = (Grid)delete.Parent;
             Frame frame = (Frame)container.Parent;
             StackLayout stackLayout = (StackLayout)frame.Parent;
-            stackLayout.Children.Remove(frame);
+            StackLayout stackLayout1 = (StackLayout)stackLayout.Parent;
+            stackLayout1.Children.Remove(stackLayout);
         }
+
+        #endregion
+
+        #region Course methods
+
+        private void CourseAdd_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void CourseView_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new Course());
+        }
+
+        public async void CourseEdit_Clicked(object sender, EventArgs e)
+        {
+            await DisplayAlert("Clicked", "Course Edit Clicked", "OK");
+            //List<Term> terms = (List<Term>)await DatabaseService.GetTerms();
+            //await DisplayAlert("Clicked", $"{terms[0].ToString()}", "OK");
+            //term1NameLabel.Text = terms[0].Name;
+            //term1NameEntry.Text = terms[0].Name;
+
+            //await DatabaseService.ClearSampleData();
+
+        }
+
+        #endregion
     }
 
 }
