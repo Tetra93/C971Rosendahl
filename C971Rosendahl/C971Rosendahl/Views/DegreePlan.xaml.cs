@@ -17,6 +17,8 @@ namespace C971Rosendahl.Views
     {
         public static int objectCount;
 
+        public static List<string> status = new List<string> { "Completed", "Started", "Failed", "Not Started" };
+
         public DegreePlan()
         {
             InitializeComponent();
@@ -377,7 +379,7 @@ namespace C971Rosendahl.Views
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
-            grid.Children.Add(courseName);
+            grid.Children.Add(courseName); 
             Label completionStatus = new Label()
             {
                 Text = "Not Started",
@@ -387,6 +389,16 @@ namespace C971Rosendahl.Views
             };
             Grid.SetColumn(completionStatus, 1);
             grid.Children.Add(completionStatus);
+            Picker completionPicker = new Picker()
+            {
+                ItemsSource = status,
+                IsVisible = false
+            };
+            Grid.SetColumn(completionPicker, 1);
+            TapGestureRecognizer changeStatus = new TapGestureRecognizer();
+            changeStatus.Tapped += ChangeStatus_Clicked;
+            completionStatus.GestureRecognizers.Add(changeStatus);
+            grid.Children.Add(completionPicker);
             Grid startDateGrid = new Grid();
             Grid.SetRow(startDateGrid, 1);
             Label courseStartDate = new Label()
@@ -431,6 +443,32 @@ namespace C971Rosendahl.Views
 
             frame.Content = grid;
             container.Children.Insert((container.Children.Count() - 1), frame);
+        }
+
+        private void ChangeStatus_Clicked(object sender, EventArgs e)
+        {
+            if (sender is Label label)
+            {
+                Grid container = (Grid)label.Parent;
+                foreach (View child in container.Children)
+                {
+                    //SEARCH FOR PICKER, TOGGLE VISIBILITY, TOGGLE LABEL VISIBILITY
+                }
+            }
+            foreach (View child in container.Children)
+            {
+                if (child)
+                {
+                    if (child.IsVisible)
+                    {
+                        child.IsVisible = false;
+                    }
+                    else if (!child.IsVisible)
+                    {
+                        child.IsVisible = true;
+                    }
+                }
+            }
         }
 
         private async void CourseView_Clicked(object sender, EventArgs e)

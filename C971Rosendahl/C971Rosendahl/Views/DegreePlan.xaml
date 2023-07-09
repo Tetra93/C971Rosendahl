@@ -95,7 +95,7 @@
                                            IsVisible="False">
                                     <Label.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="TermCancel_Clicked"/>
-                                    </Label.GestureRecognizers>                                    
+                                    </Label.GestureRecognizers>
                                 </Label>
                                 <Label Grid.Row="2"
                                        Grid.Column="1"
