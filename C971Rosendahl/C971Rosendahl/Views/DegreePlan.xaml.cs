@@ -32,6 +32,9 @@ namespace C971Rosendahl.Views
             {
                 Margin = new Thickness(0, 10)
             };
+            TapGestureRecognizer collapseTerm = new TapGestureRecognizer();
+            collapseTerm.Tapped += Term_Clicked;
+            frame.GestureRecognizers.Add(collapseTerm);
             Grid grid = new Grid();
             ColumnDefinition column0 = new ColumnDefinition();
             ColumnDefinition column1 = new ColumnDefinition();
@@ -188,8 +191,8 @@ namespace C971Rosendahl.Views
             {
                 Text = "Add New Course",
                 FontSize = 18,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
             };
             TapGestureRecognizer AddCourse = new TapGestureRecognizer();
             AddCourse.Tapped += CourseAdd_Clicked;
@@ -353,7 +356,81 @@ namespace C971Rosendahl.Views
 
         private void CourseAdd_Clicked(object sender, EventArgs e)
         {
+            Label button = (Label)sender;
+            StackLayout container = (StackLayout)button.Parent;
+            Frame frame = new Frame();
+            frame.Margin = new Thickness(25, 3);
+            Grid grid = new Grid();
+            ColumnDefinition column0 = new ColumnDefinition();
+            ColumnDefinition column1 = new ColumnDefinition();
+            column0.Width = new GridLength(2, GridUnitType.Star);
+            column1.Width = new GridLength(1, GridUnitType.Star);
+            grid.ColumnDefinitions.Add(column0);
+            grid.ColumnDefinitions.Add(column1);
+            TapGestureRecognizer courseClick = new TapGestureRecognizer();
+            courseClick.Tapped += CourseView_Clicked;
+            grid.GestureRecognizers.Add(courseClick);
+            Label courseName = new Label()
+            {
+                Text = "New Course",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start
+            };
+            grid.Children.Add(courseName);
+            Label completionStatus = new Label()
+            {
+                Text = "Not Started",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.End
+            };
+            Grid.SetColumn(completionStatus, 1);
+            grid.Children.Add(completionStatus);
+            Grid startDateGrid = new Grid();
+            Grid.SetRow(startDateGrid, 1);
+            Label courseStartDate = new Label()
+            {
+                Text = "Start Date: ",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start
+            };
+            startDateGrid.Children.Add(courseStartDate);
+            Label courseStartDate1 = new Label()
+            {
+                Text = DateTime.Now.Date.ToString("MM/dd/yyyy"),
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start
+            };
+            Grid.SetColumn(courseStartDate1, 1);
+            startDateGrid.Children.Add(courseStartDate1);
+            grid.Children.Add(startDateGrid);
+            Grid endDateGrid = new Grid();
+            Grid.SetRow(endDateGrid, 2);
+            Label courseEndDate = new Label()
+            {
+                Text = "End Date: ",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start
+            };
+            endDateGrid.Children.Add(courseEndDate);
+            Label courseEndDate1 = new Label()
+            {
+                Text = DateTime.Now.Date.AddDays(14).ToString("MM/dd/yyyy"),
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start
+            };
+            Grid.SetColumn(courseEndDate1 , 1);
+            endDateGrid.Children.Add(courseEndDate1);
+            grid.Children.Add(endDateGrid);
 
+
+            frame.Content = grid;
+            container.Children.Insert((container.Children.Count() - 1), frame);
         }
 
         private async void CourseView_Clicked(object sender, EventArgs e)
