@@ -392,9 +392,12 @@ namespace C971Rosendahl.Views
             Picker completionPicker = new Picker()
             {
                 ItemsSource = status,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.End,
                 IsVisible = false
             };
             Grid.SetColumn(completionPicker, 1);
+            completionPicker.SelectedIndexChanged += PickerSelection_Clicked;
             TapGestureRecognizer changeStatus = new TapGestureRecognizer();
             changeStatus.Tapped += ChangeStatus_Clicked;
             completionStatus.GestureRecognizers.Add(changeStatus);
@@ -452,20 +455,43 @@ namespace C971Rosendahl.Views
                 Grid container = (Grid)label.Parent;
                 foreach (View child in container.Children)
                 {
-                    //SEARCH FOR PICKER, TOGGLE VISIBILITY, TOGGLE LABEL VISIBILITY
+                    if (child is Picker picker)
+                    {
+                        if (Grid.GetRow(picker) == 0 && Grid.GetColumn(picker) == 1)
+                        {
+                            label.IsVisible = false;
+                            picker.SelectedItem = label.Text;
+                            picker.IsVisible = true;
+                            break;
+                        }
+                    }
                 }
             }
-            foreach (View child in container.Children)
+        }
+
+        private void PickerSelection_Clicked(object sender, EventArgs e)
+        {
+            if (sender is Picker picker)
             {
-                if (child)
+                Grid container = (Grid)picker.Parent;
+                foreach (View child in container.Children)
                 {
-                    if (child.IsVisible)
-                    {
-                        child.IsVisible = false;
-                    }
-                    else if (!child.IsVisible)
-                    {
-                        child.IsVisible = true;
+                    if (child is Label label)
+                    {                        
+                        if (Grid.GetRow(label) == 0 && Grid.GetColumn(label) == 1)
+                        {
+                            if (picker.IsVisible == false)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                picker.IsVisible = false;
+                                label.Text = picker.SelectedItem.ToString();
+                                label.IsVisible = true;
+                                break;
+                            }
+                        }                        
                     }
                 }
             }
