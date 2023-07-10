@@ -3,12 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="C971Rosendahl.Views.DegreePlan"
              Title="Degree Plan">
-    <ContentPage.Content>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Delete Data" Order="Secondary" Clicked="DeleteData"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>        
         <ScrollView>
             <StackLayout>
                 <Frame Margin="0,10">
                     <Label Text="Student info"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="CenterAndExpand"/>
                 </Frame>
@@ -22,44 +25,44 @@
                                 </Grid.ColumnDefinitions>
                                 <Label x:Name="term1NameLabel"
                                            Text="Term maybe?"
-                                           FontSize="Medium"
+                                           FontSize="18"
                                            VerticalOptions="Start"
                                            HorizontalOptions="Start"/>
                                 <Entry x:Name="term1NameEntry"
                                        Text="Change text here"
-                                       FontSize="Medium"
+                                       FontSize="18"
                                        VerticalOptions="Start"
                                        HorizontalOptions="Start"
                                        IsVisible="False"/>
                                 <Grid Grid.Row="1" HorizontalOptions="Start">
                                     <Label Text="Start Date: "
-                                       FontSize="Medium"
+                                       FontSize="18"
                                        VerticalOptions="End"
                                        HorizontalOptions="Start"/>
                                 <Label x:Name="term1StartDate"
                                            Grid.Column="1"
                                            Text="07/07/2023"
-                                           FontSize="Medium"
+                                           FontSize="18"
                                            VerticalOptions="End"
                                            HorizontalOptions="Start"/>
                             </Grid>
                             <DatePicker x:Name="term1StartDateChange"
                                                 Grid.Row="1"
                                                 Date="07/07/2023"
-                                                FontSize="Medium"
+                                                FontSize="18"
                                                 VerticalOptions="End"
                                                 HorizontalOptions="Start"
                                                 IsVisible="False"/>
                                 <Label x:Name="term1EndDate"
                                            Grid.Row="2"
                                            Text="12/07/2023"
-                                           FontSize="Medium"
+                                           FontSize="18"
                                            VerticalOptions="End"
                                            HorizontalOptions="Start"/>
                                 <DatePicker x:Name="term1EndDateChange"
                                                 Grid.Row="2"
                                                 Date="07/19/2023"
-                                                FontSize="Medium"
+                                                FontSize="18"
                                                 VerticalOptions="End"
                                                 HorizontalOptions="Start"
                                                 IsVisible="False"/>
@@ -67,7 +70,7 @@
                                            Grid.Row="1"
                                            Grid.Column="1"
                                            Text="Edit"
-                                           FontSize="Medium"
+                                           FontSize="18"
                                            VerticalOptions="End"
                                            HorizontalOptions="End">
                                     <Label.GestureRecognizers>
@@ -77,7 +80,7 @@
                                 <Label x:Name="term1Save"
                                            Grid.Column="1"
                                            Text="Save"
-                                           FontSize="Medium"
+                                           FontSize="18"
                                            VerticalOptions="End"
                                            HorizontalOptions="End"
                                            IsVisible="False">
@@ -89,7 +92,7 @@
                                            Grid.Row="1"
                                            Grid.Column="1"
                                            Text="Cancel"
-                                           FontSize="Medium"
+                                           FontSize="18"
                                            VerticalOptions="End"
                                            HorizontalOptions="End"
                                            IsVisible="False">
@@ -100,7 +103,7 @@
                                 <Label Grid.Row="2"
                                        Grid.Column="1"
                                        Text="Delete"
-                                       FontSize="Medium"
+                                       FontSize="18"
                                        VerticalOptions="End"
                                        HorizontalOptions="End"
                                        IsVisible="False">
@@ -285,7 +288,7 @@
                         <TapGestureRecognizer Tapped="NewTerm_Clicked"/>
                     </Frame.GestureRecognizers>
                     <Label Text="Add new term"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand"
                                HorizontalOptions="CenterAndExpand"/>
                 </Frame>

@@ -17,7 +17,7 @@ namespace C971Rosendahl.Views
     {
         public static int objectCount;
 
-        public static List<string> status = new List<string> { "Completed", "Started", "Failed", "Not Started" };
+        public static List<string> status = new List<string> { "Completed", "Started", "Failed", "Dropped", "Not Started" };
 
         public DegreePlan()
         {
@@ -37,6 +37,7 @@ namespace C971Rosendahl.Views
             TapGestureRecognizer collapseTerm = new TapGestureRecognizer();
             collapseTerm.Tapped += Term_Clicked;
             frame.GestureRecognizers.Add(collapseTerm);
+
             Grid grid = new Grid();
             ColumnDefinition column0 = new ColumnDefinition();
             ColumnDefinition column1 = new ColumnDefinition();
@@ -54,6 +55,7 @@ namespace C971Rosendahl.Views
             Grid.SetRow(termName, 0);
             Grid.SetColumn(termName, 0);
             grid.Children.Add(termName);
+
             Grid grid1 = new Grid();
             Grid.SetRow(grid1, 1);
             grid1.HorizontalOptions = LayoutOptions.Start;
@@ -75,6 +77,7 @@ namespace C971Rosendahl.Views
             Grid.SetColumn(termStartDate1, 1);
             grid1.Children.Add(termStartDate1);
             grid.Children.Add(grid1);
+
             Grid grid2 = new Grid();
             Grid.SetRow(grid2, 2);
             grid2.HorizontalOptions = LayoutOptions.Start;
@@ -96,6 +99,7 @@ namespace C971Rosendahl.Views
             Grid.SetColumn(termEndDate1, 1);
             grid2.Children.Add(termEndDate1);
             grid.Children.Add(grid2);
+
             Label termEditButton = new Label()
             {
                 Text = "Edit",
@@ -109,7 +113,8 @@ namespace C971Rosendahl.Views
             Grid.SetRow(termEditButton, 0);
             Grid.SetColumn(termEditButton, 1);
             grid.Children.Add(termEditButton);
-            Entry entry = new Entry()
+
+            Entry nameEntry = new Entry()
             {
                 Text = string.Empty,
                 FontSize = 18,
@@ -117,9 +122,10 @@ namespace C971Rosendahl.Views
                 VerticalOptions = LayoutOptions.Start,
                 IsVisible = false
             };
-            Grid.SetRow(entry, 0);
-            Grid.SetColumn(entry, 0);
-            grid.Children.Add(entry);
+            Grid.SetRow(nameEntry, 0);
+            Grid.SetColumn(nameEntry, 0);
+            grid.Children.Add(nameEntry);
+
             DatePicker startDatePicker = new DatePicker()
             {
                 Date = DateTime.Now,
@@ -131,6 +137,7 @@ namespace C971Rosendahl.Views
             Grid.SetRow(startDatePicker, 1);
             Grid.SetColumn(startDatePicker, 0);
             grid.Children.Add(startDatePicker);
+
             DatePicker endDatePicker = new DatePicker()
             {
                 Date = DateTime.Now.AddDays(14),
@@ -142,6 +149,7 @@ namespace C971Rosendahl.Views
             Grid.SetRow(endDatePicker, 2);
             Grid.SetColumn(endDatePicker, 0);
             grid.Children.Add(endDatePicker);
+
             Label saveButton = new Label()
             {
                 Text = "Save",
@@ -156,6 +164,7 @@ namespace C971Rosendahl.Views
             Grid.SetRow(saveButton, 0);
             Grid.SetColumn(saveButton, 1);
             grid.Children.Add(saveButton);
+
             Label cancelButton = new Label()
             {
                 Text = "Cancel",
@@ -170,6 +179,7 @@ namespace C971Rosendahl.Views
             Grid.SetRow(cancelButton, 1);
             Grid.SetColumn(cancelButton, 1);
             grid.Children.Add(cancelButton);
+
             Label deleteButton = new Label()
             {
                 Text = "Delete",
@@ -184,9 +194,11 @@ namespace C971Rosendahl.Views
             Grid.SetRow(deleteButton, 2);
             Grid.SetColumn(deleteButton, 1);
             grid.Children.Add(deleteButton);
+
             frame.Content = grid;
             stackLayout.Children.Add(frame);
             termList.Children.Add(stackLayout);
+
             Frame frame1 = new Frame();
             frame1.Margin = new Thickness(25, 3);
             Label newCourse = new Label()
@@ -515,6 +527,11 @@ namespace C971Rosendahl.Views
         }
 
         #endregion
+
+        private async void DeleteData(object sender, EventArgs e)
+        {
+            await DatabaseService.ClearSampleData();
+        }
     }
 
 }

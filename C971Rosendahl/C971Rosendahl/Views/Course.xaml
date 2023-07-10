@@ -11,25 +11,51 @@
             <StackLayout>
                 <Frame Margin="0,10">
                     <Label Text="Student info"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="CenterAndExpand"/>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Label Text="Course Name"
-                               FontSize="Medium"
+                    <Label     x:Name="courseName"
+                               Text="Course Name"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="CenterAndExpand"/>
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>
-                        <Label Text="Start/end date"
-                               FontSize="Medium"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Label Text="Start Date: "
+                                   FontSize="18"
+                                   VerticalOptions="Start"
+                                   HorizontalOptions="Start"/>
+                            <Label Grid.Column="1"
+                                x:Name="courseStartDate"
+                               Text="01/01/2023"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"/>
-                        <Label Grid.Column="1"
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Label Text="End Date: "
+                                   FontSize="18"
+                                   VerticalOptions="Start"
+                                   HorizontalOptions="Start"/>
+                            <Label x:Name="courseEndDate"
+                                   Grid.Column="1"
+                               Text="02/01/2023"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand" 
+                               HorizontalOptions="Start"/>
+                        </Grid>
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
                                Text="Notifications"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="End">
                             <Label.GestureRecognizers>
@@ -39,34 +65,37 @@
                     </Grid>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Label Text="Course info"
-                               FontSize="Medium"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand"/>
+                    <Label x:Name="courseDescription" 
+                           Text="Course info"
+                           FontSize="18"
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Label Text="Instructor info"
-                               FontSize="Medium"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand"/>
+                    <Label x:Name="instructorInfo"
+                           Text="Instructor info"
+                           FontSize="18"
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>
-                    <Label Text="Notes"
-                               FontSize="Medium"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand"/>
+                    <Label x:Name="notes"
+                           Text="Notes"
+                           FontSize="18"
+                           VerticalOptions="CenterAndExpand" 
+                           HorizontalOptions="CenterAndExpand"/>
                     </Grid>
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>
                         <Label Text="Objective Assessment 1"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"/>
                         <Label Grid.Column="1"
                                Text="Notifications"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="End">
                             <Label.GestureRecognizers>
@@ -75,13 +104,13 @@
                         </Label>
                         <Label Grid.Row="1"
                                Text="Dates"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"/>
                         <Label Grid.Row="1"
                                Grid.Column="1"
                                Text="Edit"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="End">
                             <Label.GestureRecognizers>
@@ -93,12 +122,12 @@
                 <Frame Margin="0,10">
                     <Grid>
                         <Label Text="Performance Assessment 1"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"/>
                         <Label Grid.Column="1"
                                Text="Notifications"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="End">
                             <Label.GestureRecognizers>
@@ -107,13 +136,13 @@
                         </Label>
                         <Label Grid.Row="1"
                                Text="Dates"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"/>
                         <Label Grid.Row="1"
                                Grid.Column="1"
                                Text="Edit"
-                               FontSize="Medium"
+                               FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="End">
                             <Label.GestureRecognizers>
