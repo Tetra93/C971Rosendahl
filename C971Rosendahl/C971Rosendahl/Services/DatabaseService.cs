@@ -28,8 +28,7 @@ namespace C971Rosendahl.Services
                 StartDate = StartDate,
                 EndDate = EndDate
             };
-            await _db.InsertAsync(term);
-            
+            await _db.InsertAsync(term);            
         }
 
         public static async Task UpdateTerm(int id, string Name, DateTime StartDate, DateTime EndDate)
@@ -309,7 +308,7 @@ namespace C971Rosendahl.Services
 
         #region Load Sample Data
 
-        public static async void LoadSampleData()
+        public static async Task LoadSampleData()
         {
             await Init();
 
@@ -317,11 +316,78 @@ namespace C971Rosendahl.Services
             {
                 Name = "Term 1",
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now
+                EndDate = DateTime.Now.AddDays(180)
 
             };
 
             await _db.InsertAsync(term1);
+
+            Course course1 = new Course
+            {
+                Name = "C971",
+                Description = "Mobile Application Development",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(30),
+                TermId = 1
+            };
+
+            await _db.InsertAsync(course1);
+
+            Course course2 = new Course
+            {
+                Name = "C968",
+                Description = "Software I - C#",
+                StartDate = DateTime.Now.AddDays(30),
+                EndDate = DateTime.Now.AddDays(60),
+                TermId = 1
+            };
+
+            await _db.InsertAsync(course2);
+
+            Course course3 = new Course
+            {
+                Name = "C969",
+                Description = "Software II - Advanced C#",
+                StartDate = DateTime.Now.AddDays(60),
+                EndDate = DateTime.Now.AddDays(90),
+                TermId = 1
+            };
+
+            await _db.InsertAsync(course3);
+
+            Course course4 = new Course
+            {
+                Name = "D191",
+                Description = "Advanced Data Management",
+                StartDate = DateTime.Now.AddDays(90),
+                EndDate = DateTime.Now.AddDays(120),
+                TermId = 1
+            };
+
+            await _db.InsertAsync(course4);
+
+            Course course5 = new Course
+            {
+                Name = "C172",
+                Description = "Network and Security - Foundations",
+                StartDate = DateTime.Now.AddDays(120),
+                EndDate = DateTime.Now.AddDays(150),
+                TermId = 1
+            };
+
+            await _db.InsertAsync(course5);
+
+            Course course6 = new Course
+            {
+                Name = "C949",
+                Description = "Data Structures and Algorithms",
+                StartDate = DateTime.Now.AddDays(150),
+                EndDate = DateTime.Now.AddDays(180),
+                TermId = 1
+            };
+
+            await _db.InsertAsync(course6);
+            DegreePlan.terms = (List<Term>) await GetTerms();            
         }
 
         public static async Task ClearSampleData()

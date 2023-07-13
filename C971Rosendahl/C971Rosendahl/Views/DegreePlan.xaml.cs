@@ -19,16 +19,54 @@ namespace C971Rosendahl.Views
 
         public static List<string> status = new List<string> { "Completed", "Started", "Failed", "Dropped", "Not Started" };
 
+        public static List<string> dataOptions = new List<string> { "Clear All Data", "Load Sample Data" };
+
+        public static List<Term> terms = new List<Term>();
+
+        public static List<Course> courses = new List<Course>();
+        
         public DegreePlan()
         {
             InitializeComponent();
+            //GetData();
+
             objectCount = termList.Children.Count;
         }
 
-        #region Term methods
-
-        private void NewTerm_Clicked(object sender, EventArgs e)
+        protected override async void OnAppearing()
         {
+            base.OnAppearing();
+            await DatabaseService.LoadSampleData();
+            foreach (Term term in terms)
+            {
+                NewTerm_Clicked(null, null);
+            }
+        }
+
+        //public static async void GetData()
+        //{
+        //    terms = (List<Term>)await DatabaseService.GetTerms();
+        //    //courses = (List<Course>)await DatabaseService.GetCourse();
+        //}
+
+        #region Term methods
+        
+        public void NewTerm_Clicked(object sender, EventArgs e)
+        {
+            Term term;
+            if (sender == null)
+            {
+                term = terms[0];
+            }
+            else
+            {
+                term = new Term
+                {
+                    Name = "New Term",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(180),
+                };
+            }
             StackLayout stackLayout = new StackLayout();
             Frame frame = new Frame
             {
@@ -47,7 +85,7 @@ namespace C971Rosendahl.Views
             grid.ColumnDefinitions.Add(column1);
             Label termName = new Label()
             {
-                Text = "New Term",
+                Text = term.Name,
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -69,7 +107,7 @@ namespace C971Rosendahl.Views
             grid1.Children.Add(termStartDate);
             Label termStartDate1 = new Label()
             {
-                Text = DateTime.Now.Date.ToString("MM/dd/yyyy"),
+                Text = term.StartDate.ToString("MM/dd/yyyy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -91,7 +129,7 @@ namespace C971Rosendahl.Views
             grid2.Children.Add(termEndDate);
             Label termEndDate1 = new Label()
             {
-                Text = DateTime.Now.Date.AddDays(7).ToString("MM/dd/yyyy"),
+                Text = term.EndDate.ToString("MM/dd/yyyy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -368,8 +406,13 @@ namespace C971Rosendahl.Views
 
         #region Course methods
 
-        private void CourseAdd_Clicked(object sender, EventArgs e)
+        private void CourseAdd(StackLayout stackLayout)
         {
+
+        }
+        private async void CourseAdd_Clicked(object sender, EventArgs e)
+        {
+            string selection = await DisplayActionSheet("Select Course", "Cancel", null, status.ToArray());
             Label button = (Label)sender;
             StackLayout container = (StackLayout)button.Parent;
             Frame frame = new Frame();
@@ -386,7 +429,7 @@ namespace C971Rosendahl.Views
             grid.GestureRecognizers.Add(courseClick);
             Label courseName = new Label()
             {
-                Text = "New Course",
+                Text = selection,
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -531,6 +574,11 @@ namespace C971Rosendahl.Views
         private async void DeleteData(object sender, EventArgs e)
         {
             await DatabaseService.ClearSampleData();
+        }
+
+        private async void LoadData(object sender, EventArgs e)
+        {
+            await DatabaseService.LoadSampleData();
         }
     }
 

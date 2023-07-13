@@ -12,7 +12,6 @@ namespace C971Rosendahl
         {
             InitializeComponent();
 
-            DatabaseService.LoadSampleData();
 
             var degreePlan = new DegreePlan();
             var navPage = new NavigationPage(degreePlan);

@@ -10,17 +10,17 @@ namespace C971Rosendahl.Models
         [PrimaryKey, AutoIncrement]
         public int CourseId { get; set; }
 
-        public int TermId { get; set; }
+        public int TermId { get; set; } = -1;
 
-        public int InstructorId { get; set; }
+        public int InstructorId { get; set; } = -1;
 
         public string Name { set; get; }
 
-        public DateTime StartDate { set; get; }
+        public DateTime StartDate { set; get; } = DateTime.Now.Date;
 
-        public DateTime EndDate { set; get; }
+        public DateTime EndDate { set; get; } = DateTime.Now.Date.AddDays(30);
 
-        public bool DateNotifications { set; get; }
+        public bool DateNotifications { set; get; } = false;
         
         public string Description { set; get; }
 
