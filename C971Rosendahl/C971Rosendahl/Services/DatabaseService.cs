@@ -51,7 +51,7 @@ namespace C971Rosendahl.Services
         public static async Task<IEnumerable<Term>> GetTerms()
         {
             await Init();
-            var terms = await _db.Table<Term>().ToListAsync();
+            List<Term> terms = await _db.Table<Term>().ToListAsync();
             return terms;
         }
 
@@ -114,11 +114,11 @@ namespace C971Rosendahl.Services
             return courses;
         }
 
-        public static async Task<IEnumerable<Course>> GetCourse()
+        public static async Task<List<Course>> GetCourse()
         {
             await Init();
 
-            var courses = await _db.Table<Course>().ToListAsync();
+            List<Course> courses = await _db.Table<Course>().ToListAsync();
 
             return courses;
         }
@@ -387,7 +387,8 @@ namespace C971Rosendahl.Services
             };
 
             await _db.InsertAsync(course6);
-            DegreePlan.terms = (List<Term>) await GetTerms();            
+            DegreePlan.terms = (List<Term>) await GetTerms();
+            Settings.FirstRun = false;
         }
 
         public static async Task ClearSampleData()
@@ -401,6 +402,7 @@ namespace C971Rosendahl.Services
             await _db.DropTableAsync<Note>();
 
             _db = null;
+            Settings.FirstRun = true;
         }
         #endregion
 

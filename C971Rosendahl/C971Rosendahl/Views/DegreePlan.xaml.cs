@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,7 +14,11 @@ namespace C971Rosendahl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class DegreePlan : ContentPage
     {
-        public static int objectCount;
+        public static int termCount;
+
+        public static int courseCount;
+
+        public static int courseTermId;
 
         public static List<string> status = new List<string> { "Completed", "Started", "Failed", "Dropped", "Not Started" };
 
@@ -29,17 +32,35 @@ namespace C971Rosendahl.Views
         {
             InitializeComponent();
             //GetData();
-
-            objectCount = termList.Children.Count;
+            //Not working on the first load after clearing data. Figure out why
+            //Maybe there's a method for when the app first loads rather than when
+            //elements begin appearing. I don't know
+            termCount = termList.Children.Count;
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await DatabaseService.LoadSampleData();
-            foreach (Term term in terms)
+            if (Settings.FirstRun == true)
             {
-                NewTerm_Clicked(null, null);
+                await DatabaseService.LoadSampleData();
+            }
+            else if (termList.Children.Count == 0)
+            {
+                terms = (List<Term>)await DatabaseService.GetTerms();
+                courses = await DatabaseService.GetCourse();
+
+                foreach (Term term in terms)
+                {
+                    NewTerm_Clicked(null, null);
+                }
+                for (int i = 0; i <= courses.Count - 1; i++)
+                {
+                    courseCount = i;
+                    Course course = courses[i];
+                    courseTermId = course.TermId;
+                    CourseAdd_Clicked(null, null);
+                }
             }
         }
 
@@ -56,7 +77,7 @@ namespace C971Rosendahl.Views
             Term term;
             if (sender == null)
             {
-                term = terms[0];
+                term = terms[termCount];
             }
             else
             {
@@ -406,15 +427,22 @@ namespace C971Rosendahl.Views
 
         #region Course methods
 
-        private void CourseAdd(StackLayout stackLayout)
-        {
-
-        }
         private async void CourseAdd_Clicked(object sender, EventArgs e)
         {
-            string selection = await DisplayActionSheet("Select Course", "Cancel", null, status.ToArray());
-            Label button = (Label)sender;
-            StackLayout container = (StackLayout)button.Parent;
+            Course course = new Course();
+            string selection = string.Empty;
+            StackLayout container = new StackLayout();
+            if (sender == null)
+            {
+                course = courses[courseCount];
+                container = (StackLayout)termList.Children[course.TermId - 1];
+            }
+            else
+            {
+                selection = await DisplayActionSheet("Select Course", "Cancel", null, status.ToArray());
+                Label button = (Label)sender;
+                container = (StackLayout)button.Parent;
+            }
             Frame frame = new Frame();
             frame.Margin = new Thickness(25, 3);
             Grid grid = new Grid();
@@ -429,11 +457,18 @@ namespace C971Rosendahl.Views
             grid.GestureRecognizers.Add(courseClick);
             Label courseName = new Label()
             {
-                Text = selection,
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
+            if (sender == null)
+            {
+                courseName.Text = course.Name;
+            }
+            else
+            {
+                courseName.Text = selection;
+            }
             grid.Children.Add(courseName); 
             Label completionStatus = new Label()
             {
@@ -554,7 +589,7 @@ namespace C971Rosendahl.Views
 
         private async void CourseView_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new Course());
+            await Navigation.PushAsync(new ViewCourse());
         }
 
         public async void CourseEdit_Clicked(object sender, EventArgs e)
@@ -574,11 +609,17 @@ namespace C971Rosendahl.Views
         private async void DeleteData(object sender, EventArgs e)
         {
             await DatabaseService.ClearSampleData();
+            termList.Children.Clear();
         }
 
         private async void LoadData(object sender, EventArgs e)
         {
             await DatabaseService.LoadSampleData();
+
+            foreach (Term term in terms)
+            {
+                NewTerm_Clicked(null, null);
+            }
         }
     }
 

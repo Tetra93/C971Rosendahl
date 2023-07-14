@@ -19,13 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ViewCourse.xaml.cs">
+      <DependentUpon>ViewCourse.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\DegreePlan.xaml.cs">
       <DependentUpon>DegreePlan.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\Course.xaml">
+    <EmbeddedResource Update="Views\ViewCourse.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\DegreePlan.xaml">
