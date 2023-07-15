@@ -388,6 +388,7 @@ namespace C971Rosendahl.Services
 
             await _db.InsertAsync(course6);
             DegreePlan.terms = (List<Term>) await GetTerms();
+            DegreePlan.courses = await GetCourse();
             Settings.FirstRun = false;
         }
 

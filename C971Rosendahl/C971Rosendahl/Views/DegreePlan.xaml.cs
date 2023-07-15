@@ -31,10 +31,6 @@ namespace C971Rosendahl.Views
         public DegreePlan()
         {
             InitializeComponent();
-            //GetData();
-            //Not working on the first load after clearing data. Figure out why
-            //Maybe there's a method for when the app first loads rather than when
-            //elements begin appearing. I don't know
             termCount = termList.Children.Count;
         }
 
@@ -49,18 +45,18 @@ namespace C971Rosendahl.Views
             {
                 terms = (List<Term>)await DatabaseService.GetTerms();
                 courses = await DatabaseService.GetCourse();
-
-                foreach (Term term in terms)
-                {
-                    NewTerm_Clicked(null, null);
-                }
-                for (int i = 0; i <= courses.Count - 1; i++)
-                {
-                    courseCount = i;
-                    Course course = courses[i];
-                    courseTermId = course.TermId;
-                    CourseAdd_Clicked(null, null);
-                }
+            }
+            foreach (Term term in terms)
+            {
+                NewTerm_Clicked(null, null);
+                termCount++;
+            }
+            for (int i = 0; i <= courses.Count - 1; i++)
+            {
+                courseCount = i;
+                Course course = courses[i];
+                courseTermId = course.TermId;
+                CourseAdd_Clicked(null, null);
             }
         }
 
@@ -72,7 +68,7 @@ namespace C971Rosendahl.Views
 
         #region Term methods
         
-        public void NewTerm_Clicked(object sender, EventArgs e)
+        public async void NewTerm_Clicked(object sender, EventArgs e)
         {
             Term term;
             if (sender == null)
@@ -87,6 +83,7 @@ namespace C971Rosendahl.Views
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now.AddDays(180),
                 };
+                await DatabaseService.AddTerm(term.Name, term.StartDate, term.EndDate);
             }
             StackLayout stackLayout = new StackLayout();
             Frame frame = new Frame
@@ -419,8 +416,8 @@ namespace C971Rosendahl.Views
             Grid container = (Grid)delete.Parent;
             Frame frame = (Frame)container.Parent;
             StackLayout stackLayout = (StackLayout)frame.Parent;
-            StackLayout stackLayout1 = (StackLayout)stackLayout.Parent;
-            stackLayout1.Children.Remove(stackLayout);
+ //           StackLayout stackLayout1 = (StackLayout)stackLayout.Parent;
+            termList.Children.Remove(stackLayout);
         }
 
         #endregion
