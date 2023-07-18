@@ -58,6 +58,11 @@ namespace C971Rosendahl.Services
         public static async Task RemoveTerm(int id)
         {
             await Init();
+            List<Course> courses = (List<Course>)await GetCourse(id);
+            foreach (Course course in courses)
+            {
+                await RemoveCourse(course.CourseId);
+            }
             await _db.DeleteAsync<Term>(id);
         }
 
@@ -83,11 +88,11 @@ namespace C971Rosendahl.Services
 
         }
 
-        public static async Task UpdateCourse(int termId, int instructorId, string name, DateTime StartDate, DateTime EndDate, bool notifications, string description)
+        public static async Task UpdateCourse(int courseId, int instructorId, string name, DateTime StartDate, DateTime EndDate, bool notifications, string description)
         {
             await Init();
             var courseQuery = await _db.Table<Course>()
-                .Where(i => i.TermId == termId)
+                .Where(i => i.CourseId == courseId)
                 .FirstOrDefaultAsync();
 
             if (courseQuery != null) 
@@ -98,6 +103,21 @@ namespace C971Rosendahl.Services
                 courseQuery.EndDate = EndDate;
                 courseQuery.DateNotifications = notifications;
                 courseQuery.Description = description;
+
+                await _db.UpdateAsync(courseQuery);
+            }
+        }
+
+        public static async Task UpdateCourse(int courseId, int completionStatus)
+        {
+            await Init();
+            var courseQuery = await _db.Table<Course>()
+                .Where(i => i.CourseId == courseId)
+                .FirstOrDefaultAsync();
+
+            if (courseQuery != null)
+            {
+                courseQuery.CompletionStatus = completionStatus;
 
                 await _db.UpdateAsync(courseQuery);
             }
@@ -312,84 +332,90 @@ namespace C971Rosendahl.Services
         {
             await Init();
 
-            Term term1 = new Term
-            {
-                Name = "Term 1",
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(180)
+                Term term1 = new Term
+                {
+                    Name = "Term 1",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(180)
 
-            };
+                };
 
-            await _db.InsertAsync(term1);
+                await _db.InsertAsync(term1);
 
-            Course course1 = new Course
-            {
-                Name = "C971",
-                Description = "Mobile Application Development",
-                StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(30),
-                TermId = 1
-            };
+                Course course1 = new Course
+                {
+                    Name = "C971",
+                    CompletionStatus = 1,
+                    Description = "Mobile Application Development",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now.AddDays(30),
+                    TermId = 1
+                };
 
-            await _db.InsertAsync(course1);
+                await _db.InsertAsync(course1);
 
-            Course course2 = new Course
-            {
-                Name = "C968",
-                Description = "Software I - C#",
-                StartDate = DateTime.Now.AddDays(30),
-                EndDate = DateTime.Now.AddDays(60),
-                TermId = 1
-            };
+                Course course2 = new Course
+                {
+                    Name = "C968",
+                    CompletionStatus = 4,
+                    Description = "Software I - C#",
+                    StartDate = DateTime.Now.AddDays(30),
+                    EndDate = DateTime.Now.AddDays(60),
+                    TermId = 1
+                };
 
-            await _db.InsertAsync(course2);
+                await _db.InsertAsync(course2);
 
-            Course course3 = new Course
-            {
-                Name = "C969",
-                Description = "Software II - Advanced C#",
-                StartDate = DateTime.Now.AddDays(60),
-                EndDate = DateTime.Now.AddDays(90),
-                TermId = 1
-            };
+                Course course3 = new Course
+                {
+                    Name = "C969",
+                    CompletionStatus = 4,
+                    Description = "Software II - Advanced C#",
+                    StartDate = DateTime.Now.AddDays(60),
+                    EndDate = DateTime.Now.AddDays(90),
+                    TermId = 1
+                };
 
-            await _db.InsertAsync(course3);
+                await _db.InsertAsync(course3);
 
-            Course course4 = new Course
-            {
-                Name = "D191",
-                Description = "Advanced Data Management",
-                StartDate = DateTime.Now.AddDays(90),
-                EndDate = DateTime.Now.AddDays(120),
-                TermId = 1
-            };
+                Course course4 = new Course
+                {
+                    Name = "D191",
+                    CompletionStatus = 4,
+                    Description = "Advanced Data Management",
+                    StartDate = DateTime.Now.AddDays(90),
+                    EndDate = DateTime.Now.AddDays(120),
+                    TermId = 1
+                };
 
-            await _db.InsertAsync(course4);
+                await _db.InsertAsync(course4);
 
-            Course course5 = new Course
-            {
-                Name = "C172",
-                Description = "Network and Security - Foundations",
-                StartDate = DateTime.Now.AddDays(120),
-                EndDate = DateTime.Now.AddDays(150),
-                TermId = 1
-            };
+                Course course5 = new Course
+                {
+                    Name = "C172",
+                    CompletionStatus = 4,
+                    Description = "Network and Security - Foundations",
+                    StartDate = DateTime.Now.AddDays(120),
+                    EndDate = DateTime.Now.AddDays(150),
+                    TermId = 1
+                };
 
-            await _db.InsertAsync(course5);
+                await _db.InsertAsync(course5);
 
-            Course course6 = new Course
-            {
-                Name = "C949",
-                Description = "Data Structures and Algorithms",
-                StartDate = DateTime.Now.AddDays(150),
-                EndDate = DateTime.Now.AddDays(180),
-                TermId = 1
-            };
+                Course course6 = new Course
+                {
+                    Name = "C949",
+                    CompletionStatus = 4,
+                    Description = "Data Structures and Algorithms",
+                    StartDate = DateTime.Now.AddDays(150),
+                    EndDate = DateTime.Now.AddDays(180),
+                    TermId = 1
+                };
 
-            await _db.InsertAsync(course6);
-            DegreePlan.terms = (List<Term>) await GetTerms();
-            DegreePlan.courses = await GetCourse();
-            Settings.FirstRun = false;
+                await _db.InsertAsync(course6);
+                DegreePlan.terms = (List<Term>)await GetTerms();
+                DegreePlan.courses = await GetCourse();
+                Settings.FirstRun = false;            
         }
 
         public static async Task ClearSampleData()

@@ -1,4 +1,5 @@
-﻿using C971Rosendahl.Services;
+﻿using C971Rosendahl.Models;
+using C971Rosendahl.Services;
 using C971Rosendahl.Views;
 using System;
 using Xamarin.Forms;

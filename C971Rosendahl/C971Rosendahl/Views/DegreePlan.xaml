@@ -11,12 +11,6 @@
     <ContentPage.Content>        
         <ScrollView>
             <StackLayout>
-                <Frame Margin="0,10">
-                    <Label Text="Student info"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand"/>
-                </Frame>
                 <StackLayout x:Name="termList">
                     <!--<StackLayout x:Name="term1">
                         <Frame Margin="0,15">

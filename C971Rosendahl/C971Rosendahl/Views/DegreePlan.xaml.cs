@@ -31,12 +31,12 @@ namespace C971Rosendahl.Views
         public DegreePlan()
         {
             InitializeComponent();
-            termCount = termList.Children.Count;
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            termCount = termList.Children.Count;
             if (Settings.FirstRun == true)
             {
                 await DatabaseService.LoadSampleData();
@@ -346,11 +346,14 @@ namespace C971Rosendahl.Views
         {
             Label save = (Label)sender;
             Grid container = (Grid)save.Parent;
+            Frame frame = (Frame)container.Parent;
+            StackLayout stackLayout = (StackLayout)frame.Parent;
             int row1 = -1;
             int row2 = -1;
             int column1 = -1;
             int column2 = -1;
-            string value = string.Empty;
+            Term term = new Term();
+            term.Id = (termList.Children.IndexOf(stackLayout) + 1);
 
             foreach (View child in container.Children)
             {
@@ -367,13 +370,21 @@ namespace C971Rosendahl.Views
                         if (child is Label Child && child2 is Entry entry)
                         {
                             Child.Text = entry.Text;
+                            term.Name = entry.Text;
                             break;
                         }
                         else if (child is Grid grid)
                         {
-                            if (grid.Children[1] is Label child3 && child2 is DatePicker datePicker)
+                            if (grid.Children[1] is Label child3 && grid.Children[0] is Label child4 && child2 is DatePicker datePicker)
                             {
-
+                                if(child4.Text == "Start Date: ")
+                                {
+                                    term.StartDate = datePicker.Date;
+                                }
+                                else if (child4.Text == "End Date: ")
+                                {
+                                    term.EndDate = datePicker.Date;
+                                }
                                 child3.Text = datePicker.Date.ToString("MM/dd/yyyy");
                                 break;
                             }
@@ -389,7 +400,7 @@ namespace C971Rosendahl.Views
                     child.IsVisible = true;
                 }
             }
-
+            await DatabaseService.UpdateTerm(term.Id, term.Name, term.StartDate, term.EndDate);
         }
 
         private void TermCancel_Clicked(object sender, EventArgs e)
@@ -410,14 +421,19 @@ namespace C971Rosendahl.Views
             }
         }
 
-        private void DeleteTerm_Clicked(object sender, EventArgs e)
+        private async void DeleteTerm_Clicked(object sender, EventArgs e)
         {
             Label delete = (Label)sender;
             Grid container = (Grid)delete.Parent;
             Frame frame = (Frame)container.Parent;
             StackLayout stackLayout = (StackLayout)frame.Parent;
- //           StackLayout stackLayout1 = (StackLayout)stackLayout.Parent;
-            termList.Children.Remove(stackLayout);
+            int ID = termList.Children.IndexOf(stackLayout) + 1;
+            bool check = await DisplayAlert("Delete Term?", "All courses inside this term will also be deleted. Are you sure?", "Yes", "No");
+            if (check == true)
+            {
+                await DatabaseService.RemoveTerm(ID);
+                termList.Children.Remove(stackLayout);
+            }
         }
 
         #endregion
@@ -426,7 +442,7 @@ namespace C971Rosendahl.Views
 
         private async void CourseAdd_Clicked(object sender, EventArgs e)
         {
-            Course course = new Course();
+            Course course;
             string selection = string.Empty;
             StackLayout container = new StackLayout();
             if (sender == null)
@@ -436,9 +452,14 @@ namespace C971Rosendahl.Views
             }
             else
             {
-                selection = await DisplayActionSheet("Select Course", "Cancel", null, status.ToArray());
                 Label button = (Label)sender;
                 container = (StackLayout)button.Parent;
+                course = new Course()
+                {
+                    Name = "New Course",
+                    Description = "No description",
+                    TermId = termList.Children.IndexOf(container) + 1
+                };
             }
             Frame frame = new Frame();
             frame.Margin = new Thickness(25, 3);
@@ -454,22 +475,15 @@ namespace C971Rosendahl.Views
             grid.GestureRecognizers.Add(courseClick);
             Label courseName = new Label()
             {
+                Text = course.Name,
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
-            if (sender == null)
-            {
-                courseName.Text = course.Name;
-            }
-            else
-            {
-                courseName.Text = selection;
-            }
             grid.Children.Add(courseName); 
             Label completionStatus = new Label()
             {
-                Text = "Not Started",
+                Text = status[course.CompletionStatus],
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.End
@@ -501,7 +515,7 @@ namespace C971Rosendahl.Views
             startDateGrid.Children.Add(courseStartDate);
             Label courseStartDate1 = new Label()
             {
-                Text = DateTime.Now.Date.ToString("MM/dd/yyyy"),
+                Text = course.StartDate.ToString("MM/dd/yyyy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -521,7 +535,7 @@ namespace C971Rosendahl.Views
             endDateGrid.Children.Add(courseEndDate);
             Label courseEndDate1 = new Label()
             {
-                Text = DateTime.Now.Date.AddDays(14).ToString("MM/dd/yyyy"),
+                Text = course.EndDate.ToString("MM/dd/yyyy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -529,9 +543,19 @@ namespace C971Rosendahl.Views
             Grid.SetColumn(courseEndDate1 , 1);
             endDateGrid.Children.Add(courseEndDate1);
             grid.Children.Add(endDateGrid);
+            Label ID = new Label()
+            {
+                Text = course.CourseId.ToString(),
+                IsVisible = false
+            };
+            grid.Children.Add(ID);
 
 
             frame.Content = grid;
+            if (sender != null)
+            {
+                await DatabaseService.AddCourse(course.TermId, course.InstructorId, course.Name, course.StartDate, course.EndDate, course.DateNotifications, course.Description);
+            }
             container.Children.Insert((container.Children.Count() - 1), frame);
         }
 
@@ -556,11 +580,13 @@ namespace C971Rosendahl.Views
             }
         }
 
-        private void PickerSelection_Clicked(object sender, EventArgs e)
+        private async void PickerSelection_Clicked(object sender, EventArgs e)
         {
             if (sender is Picker picker)
             {
                 Grid container = (Grid)picker.Parent;
+                Label IdLabel = container.Children.Last() as Label;
+                int ID = Int32.Parse(IdLabel.Text);
                 foreach (View child in container.Children)
                 {
                     if (child is Label label)
@@ -576,6 +602,7 @@ namespace C971Rosendahl.Views
                                 picker.IsVisible = false;
                                 label.Text = picker.SelectedItem.ToString();
                                 label.IsVisible = true;
+                                await DatabaseService.UpdateCourse(ID, picker.SelectedIndex);
                                 break;
                             }
                         }                        

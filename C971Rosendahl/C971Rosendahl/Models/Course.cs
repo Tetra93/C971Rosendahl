@@ -16,6 +16,8 @@ namespace C971Rosendahl.Models
 
         public string Name { set; get; }
 
+        public int CompletionStatus { set; get; } = 4;
+
         public DateTime StartDate { set; get; } = DateTime.Now.Date;
 
         public DateTime EndDate { set; get; } = DateTime.Now.Date.AddDays(30);
