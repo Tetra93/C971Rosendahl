@@ -12,11 +12,5 @@ namespace C971Rosendahl.Services
             get => Preferences.Get(nameof(FirstRun), true);
             set => Preferences.Set(nameof(FirstRun), value);
         }
-
-        public static bool FirstLoad
-        {
-            get => Preferences.Get(nameof(FirstLoad), true);
-            set => Preferences.Set(nameof(FirstLoad), value);
-        }
     }
 }

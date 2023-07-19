@@ -36,31 +36,28 @@ namespace C971Rosendahl.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            termCount = termList.Children.Count;
-            if (Settings.FirstLoad == true)
+            termList.Children.Clear();
+            termCount = 0;
+            if (Settings.FirstRun == true)
             {
-                if (Settings.FirstRun == true)
-                {
-                    await DatabaseService.LoadSampleData();
-                }
-                else if (termList.Children.Count == 0)
-                {
-                    terms = (List<Term>)await DatabaseService.GetTerms();
-                    courses = await DatabaseService.GetCourse();
-                }
-                foreach (Term term in terms)
-                {
-                    NewTerm_Clicked(null, null);
-                    termCount++;
-                }
-                for (int i = 0; i <= courses.Count - 1; i++)
-                {
-                    courseCount = i;
-                    Course course = courses[i];
-                    courseTermId = course.TermId;
-                    CourseAdd_Clicked(null, null);
-                }
-                Settings.FirstLoad = false;
+                await DatabaseService.LoadSampleData();
+            }
+            else
+            {
+                terms = (List<Term>)await DatabaseService.GetTerms();
+                courses = await DatabaseService.GetCourse();
+            }
+            foreach (Term term in terms)
+            {
+                NewTerm_Clicked(null, null);
+                termCount++;
+            }
+            for (int i = 0; i <= courses.Count - 1; i++)
+            {
+                courseCount = i;
+                Course course = courses[i];
+                courseTermId = course.TermId;
+                CourseAdd_Clicked(null, null);
             }
         }
 
