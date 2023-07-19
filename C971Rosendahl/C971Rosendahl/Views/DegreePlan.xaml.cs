@@ -586,7 +586,7 @@ namespace C971Rosendahl.Views
             {
                 Grid container = (Grid)picker.Parent;
                 Label IdLabel = container.Children.Last() as Label;
-                int ID = Int32.Parse(IdLabel.Text);
+                int ID = int.Parse(IdLabel.Text);
                 foreach (View child in container.Children)
                 {
                     if (child is Label label)
@@ -613,7 +613,10 @@ namespace C971Rosendahl.Views
 
         private async void CourseView_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new ViewCourse());
+            Grid grid = (Grid)sender;
+            Label label = grid.Children.Last() as Label;
+            int id = int.Parse(label.Text);
+            await Navigation.PushAsync(new ViewCourse(id));
         }
 
         public async void CourseEdit_Clicked(object sender, EventArgs e)

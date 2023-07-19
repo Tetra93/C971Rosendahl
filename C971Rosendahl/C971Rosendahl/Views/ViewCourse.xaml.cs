@@ -1,9 +1,9 @@
-﻿using System;
+﻿using C971Rosendahl.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -12,9 +12,20 @@ namespace C971Rosendahl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ViewCourse : ContentPage
     {
-        public ViewCourse()
+        public ViewCourse(int id)
         {
             InitializeComponent();
+            List<Course> courses = DegreePlan.courses;
+            foreach (Course course in courses)
+            {
+                if (course.CourseId == id)
+                {
+                    courseName.Text = course.Name;
+                    courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yyyy");
+                    courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yyyy");
+                    courseDescription.Text = course.Description;
+                }
+            }
         }
 
         public async void CourseEdit_Clicked(object sender, EventArgs e)
