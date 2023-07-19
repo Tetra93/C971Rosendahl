@@ -4,7 +4,8 @@
              x:Class="C971Rosendahl.Views.ViewCourse"
              Title="Course Name">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Edit Course" Clicked="CourseEdit_Clicked"/>
+        <!--<ToolbarItem Text="Edit Course" Clicked="CourseEdit_Clicked"/>-->
+        <!--<ToolbarItem Text="Cancel" Clicked="Cancel"/>-->
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>

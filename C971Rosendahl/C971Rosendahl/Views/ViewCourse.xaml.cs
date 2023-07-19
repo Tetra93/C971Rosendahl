@@ -59,5 +59,10 @@ namespace C971Rosendahl.Views
         {
             await DisplayAlert("Clicked", "PA Notifications Clicked", "OK");
         }
+
+        private async void Cancel(object sender, EventArgs e)
+        {
+            await Navigation.PopAsync();
+        }
     }
 }

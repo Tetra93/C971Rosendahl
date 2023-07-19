@@ -21,6 +21,7 @@ namespace C971Rosendahl
 
         protected override void OnStart()
         {
+            Settings.FirstLoad = true;
         }
 
         protected override void OnSleep()

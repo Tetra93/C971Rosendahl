@@ -37,26 +37,30 @@ namespace C971Rosendahl.Views
         {
             base.OnAppearing();
             termCount = termList.Children.Count;
-            if (Settings.FirstRun == true)
+            if (Settings.FirstLoad == true)
             {
-                await DatabaseService.LoadSampleData();
-            }
-            else if (termList.Children.Count == 0)
-            {
-                terms = (List<Term>)await DatabaseService.GetTerms();
-                courses = await DatabaseService.GetCourse();
-            }
-            foreach (Term term in terms)
-            {
-                NewTerm_Clicked(null, null);
-                termCount++;
-            }
-            for (int i = 0; i <= courses.Count - 1; i++)
-            {
-                courseCount = i;
-                Course course = courses[i];
-                courseTermId = course.TermId;
-                CourseAdd_Clicked(null, null);
+                if (Settings.FirstRun == true)
+                {
+                    await DatabaseService.LoadSampleData();
+                }
+                else if (termList.Children.Count == 0)
+                {
+                    terms = (List<Term>)await DatabaseService.GetTerms();
+                    courses = await DatabaseService.GetCourse();
+                }
+                foreach (Term term in terms)
+                {
+                    NewTerm_Clicked(null, null);
+                    termCount++;
+                }
+                for (int i = 0; i <= courses.Count - 1; i++)
+                {
+                    courseCount = i;
+                    Course course = courses[i];
+                    courseTermId = course.TermId;
+                    CourseAdd_Clicked(null, null);
+                }
+                Settings.FirstLoad = false;
             }
         }
 
