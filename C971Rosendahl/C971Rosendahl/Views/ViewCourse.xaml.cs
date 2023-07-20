@@ -17,17 +17,21 @@ namespace C971Rosendahl.Views
             InitializeComponent();
             List<Course> courses = DegreePlan.courses;
             List<Instructor> instructors = DegreePlan.instructors;
-            foreach (Course course in courses)
+            List<Note> notes = DegreePlan.notes;
+            List<Assessment> assessments = DegreePlan.assessments;
+            Course course = new Course();
+            foreach (Course searchCourse in courses)
             {
-                if (course.CourseId == id)
+                if (searchCourse.CourseId == id)
                 {
-                    courseName.Text = course.Name;
-                    courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yyyy");
-                    courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yyyy");
-                    courseDescription.Text = course.Description;
-                    instructorInfo.Text = instructors[course.InstructorId - 1].Name;
+                    course = searchCourse;
                 }
             }
+            courseName.Text = course.Name;
+            courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yyyy");
+            courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yyyy");
+            courseDescription.Text = course.Description;
+            instructorInfo.Text = instructors[course.InstructorId - 1].Name;
         }
 
         public async void CourseEdit_Clicked(object sender, EventArgs e)

@@ -389,7 +389,8 @@ namespace C971Rosendahl.Services
                 "Programming: Applications are prerequisites for this course.",
                 StartDate = DateTime.Now.AddDays(30),
                 EndDate = DateTime.Now.AddDays(60),
-                TermId = 1
+                TermId = 1,
+                InstructorId = 1
             };
 
             await _db.InsertAsync(course2);
@@ -408,7 +409,8 @@ namespace C971Rosendahl.Services
                 "the C# language. The prerequisite for this course is Software I - C#.",
                 StartDate = DateTime.Now.AddDays(60),
                 EndDate = DateTime.Now.AddDays(90),
-                TermId = 1
+                TermId = 1,
+                InstructorId = 1
             };
 
             await _db.InsertAsync(course3);
@@ -438,7 +440,8 @@ namespace C971Rosendahl.Services
                 "Management is a prerequisite for this course.",
                 StartDate = DateTime.Now.AddDays(90),
                 EndDate = DateTime.Now.AddDays(120),
-                TermId = 1
+                TermId = 1,
+                InstructorId = 1
             };
 
             await _db.InsertAsync(course4);
@@ -460,7 +463,8 @@ namespace C971Rosendahl.Services
                 "security policies and procedures. This course has no prerequisites.",
                 StartDate = DateTime.Now.AddDays(120),
                 EndDate = DateTime.Now.AddDays(150),
-                TermId = 1
+                TermId = 1,
+                InstructorId = 1
             };
 
             await _db.InsertAsync(course5);
@@ -481,7 +485,8 @@ namespace C971Rosendahl.Services
                 "Students will implement simple applications using the techniques learned.",
                 StartDate = DateTime.Now.AddDays(150),
                 EndDate = DateTime.Now.AddDays(180),
-                TermId = 1
+                TermId = 1,
+                InstructorId = 1
             };
 
             await _db.InsertAsync(course6);
