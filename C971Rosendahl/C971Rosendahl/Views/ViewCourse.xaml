@@ -13,9 +13,10 @@
                 <Frame Margin="0,10">
                     <Label     x:Name="courseName"
                                Text="Course Name"
-                               FontSize="18"
+                               FontSize="18"       
                                VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand"/>
+                               HorizontalOptions="CenterAndExpand"
+                               HorizontalTextAlignment="Center"/>                        
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>
@@ -64,7 +65,8 @@
                            Text="Course info"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand" 
-                           HorizontalOptions="CenterAndExpand"/>
+                           HorizontalOptions="CenterAndExpand"
+                           HorizontalTextAlignment="Center"/>
                 </Frame>
                 <Frame Margin="0,10">
                     <Label x:Name="instructorInfo"

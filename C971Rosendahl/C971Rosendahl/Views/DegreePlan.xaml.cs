@@ -476,7 +476,7 @@ namespace C971Rosendahl.Views
             grid.GestureRecognizers.Add(courseClick);
             Label courseName = new Label()
             {
-                Text = course.Name,
+                Text = course.Name.Substring(course.Name.Length - 4),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -544,6 +544,32 @@ namespace C971Rosendahl.Views
             Grid.SetColumn(courseEndDate1 , 1);
             endDateGrid.Children.Add(courseEndDate1);
             grid.Children.Add(endDateGrid);
+            Label editCourse = new Label()
+            {
+                Text = "Edit",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.End,
+            };
+            Grid.SetRow(editCourse, 1);
+            Grid.SetColumn(editCourse , 1);
+            TapGestureRecognizer courseEdit = new TapGestureRecognizer();
+            courseEdit.Tapped += CourseEdit_Clicked;
+            editCourse.GestureRecognizers.Add(courseEdit);
+            grid.Children.Add(editCourse);
+            Label deleteCourse = new Label()
+            {
+                Text = "Delete",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.End
+            };
+            Grid.SetRow(deleteCourse, 2);
+            Grid.SetColumn(deleteCourse , 1);
+            TapGestureRecognizer courseDelete = new TapGestureRecognizer();
+            courseDelete.Tapped += CourseDelete_Clicked;
+            deleteCourse.GestureRecognizers.Add(courseDelete);
+            grid.Children.Add(deleteCourse);
             Label ID = new Label()
             {
                 Text = course.CourseId.ToString(),
@@ -630,6 +656,24 @@ namespace C971Rosendahl.Views
 
             //await DatabaseService.ClearSampleData();
 
+            //On course edit page, add check for name to make sure it is at least 4 characters long
+        }
+
+        private async void CourseDelete_Clicked(object sender, EventArgs e)
+        {
+            Label label = (Label)sender;
+            Grid grid = (Grid)label.Parent;
+
+            bool confirmation = await DisplayAlert("Delete course?", "Are you sure you want to delete this course?", "Yes", "No");
+            if (confirmation == true)
+            {
+                Label idLabel = grid.Children.Last() as Label;
+                int id = int.Parse(idLabel.Text);
+                Frame frame = (Frame)grid.Parent;
+                StackLayout stackLayout = (StackLayout)frame.Parent;
+                stackLayout.Children.Remove(frame);
+                await DatabaseService.RemoveCourse(id);
+            }
         }
 
         #endregion
@@ -638,16 +682,14 @@ namespace C971Rosendahl.Views
         {
             await DatabaseService.ClearSampleData();
             termList.Children.Clear();
+            termCount = 0;
         }
 
         private async void LoadData(object sender, EventArgs e)
         {
             await DatabaseService.LoadSampleData();
-
-            foreach (Term term in terms)
-            {
-                NewTerm_Clicked(null, null);
-            }
+            termCount = 0;
+            OnAppearing();
         }
     }
 
