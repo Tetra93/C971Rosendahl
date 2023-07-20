@@ -48,10 +48,12 @@ namespace C971Rosendahl.Services
             }
         }
 
-        public static async Task<IEnumerable<Term>> GetTerms()
+        public static async Task<List<Term>> GetTerms()
         {
             await Init();
+
             List<Term> terms = await _db.Table<Term>().ToListAsync();
+
             return terms;
         }
 
@@ -123,11 +125,11 @@ namespace C971Rosendahl.Services
             }
         }
 
-        public static async Task<IEnumerable<Course>> GetCourse(int termId)
+        public static async Task<List<Course>> GetCourse(int termId)
         {
             await Init();
             
-            var courses = await _db.Table<Course>()
+            List<Course> courses = await _db.Table<Course>()
                 .Where (i =>  i.TermId == termId)
                 .ToListAsync();
 
@@ -185,7 +187,7 @@ namespace C971Rosendahl.Services
             }
         }
 
-        public static async Task<IEnumerable<Instructor>> GetInstructor()
+        public static async Task<List<Instructor>> GetInstructor()
         {
             await Init();
 
@@ -235,7 +237,7 @@ namespace C971Rosendahl.Services
             }
         }
 
-        public static async Task<IEnumerable<Note>> GetNote()
+        public static async Task<List<Note>> GetNote()
         {
             await Init();
 
@@ -297,7 +299,7 @@ namespace C971Rosendahl.Services
             }
         }
 
-        public static async Task<IEnumerable<Assessment>> GetAssessment(int courseId)
+        public static async Task<List<Assessment>> GetAssessment(int courseId)
         {
             await Init();
 
@@ -308,7 +310,7 @@ namespace C971Rosendahl.Services
             return assessments;
         }
 
-        public static async Task<IEnumerable<Assessment>> GetAssessment()
+        public static async Task<List<Assessment>> GetAssessment()
         {
             await Init();
 
@@ -332,150 +334,160 @@ namespace C971Rosendahl.Services
         {
             await Init();
 
-                Term term1 = new Term
-                {
-                    Name = "Term 1",
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(180)
+            Instructor instructor1 = new Instructor
+            {
+                Name = "Jacob Rosendahl",
+                Phone = "123-456-7890",
+                Email = "jrosendahl@fakemail.com"
+            };
 
-                };
+            await _db.InsertAsync(instructor1);
 
-                await _db.InsertAsync(term1);
+            Term term1 = new Term
+            {
+                Name = "Term 1",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(180)
 
-                Course course1 = new Course
-                {
-                    Name = "Mobile Application Development Using C# - C971",
-                    CompletionStatus = 1,
-                    Description = "Mobile Application Development Using C# introduces " +
-                    "students to programming for mobile devices. " +
-                    "Building on students’ previous knowledge of programming in C#, " +
-                    "this course investigates Xamarin.Forms and how it can be used to " +
-                    "build a mobile application. This course explores a broad range of topics, " +
-                    "including mobile user interface design and development; building applications " +
-                    "that adapt to different mobile devices and platforms; managing data using a " +
-                    "local database; and consuming REST-based web services. There are several " +
-                    "prerequisites for this course: Software I and II, and UI Design.",
-                    StartDate = DateTime.Now,
-                    EndDate = DateTime.Now.AddDays(30),
-                    TermId = 1
-                };
+            };
 
-                await _db.InsertAsync(course1);
+            await _db.InsertAsync(term1);
 
-                Course course2 = new Course
-                {
-                    Name = "Software I – C# - C968",
-                    CompletionStatus = 4,
-                    Description = "Software I - C# builds object-oriented " +
-                    "programming expertise and introduces powerful new tools " +
-                    "for C# application development. You will learn about and " +
-                    "put into action: class design, exception handling, and " +
-                    "other object-oriented principles and constructs to develop " +
-                    "software that meets business requirements. This course " +
-                    "requires foundational knowledge of object-oriented programming. " +
-                    "Scripting and Programming: Foundations and Scripting and " +
-                    "Programming: Applications are prerequisites for this course.",
-                    StartDate = DateTime.Now.AddDays(30),
-                    EndDate = DateTime.Now.AddDays(60),
-                    TermId = 1
-                };
+            Course course1 = new Course
+            {
+                Name = "Mobile Application Development Using C# - C971",
+                CompletionStatus = 1,
+                Description = "Mobile Application Development Using C# introduces " +
+                "students to programming for mobile devices. " +
+                "Building on students’ previous knowledge of programming in C#, " +
+                "this course investigates Xamarin.Forms and how it can be used to " +
+                "build a mobile application. This course explores a broad range of topics, " +
+                "including mobile user interface design and development; building applications " +
+                "that adapt to different mobile devices and platforms; managing data using a " +
+                "local database; and consuming REST-based web services. There are several " +
+                "prerequisites for this course: Software I and II, and UI Design.",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(30),
+                TermId = 1,
+                InstructorId = 1
+            };
 
-                await _db.InsertAsync(course2);
+            await _db.InsertAsync(course1);
 
-                Course course3 = new Course
-                {
-                    Name = "Software II – Advanced C# - C969",
-                    CompletionStatus = 4,
-                    Description = "Software II - Advanced C# refines " +
-                    "object-oriented programming expertise and builds database " +
-                    "and file server application development skills. You will " +
-                    "learn about and put into action lambda expressions, " +
-                    "collections, and input/output to develop software with " +
-                    "C# that meets business requirements. This course requires " +
-                    "intermediate expertise in object-oriented programming and " +
-                    "the C# language. The prerequisite for this course is Software I - C#.",
-                    StartDate = DateTime.Now.AddDays(60),
-                    EndDate = DateTime.Now.AddDays(90),
-                    TermId = 1
-                };
+            Course course2 = new Course
+            {
+                Name = "Software I – C# - C968",
+                CompletionStatus = 4,
+                Description = "Software I - C# builds object-oriented " +
+                "programming expertise and introduces powerful new tools " +
+                "for C# application development. You will learn about and " +
+                "put into action: class design, exception handling, and " +
+                "other object-oriented principles and constructs to develop " +
+                "software that meets business requirements. This course " +
+                "requires foundational knowledge of object-oriented programming. " +
+                "Scripting and Programming: Foundations and Scripting and " +
+                "Programming: Applications are prerequisites for this course.",
+                StartDate = DateTime.Now.AddDays(30),
+                EndDate = DateTime.Now.AddDays(60),
+                TermId = 1
+            };
 
-                await _db.InsertAsync(course3);
+            await _db.InsertAsync(course2);
 
-                Course course4 = new Course
-                {
-                    Name = "Advanced Data Management - D191",
-                    CompletionStatus = 4,
-                    Description = "Advanced Data Management enables " +
-                    "organizations to extract and analyze raw data. " +
-                    "Skillful data management allows organizations to " +
-                    "discover and explore data in ways that uncover " +
-                    "trends, issues, and their root causes. In turn, " +
-                    "businesses are better equipped to capitalize on " +
-                    "opportunities and more accurately plan for the future. " +
-                    "As organizations continue to extract larger and more " +
-                    "detailed volumes of data, the need is rapidly growing " +
-                    "for IT professionals possessing data management skills. " +
-                    "These skills include performing advanced relational " +
-                    "data modeling as well as designing data marts, lakes, " +
-                    "and warehouses. This course will empower software " +
-                    "developers with the skills to build business logic at " +
-                    "the database layer to employ more stability and higher " +
-                    "data-processing speeds. Data analysts will gain the " +
-                    "ability to automate common tasks to summarize and " +
-                    "integrate data as they prepare it for analysis. Data " +
-                    "Management is a prerequisite for this course.",
-                    StartDate = DateTime.Now.AddDays(90),
-                    EndDate = DateTime.Now.AddDays(120),
-                    TermId = 1
-                };
+            Course course3 = new Course
+            {
+                Name = "Software II – Advanced C# - C969",
+                CompletionStatus = 4,
+                Description = "Software II - Advanced C# refines " +
+                "object-oriented programming expertise and builds database " +
+                "and file server application development skills. You will " +
+                "learn about and put into action lambda expressions, " +
+                "collections, and input/output to develop software with " +
+                "C# that meets business requirements. This course requires " +
+                "intermediate expertise in object-oriented programming and " +
+                "the C# language. The prerequisite for this course is Software I - C#.",
+                StartDate = DateTime.Now.AddDays(60),
+                EndDate = DateTime.Now.AddDays(90),
+                TermId = 1
+            };
 
-                await _db.InsertAsync(course4);
+            await _db.InsertAsync(course3);
 
-                Course course5 = new Course
-                {
-                    Name = "Network and Security - Foundations - C172",
-                    CompletionStatus = 4,
-                    Description = "Network and Security - Foundations " +
-                    "introduces students to the components of a computer " +
-                    "network and the concept and role of communication " +
-                    "protocols. The course covers widely used categorical " +
-                    "classifications of networks (e.g., LAN, MAN, WAN, " +
-                    "WLAN, PAN, SAN, CAN, and VPN) as well as network " +
-                    "topologies, physical devices, and layered abstraction. " +
-                    "The course also introduces students to basic concepts " +
-                    "of security, covering vulnerabilities of networks and " +
-                    "mitigation techniques, security of physical media, and " +
-                    "security policies and procedures. This course has no prerequisites.",
-                    StartDate = DateTime.Now.AddDays(120),
-                    EndDate = DateTime.Now.AddDays(150),
-                    TermId = 1
-                };
+            Course course4 = new Course
+            {
+                Name = "Advanced Data Management - D191",
+                CompletionStatus = 4,
+                Description = "Advanced Data Management enables " +
+                "organizations to extract and analyze raw data. " +
+                "Skillful data management allows organizations to " +
+                "discover and explore data in ways that uncover " +
+                "trends, issues, and their root causes. In turn, " +
+                "businesses are better equipped to capitalize on " +
+                "opportunities and more accurately plan for the future. " +
+                "As organizations continue to extract larger and more " +
+                "detailed volumes of data, the need is rapidly growing " +
+                "for IT professionals possessing data management skills. " +
+                "These skills include performing advanced relational " +
+                "data modeling as well as designing data marts, lakes, " +
+                "and warehouses. This course will empower software " +
+                "developers with the skills to build business logic at " +
+                "the database layer to employ more stability and higher " +
+                "data-processing speeds. Data analysts will gain the " +
+                "ability to automate common tasks to summarize and " +
+                "integrate data as they prepare it for analysis. Data " +
+                "Management is a prerequisite for this course.",
+                StartDate = DateTime.Now.AddDays(90),
+                EndDate = DateTime.Now.AddDays(120),
+                TermId = 1
+            };
 
-                await _db.InsertAsync(course5);
+            await _db.InsertAsync(course4);
 
-                Course course6 = new Course
-                {
-                    Name = "Data Structures and Algorithms I - C949",
-                    CompletionStatus = 4,
-                    Description = "Data Structures and Algorithms I " +
-                    "covers the fundamentals of dynamic data " +
-                    "structures, such as bags, lists, stacks, queues, " +
-                    "trees, hash tables, and their associated algorithms. " +
-                    "With Python software as the basis, the course " +
-                    "discusses object-oriented design and abstract data " +
-                    "types as a design paradigm. The course emphasizes " +
-                    "problem solving and techniques for designing " +
-                    "efficient, maintainable software applications. " +
-                    "Students will implement simple applications using the techniques learned.",
-                    StartDate = DateTime.Now.AddDays(150),
-                    EndDate = DateTime.Now.AddDays(180),
-                    TermId = 1
-                };
+            Course course5 = new Course
+            {
+                Name = "Network and Security - Foundations - C172",
+                CompletionStatus = 4,
+                Description = "Network and Security - Foundations " +
+                "introduces students to the components of a computer " +
+                "network and the concept and role of communication " +
+                "protocols. The course covers widely used categorical " +
+                "classifications of networks (e.g., LAN, MAN, WAN, " +
+                "WLAN, PAN, SAN, CAN, and VPN) as well as network " +
+                "topologies, physical devices, and layered abstraction. " +
+                "The course also introduces students to basic concepts " +
+                "of security, covering vulnerabilities of networks and " +
+                "mitigation techniques, security of physical media, and " +
+                "security policies and procedures. This course has no prerequisites.",
+                StartDate = DateTime.Now.AddDays(120),
+                EndDate = DateTime.Now.AddDays(150),
+                TermId = 1
+            };
 
-                await _db.InsertAsync(course6);
-                DegreePlan.terms = (List<Term>)await GetTerms();
-                DegreePlan.courses = await GetCourse();
-                Settings.FirstRun = false;            
+            await _db.InsertAsync(course5);
+
+            Course course6 = new Course
+            {
+                Name = "Data Structures and Algorithms I - C949",
+                CompletionStatus = 4,
+                Description = "Data Structures and Algorithms I " +
+                "covers the fundamentals of dynamic data " +
+                "structures, such as bags, lists, stacks, queues, " +
+                "trees, hash tables, and their associated algorithms. " +
+                "With Python software as the basis, the course " +
+                "discusses object-oriented design and abstract data " +
+                "types as a design paradigm. The course emphasizes " +
+                "problem solving and techniques for designing " +
+                "efficient, maintainable software applications. " +
+                "Students will implement simple applications using the techniques learned.",
+                StartDate = DateTime.Now.AddDays(150),
+                EndDate = DateTime.Now.AddDays(180),
+                TermId = 1
+            };
+
+            await _db.InsertAsync(course6);
+            DegreePlan.terms = (List<Term>)await GetTerms();
+            DegreePlan.courses = await GetCourse();
+            Settings.FirstRun = false;  
         }
 
         public static async Task ClearSampleData()

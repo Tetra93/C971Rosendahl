@@ -27,6 +27,8 @@ namespace C971Rosendahl.Views
         public static List<Term> terms = new List<Term>();
 
         public static List<Course> courses = new List<Course>();
+
+        public static List<Instructor> instructors = new List<Instructor>();
         
         public DegreePlan()
         {
@@ -44,8 +46,9 @@ namespace C971Rosendahl.Views
             }
             else
             {
-                terms = (List<Term>)await DatabaseService.GetTerms();
+                terms = await DatabaseService.GetTerms();
                 courses = await DatabaseService.GetCourse();
+                instructors = await DatabaseService.GetInstructor();
             }
             foreach (Term term in terms)
             {

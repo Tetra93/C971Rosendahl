@@ -16,6 +16,7 @@ namespace C971Rosendahl.Views
         {
             InitializeComponent();
             List<Course> courses = DegreePlan.courses;
+            List<Instructor> instructors = DegreePlan.instructors;
             foreach (Course course in courses)
             {
                 if (course.CourseId == id)
@@ -24,6 +25,7 @@ namespace C971Rosendahl.Views
                     courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yyyy");
                     courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yyyy");
                     courseDescription.Text = course.Description;
+                    instructorInfo.Text = instructors[course.InstructorId - 1].Name;
                 }
             }
         }
