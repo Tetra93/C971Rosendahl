@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="C971Rosendahl.Views.EditNote"
+             Title="Edit Note">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Clicked="SaveButton_Clicked"/>
+        <ToolbarItem Text="Delete Note" Order="Secondary" Clicked="DeleteNote"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <StackLayout>
+            <Entry x:Name="noteName"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand"/>
+            <Entry x:Name="noteContents"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalOptions="CenterAndExpand"/>
+            <Label Text="Cancel"
+                       VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="CenterAndExpand">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="CancelButton_Clicked"/>
+                    </Label.GestureRecognizers>
+                </Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

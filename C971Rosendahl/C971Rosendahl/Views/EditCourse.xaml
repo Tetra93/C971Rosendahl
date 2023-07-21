@@ -67,11 +67,13 @@
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>
-                        <Label x:Name="notes"
+                        <StackLayout x:Name="notes">
+                            <Label
                            Text="Notes"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand" 
                            HorizontalOptions="CenterAndExpand"/>
+                        </StackLayout>
                     </Grid>
                 </Frame>
                 <Frame Margin="0,10">

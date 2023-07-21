@@ -12,14 +12,18 @@ namespace C971Rosendahl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ViewCourse : ContentPage
     {
+        public Course course = new Course();
+        public Note currentNote = new Note();
+        public int maxNoteId = 0;
+
         public ViewCourse(int id)
         {
             InitializeComponent();
             List<Course> courses = DegreePlan.courses;
             List<Instructor> instructors = DegreePlan.instructors;
-            List<Note> notes = DegreePlan.notes;
+            List<Note> notes = new List<Note>();
             List<Assessment> assessments = DegreePlan.assessments;
-            Course course = new Course();
+
             foreach (Course searchCourse in courses)
             {
                 if (searchCourse.CourseId == id)
@@ -27,11 +31,27 @@ namespace C971Rosendahl.Views
                     course = searchCourse;
                 }
             }
+            foreach (Note note in DegreePlan.notes)
+            {
+                if (note.NoteId > maxNoteId)
+                {
+                    maxNoteId = note.NoteId;
+                }
+                if (note.CourseID == id)
+                {
+                    notes.Add(note);
+                }
+            }
             courseName.Text = course.Name;
             courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yyyy");
             courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yyyy");
             courseDescription.Text = course.Description;
             instructorInfo.Text = instructors[course.InstructorId - 1].Name;
+            foreach (Note note in notes)
+            {
+                currentNote = note;
+                AddNote_Clicked(null, null);
+            }
         }
 
         public async void CourseEdit_Clicked(object sender, EventArgs e)
@@ -69,6 +89,20 @@ namespace C971Rosendahl.Views
         private async void Cancel(object sender, EventArgs e)
         {
             await Navigation.PopAsync();
+        }
+
+        private async void AddNote_Clicked(object sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                await Navigation.PushAsync(new EditNote(maxNoteId + 1));
+            }
+            //Grid grid = new Grid();
+            //Label newNote = new Label()
+            //{
+
+            //};
+
         }
     }
 }

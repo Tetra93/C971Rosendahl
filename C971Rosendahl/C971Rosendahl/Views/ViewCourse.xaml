@@ -76,13 +76,26 @@
                            HorizontalOptions="CenterAndExpand"/>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Grid>
-                    <Label x:Name="notes"
+                    <StackLayout>
+                        <StackLayout x:Name="notesList">
+                            <Grid>
+                                <Label x:Name="notes"
                            Text="Notes"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand" 
                            HorizontalOptions="CenterAndExpand"/>
-                    </Grid>
+                            </Grid>
+                        </StackLayout>
+                        <Label Text="Add New Note"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"
+                               HorizontalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="AddNote_Clicked"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>

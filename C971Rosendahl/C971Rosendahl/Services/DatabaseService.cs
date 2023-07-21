@@ -490,6 +490,15 @@ namespace C971Rosendahl.Services
             };
 
             await _db.InsertAsync(course6);
+
+            Note note = new Note
+            {
+                CourseID = 1,
+                Name = "Test",
+                Contents = "This is a note"
+            };
+
+            await _db.InsertAsync(note);
             DegreePlan.terms = (List<Term>)await GetTerms();
             DegreePlan.courses = await GetCourse();
             Settings.FirstRun = false;  
