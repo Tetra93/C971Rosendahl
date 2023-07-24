@@ -22,7 +22,7 @@ namespace C971Rosendahl.Models
 
         public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set;}
+        public DateTime DueDate { get; set;}
 
         public bool Notifications { get; set; }
 

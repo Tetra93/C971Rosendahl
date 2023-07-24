@@ -1,5 +1,6 @@
 ﻿using C971Rosendahl.Models;
 using C971Rosendahl.Services;
+using Plugin.LocalNotifications;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -44,6 +45,9 @@ namespace C971Rosendahl.Views
             base.OnAppearing();
             termList.Children.Clear();
             termCount = 0;
+            //CrossLocalNotifications.Current.Show("App status", "The app is currently running", 5, DateTime.Now.AddSeconds(3));
+            Random random = new Random();
+            int notificationNum = random.Next(1000);
             if (Settings.FirstRun == true)
             {
                 await DatabaseService.LoadSampleData();
@@ -65,8 +69,19 @@ namespace C971Rosendahl.Views
             {
                 courseCount = i;
                 Course course = courses[i];
+                if (course.DateNotifications == true && course.EndDate.Date == DateTime.Now.Date)
+                {
+                    CrossLocalNotifications.Current.Show("Course ending soon", $"{course.Name} is ending today", notificationNum);
+                }
                 courseTermId = course.TermId;
                 CourseAdd_Clicked(null, null);
+            }
+            foreach (Assessment assessment in assessments)
+            {
+                if (assessment.Notifications == true && DateTime.Now.Date == assessment.DueDate) 
+                {
+                    CrossLocalNotifications.Current.Show("Assessment due today", $"{assessment.Name} is due today", notificationNum);
+                }
             }
         }
 
@@ -135,7 +150,7 @@ namespace C971Rosendahl.Views
             grid1.Children.Add(termStartDate);
             Label termStartDate1 = new Label()
             {
-                Text = term.StartDate.ToString("MM/dd/yyyy"),
+                Text = term.StartDate.ToString("MM/dd/yy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -157,7 +172,7 @@ namespace C971Rosendahl.Views
             grid2.Children.Add(termEndDate);
             Label termEndDate1 = new Label()
             {
-                Text = term.EndDate.ToString("MM/dd/yyyy"),
+                Text = term.EndDate.ToString("MM/dd/yy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -333,7 +348,7 @@ namespace C971Rosendahl.Views
                             }
                             else if (child2 is DatePicker datePicker)
                             {
-                                datePicker.Date = DateTime.ParseExact(childText, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                                datePicker.Date = DateTime.ParseExact(childText, "MM/dd/yy", CultureInfo.InvariantCulture);
                                 break;
 
                             }
@@ -395,7 +410,7 @@ namespace C971Rosendahl.Views
                                 {
                                     term.EndDate = datePicker.Date;
                                 }
-                                child3.Text = datePicker.Date.ToString("MM/dd/yyyy");
+                                child3.Text = datePicker.Date.ToString("MM/dd/yy");
                                 break;
                             }
                         }
@@ -466,7 +481,7 @@ namespace C971Rosendahl.Views
                 container = (StackLayout)button.Parent;
                 course = new Course()
                 {
-                    Name = "New Course",
+                    Name = "New Course - X000",
                     Description = "No description",
                     TermId = termList.Children.IndexOf(container) + 1
                 };
@@ -485,11 +500,19 @@ namespace C971Rosendahl.Views
             grid.GestureRecognizers.Add(courseClick);
             Label courseName = new Label()
             {
-                Text = course.Name.Substring(course.Name.Length - 4),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
             };
+
+            if (course.Name.Length < 4)
+            {
+                courseName.Text = course.Name;
+            }
+            else
+            {
+                courseName.Text = course.Name.Substring(course.Name.Length - 4);
+            }
             grid.Children.Add(courseName); 
             Label completionStatus = new Label()
             {
@@ -525,7 +548,7 @@ namespace C971Rosendahl.Views
             startDateGrid.Children.Add(courseStartDate);
             Label courseStartDate1 = new Label()
             {
-                Text = course.StartDate.ToString("MM/dd/yyyy"),
+                Text = course.StartDate.ToString("MM/dd/yy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start
@@ -545,7 +568,7 @@ namespace C971Rosendahl.Views
             endDateGrid.Children.Add(courseEndDate);
             Label courseEndDate1 = new Label()
             {
-                Text = course.EndDate.ToString("MM/dd/yyyy"),
+                Text = course.EndDate.ToString("MM/dd/yy"),
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start

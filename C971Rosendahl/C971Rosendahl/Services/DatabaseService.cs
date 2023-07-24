@@ -124,6 +124,21 @@ namespace C971Rosendahl.Services
                 await _db.UpdateAsync(courseQuery);
             }
         }
+        
+        public static async Task UpdateCourse(int courseId, bool notifications)
+        {
+            await Init();
+            var courseQuery = await _db.Table<Course>()
+                .Where(i => i.CourseId == courseId)
+                .FirstOrDefaultAsync();
+
+            if (courseQuery != null)
+            {
+                courseQuery.DateNotifications = notifications;
+
+                await _db.UpdateAsync(courseQuery);
+            }
+        }
 
         public static async Task<List<Course>> GetCourse(int termId)
         {
@@ -257,7 +272,7 @@ namespace C971Rosendahl.Services
 
         #region Assessment
 
-        public static async Task AddAssessment(int courseId, string name, string type, string description, DateTime startDate, DateTime endDate, bool notifications, string submissionStatus, string completionStatus)
+        public static async Task AddAssessment(int courseId, string name, string type, string description, DateTime dueDate, bool notifications, string submissionStatus, string completionStatus)
         {
             await Init();
             var assessment = new Assessment()
@@ -266,8 +281,7 @@ namespace C971Rosendahl.Services
                 Name = name,
                 Type = type,
                 Description = description,
-                StartDate = startDate,
-                EndDate = endDate,
+                DueDate = dueDate,
                 Notifications = notifications,
                 SubmissionStatus = submissionStatus,
                 CompletionStatus = completionStatus
@@ -277,7 +291,7 @@ namespace C971Rosendahl.Services
 
         }
 
-        public static async Task UpdateAssessment(int assessmentId, string name, string type, string description, DateTime startDate, DateTime endDate, bool notifications, string submissionStatus, string completionStatus)
+        public static async Task UpdateAssessment(int assessmentId, string name, string type, string description, DateTime dueDate, bool notifications, string submissionStatus, string completionStatus)
         {
             await Init();
             var assessmentQuery = await _db.Table<Assessment>()
@@ -289,8 +303,7 @@ namespace C971Rosendahl.Services
                 assessmentQuery.Name = name;
                 assessmentQuery.Type = type;
                 assessmentQuery.Description = description;
-                assessmentQuery.StartDate = startDate;
-                assessmentQuery.EndDate = endDate;
+                assessmentQuery.DueDate = dueDate;
                 assessmentQuery.Notifications = notifications;
                 assessmentQuery.SubmissionStatus = submissionStatus;
                 assessmentQuery.CompletionStatus = completionStatus;
@@ -367,7 +380,8 @@ namespace C971Rosendahl.Services
                 "local database; and consuming REST-based web services. There are several " +
                 "prerequisites for this course: Software I and II, and UI Design.",
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now.AddDays(30),
+                EndDate = DateTime.Now,//DateTime.Now.AddDays(30),
+                DateNotifications = true,
                 TermId = 1,
                 InstructorId = 1
             };
@@ -388,7 +402,8 @@ namespace C971Rosendahl.Services
                 "Scripting and Programming: Foundations and Scripting and " +
                 "Programming: Applications are prerequisites for this course.",
                 StartDate = DateTime.Now.AddDays(30),
-                EndDate = DateTime.Now.AddDays(60),
+                EndDate = DateTime.Now,//DateTime.Now.AddDays(60),
+                DateNotifications = true,
                 TermId = 1,
                 InstructorId = 1
             };
@@ -408,7 +423,8 @@ namespace C971Rosendahl.Services
                 "intermediate expertise in object-oriented programming and " +
                 "the C# language. The prerequisite for this course is Software I - C#.",
                 StartDate = DateTime.Now.AddDays(60),
-                EndDate = DateTime.Now.AddDays(90),
+                EndDate = DateTime.Now,//DateTime.Now.AddDays(90),
+                DateNotifications = true,
                 TermId = 1,
                 InstructorId = 1
             };
@@ -499,6 +515,35 @@ namespace C971Rosendahl.Services
             };
 
             await _db.InsertAsync(note);
+
+            Assessment assessment = new Assessment
+            {
+                CourseId = 1,
+                Name = "Objective Assessment 1",
+                Type = "Objective Assesment",
+                Description = "This is an exam to demonstrate your understanding of Xamarin.Forms.",
+                DueDate = DateTime.Now,
+                Notifications = true,
+                SubmissionStatus = "Not Submitted",
+                CompletionStatus = "Not Completed"
+            };
+
+            await _db.InsertAsync(assessment);
+
+            Assessment assessment1 = new Assessment
+            {
+                CourseId = 1,
+                Name = "Performance Assessment 1",
+                Type = "Performance Assessment",
+                Description = "This performance assessment will demonstrate your understanding of Xamarin.Forms through the creation of your own mobile application.",
+                DueDate = DateTime.Now.AddDays(21),
+                Notifications = true,
+                SubmissionStatus = "Submitted",
+                CompletionStatus = "Not Completed"
+            };
+
+            await _db.InsertAsync(assessment1);
+
             DegreePlan.terms = (List<Term>)await GetTerms();
             DegreePlan.courses = await GetCourse();
             Settings.FirstRun = false;  

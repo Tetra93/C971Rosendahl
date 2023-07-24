@@ -16,8 +16,16 @@ namespace C971Rosendahl.Views
 
         public EditNote(int noteId)
         {
-            id = noteId;
+            id = noteId; 
             InitializeComponent();
+            if (id == ViewCourse.maxNoteId + 1)
+            {
+                this.Title = "Add Note";
+            }
+            else
+            {
+                this.Title = "Edit Note";
+            }
         }
 
         private void CancelButton_Clicked(object sender, EventArgs e)

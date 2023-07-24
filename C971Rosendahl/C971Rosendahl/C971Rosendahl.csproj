@@ -25,6 +25,9 @@
     <Compile Update="Views\EditNote.xaml.cs">
       <DependentUpon>EditNote.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\EditAssessment.xaml.cs">
+      <DependentUpon>EditAssessment.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ViewCourse.xaml.cs">
       <DependentUpon>ViewCourse.xaml</DependentUpon>
     </Compile>
@@ -38,6 +41,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\EditNote.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\EditAssessment.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ViewCourse.xaml">
