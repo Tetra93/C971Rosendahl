@@ -45,7 +45,6 @@ namespace C971Rosendahl.Views
             base.OnAppearing();
             termList.Children.Clear();
             termCount = 0;
-            //CrossLocalNotifications.Current.Show("App status", "The app is currently running", 5, DateTime.Now.AddSeconds(3));
             Random random = new Random();
             int notificationNum = random.Next(1000);
             if (Settings.FirstRun == true)

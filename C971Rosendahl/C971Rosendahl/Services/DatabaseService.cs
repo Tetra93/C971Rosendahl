@@ -291,7 +291,7 @@ namespace C971Rosendahl.Services
 
         }
 
-        public static async Task UpdateAssessment(int assessmentId, string name, string type, string description, DateTime dueDate, bool notifications, string submissionStatus, string completionStatus)
+        public static async Task UpdateAssessment(int assessmentId, string name, string description, DateTime dueDate, bool notifications, string submissionStatus, string completionStatus)
         {
             await Init();
             var assessmentQuery = await _db.Table<Assessment>()
@@ -301,7 +301,6 @@ namespace C971Rosendahl.Services
             if (assessmentQuery != null)
             {
                 assessmentQuery.Name = name;
-                assessmentQuery.Type = type;
                 assessmentQuery.Description = description;
                 assessmentQuery.DueDate = dueDate;
                 assessmentQuery.Notifications = notifications;

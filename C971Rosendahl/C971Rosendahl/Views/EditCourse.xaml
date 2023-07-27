@@ -26,7 +26,7 @@
                             <DatePicker Grid.Column="1"
                                 x:Name="courseStartDate"
                                FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
+                               VerticalOptions="CenterAndExpand"
                                HorizontalOptions="Start"/>
                         </Grid>
                         <Grid Grid.Row="1">

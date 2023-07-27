@@ -20,8 +20,6 @@ namespace C971Rosendahl.Models
 
         public string Description { get; set; }
 
-        public DateTime StartDate { get; set; }
-
         public DateTime DueDate { get; set;}
 
         public bool Notifications { get; set; }

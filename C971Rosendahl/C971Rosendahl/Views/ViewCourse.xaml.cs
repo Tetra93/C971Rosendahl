@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
 namespace C971Rosendahl.Views
@@ -14,25 +15,35 @@ namespace C971Rosendahl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ViewCourse : ContentPage
     {
+        public int CurrentCourseId { get; set; }
         public Course course = new Course();
         public Note currentNote = new Note();
         public Assessment currentAssessment = new Assessment();
         public static int maxNoteId = 0;
-        public static readonly List<string> assessmentTypes = new List<string>() { "Objective Assessment", "Performance Assessment"};
+        public List<Assessment> courseAssessments = new List<Assessment>();
+        public static readonly List<string> assessmentTypes = new List<string>() { "Objective Assessment", "Performance Assessment" };
         public static readonly List<string> completionStatus = new List<string>() { "Completed", "Not Completed" };
-        
+
         public ViewCourse(int id)
         {
+            CurrentCourseId = id;
             InitializeComponent();
             addAssessment.ItemsSource = assessmentTypes;
-            List<Course> courses = DegreePlan.courses;
-            List<Instructor> instructors = DegreePlan.instructors;
-            List<Note> notes = new List<Note>();
-            List<Assessment> assessments = DegreePlan.assessments;
+        }
+
+        protected override async void OnAppearing()
+        {
+
+            List<Course> courses = await DatabaseService.GetCourse();
+            List<Instructor> instructors = await DatabaseService.GetInstructor();
+            List<Note> allNotes = await DatabaseService.GetNote();
+            List<Note> currentNotes = new List<Note>();
+            List<Assessment> assessments = await DatabaseService.GetAssessment();
+            courseAssessments.Clear();
 
             foreach (Course searchCourse in courses)
             {
-                if (searchCourse.CourseId == id)
+                if (searchCourse.CourseId == CurrentCourseId)
                 {
                     course = searchCourse;
                 }
@@ -43,16 +54,17 @@ namespace C971Rosendahl.Views
                 {
                     maxNoteId = note.NoteId;
                 }
-                if (note.CourseID == id)
+                if (note.CourseID == CurrentCourseId)
                 {
-                    notes.Add(note);
+                    currentNotes.Add(note);
                 }
             }
             foreach (Assessment assessment in assessments)
             {
-                if (assessment.AssessmentId == id)
+                if (assessment.AssessmentId == CurrentCourseId)
                 {
                     currentAssessment = assessment;
+                    courseAssessments.Add(currentAssessment);
                     AddAssessment_Clicked(null, null);
                 }
             }
@@ -61,7 +73,7 @@ namespace C971Rosendahl.Views
             courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yy");
             courseDescription.Text = course.Description;
             instructorInfo.Text = instructors[course.InstructorId - 1].Name;
-            foreach (Note note in notes)
+            foreach (Note note in currentNotes)
             {
                 currentNote = note;
                 AddNote_Clicked(null, null);
@@ -75,7 +87,7 @@ namespace C971Rosendahl.Views
 
         private async void CourseDateNotifications_Clicked(object sender, EventArgs e)
         {
-            bool confirmation = await DisplayAlert("Course date alerts", "Would you like notifications regarding the end date of this course?", "No", "Yes");
+            bool confirmation = await DisplayAlert("Course date alerts", "Would you like notifications regarding the end date of this course?", "Yes", "No");
             if (confirmation == true)
             {
                 await DatabaseService.UpdateCourse(course.CourseId, confirmation);
@@ -121,10 +133,10 @@ namespace C971Rosendahl.Views
 
         private async void ShareNote_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Share Note", "Share note?", "No", "Yes");
+            await DisplayAlert("Share Note", "Share note?", "Yes", "No");
         }
 
-        private async void AddAssessment_Clicked(object sender, EventArgs e)
+        private void AddAssessment_Clicked(object sender, EventArgs e)
         {
             if (sender == null)
             {
@@ -176,6 +188,7 @@ namespace C971Rosendahl.Views
                     Text = currentAssessment.DueDate.Date.ToString("MM/dd/yy"),
                     FontSize = 18,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
+                    HorizontalTextAlignment = TextAlignment.Start,
                     HorizontalOptions = LayoutOptions.Start,
                 };
                 Grid.SetColumn(startDateLabel2, 1);
@@ -201,43 +214,28 @@ namespace C971Rosendahl.Views
             else
             {
                 string selection = addAssessment.SelectedItem.ToString();
-                if (selection != null || selection != string.Empty)
-                {
-                    await Navigation.PushAsync(new EditAssessment());
-                }
+                currentAssessment.Type = selection;
+                currentAssessment.Name = "New Assessment";
+                EditAssessment_Clicked(null, null);
             }
         }
 
-        private void EditAssessment_Clicked(object sender, EventArgs e)
+        private async void EditAssessment_Clicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (sender != null)
+            {
+                Label label = (Label)sender;
+                Grid grid = (Grid)label.Parent;
+                Frame frame = (Frame)grid.Parent;
+                int id = assessmentsView.Children.IndexOf(frame);
+                currentAssessment = courseAssessments[id];
+            }
+            await Navigation.PushAsync(new EditAssessment(currentAssessment));
         }
 
         private void CourseNotifications_Clicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
-        }
 
-        private async void OANotifications_Clicked(object sender, EventArgs e)
-        {
-            await DisplayAlert("Clicked", "OA Notifications Clicked", "OK");
-
-        }
-
-        private async void EditOA_Clicked(object sender, EventArgs e)
-        {
-            await DisplayAlert("Clicked", "Edit OA Clicked", "OK");
-
-        }
-        private async void EditPA_Clicked(object sender, EventArgs e)
-        {
-            await DisplayAlert("Clicked", "Edit PA Clicked", "OK");
-
-        }
-
-        private async void PANotifications_Clicked(object sender, EventArgs e)
-        {
-            await DisplayAlert("Clicked", "PA Notifications Clicked", "OK");
         }
 
         private async void Cancel(object sender, EventArgs e)

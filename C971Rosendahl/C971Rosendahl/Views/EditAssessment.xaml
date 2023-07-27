@@ -2,11 +2,60 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="C971Rosendahl.Views.EditAssessment">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Cancel" Clicked="CancelButton_Clicked"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout VerticalOptions="StartAndExpand">
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Assessment Name"
+                       FontSize="18"
+                       HorizontalOptions="CenterAndExpand"
+                       VerticalOptions="CenterAndExpand"/>
+                        <Entry x:Name="assessmentName"
+                       FontSize="18"
+                       HorizontalOptions="CenterAndExpand"
+                       VerticalOptions="FillAndExpand"
+                               Unfocused="AssessmentName_Unfocused">
+                        </Entry>
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Due Date"
+                               FontSize="18"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"/>
+                        <DatePicker x:Name="dueDate"
+                                    FontSize="18"
+                                    HorizontalOptions="CenterAndExpand"
+                                    VerticalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <StackLayout VerticalOptions="StartAndExpand"
+                                 HorizontalOptions="FillAndExpand">
+                        <Label Text="Assessment Description"
+                               FontSize="18"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"/>
+                        <Editor x:Name="assessmentDescription"                               
+                               FontSize="18"
+                                Unfocused="OnBlankUnfocus"/>                        
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <Label Text="Save"
+                           FontSize="18"
+                           HorizontalOptions="CenterAndExpand">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SaveButton_Clicked"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

@@ -34,6 +34,7 @@
                                Text="01/01/2023"
                                FontSize="18"
                                VerticalOptions="CenterAndExpand" 
+                                   HorizontalTextAlignment="Start"
                                HorizontalOptions="Start"/>
                         </Grid>
                         <Grid Grid.Row="1">
@@ -46,6 +47,7 @@
                                Text="02/01/2023"
                                FontSize="18"
                                VerticalOptions="CenterAndExpand" 
+                                   HorizontalTextAlignment="Start"
                                HorizontalOptions="Start"/>
                         </Grid>
                         <Label Grid.Row="1"
