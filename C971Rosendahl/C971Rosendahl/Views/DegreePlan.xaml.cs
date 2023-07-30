@@ -618,15 +618,19 @@ namespace C971Rosendahl.Views
             };
 
             //I have the sample courses set to use a 4 character course code
-            //like WGU's courses do. I don't 
-            if (course.Name.Length < 4)
-            {
-                courseName.Text = course.Name;
-            }
-            else
+            //like WGU's courses do. I don't really have a way set up to detect
+            //formatting since it's not a requirement. If it follows the format
+            //I'm using where the course code is at the end after a "-", it will
+            //use it. Otherwise it will just use whatever you type in.
+            if (course.Name.Length >= 5 && course.Name.Contains("-"))
             {
                 courseName.Text = course.Name.Substring(course.Name.Length - 4);
             }
+            else
+            {
+                courseName.Text = course.Name;
+            }
+
             grid.Children.Add(courseName); 
             Label completionStatus = new Label()
             {
@@ -716,6 +720,9 @@ namespace C971Rosendahl.Views
             courseDelete.Tapped += CourseDelete_Clicked;
             deleteCourse.GestureRecognizers.Add(courseDelete);
             grid.Children.Add(deleteCourse);
+
+            //This hidden Label stores the courseId and is used with my
+            //CourseEdit method so that it knows which course to edit.
             Label ID = new Label()
             {
                 Text = course.CourseId.ToString(),
@@ -732,6 +739,8 @@ namespace C971Rosendahl.Views
             container.Children.Insert((container.Children.Count() - 1), frame);
         }
 
+        //Status Picker for course completion status. It is a Label that, when clicked
+        //turns into a Picker.
         private void ChangeStatus_Clicked(object sender, EventArgs e)
         {
             if (sender is Label label)
@@ -753,6 +762,7 @@ namespace C971Rosendahl.Views
             }
         }
 
+        //When a selection is made, the Picker turns back into a Label with the selected value
         private async void PickerSelection_Clicked(object sender, EventArgs e)
         {
             if (sender is Picker picker)
@@ -784,6 +794,7 @@ namespace C971Rosendahl.Views
             }
         }
 
+        //Opens a new detailed course view page
         private async void CourseView_Clicked(object sender, EventArgs e)
         {
             Grid grid = (Grid)sender;
@@ -792,6 +803,7 @@ namespace C971Rosendahl.Views
             await Navigation.PushAsync(new ViewCourse(id));
         }
 
+        //Opens a new page to edit a course
         public async void CourseEdit_Clicked(object sender, EventArgs e)
         {
             await DisplayAlert("Clicked", "Course Edit Clicked", "OK");
@@ -805,6 +817,7 @@ namespace C971Rosendahl.Views
             //On course edit page, add check for name to make sure it is at least 4 characters long
         }
 
+        //Asks for verification and deletes the course if yes
         private async void CourseDelete_Clicked(object sender, EventArgs e)
         {
             Label label = (Label)sender;
@@ -824,6 +837,7 @@ namespace C971Rosendahl.Views
 
         #endregion
 
+        //This is for the secondary toolbar option to clear the database
         private async void DeleteData(object sender, EventArgs e)
         {
             await DatabaseService.ClearSampleData();
@@ -831,11 +845,15 @@ namespace C971Rosendahl.Views
             termCount = 0;
         }
 
+        //This is for the secondary toolbar option to load in sample data
         private async void LoadData(object sender, EventArgs e)
         {
+            if (termList.Children.Count == 0)
+            { 
             await DatabaseService.LoadSampleData();
             termCount = 0;
             OnAppearing();
+            }
         }
     }
 

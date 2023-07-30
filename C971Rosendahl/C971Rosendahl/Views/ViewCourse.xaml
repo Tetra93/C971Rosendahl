@@ -12,10 +12,10 @@
             <StackLayout>
                 <Frame Margin="0,10">
                     <Label     x:Name="courseName"
-                               Text="Course Name"
+                               Text="Course Name"                               
                                FontSize="18"       
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="FillAndExpand" 
+                               HorizontalOptions="FillAndExpand"
                                HorizontalTextAlignment="Center"/>                        
                 </Frame>
                 <Frame Margin="0,10">
