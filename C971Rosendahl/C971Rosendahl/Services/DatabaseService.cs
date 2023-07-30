@@ -60,7 +60,7 @@ namespace C971Rosendahl.Services
         public static async Task RemoveTerm(int id)
         {
             await Init();
-            List<Course> courses = (List<Course>)await GetCourse(id);
+            List<Course> courses = (List<Course>)await GetCourseByTerm(id);
             foreach (Course course in courses)
             {
                 await RemoveCourse(course.CourseId);
@@ -140,7 +140,7 @@ namespace C971Rosendahl.Services
             }
         }
 
-        public static async Task<List<Course>> GetCourse(int termId)
+        public static async Task<List<Course>> GetCourseByTerm(int termId)
         {
             await Init();
             
@@ -149,6 +149,17 @@ namespace C971Rosendahl.Services
                 .ToListAsync();
 
             return courses;
+        }
+
+        public static async Task<Course> GetSpecificCourse(int courseId)
+        {
+            await Init();
+
+            Course course = await _db.Table<Course>()
+                .Where(i => i.CourseId == courseId)
+                .FirstOrDefaultAsync();
+
+            return course;
         }
 
         public static async Task<List<Course>> GetCourse()
@@ -211,6 +222,17 @@ namespace C971Rosendahl.Services
             return instructors;
         }
 
+        public static async Task<Instructor> GetInstructorById(int id)
+        {
+            await Init();
+
+            Instructor instructorSearch = await _db.Table<Instructor>()
+                .Where (i => i.InstructorId == id)
+                .FirstOrDefaultAsync();
+
+            return instructorSearch;
+        }
+
         public static async Task RemoveInstructor(int id)
         {
             await Init();
@@ -257,6 +279,17 @@ namespace C971Rosendahl.Services
             await Init();
 
             var notes = await _db.Table<Note>().ToListAsync();
+
+            return notes;
+        }
+
+        public static async Task<List<Note>> GetNotesById(int id)
+        {
+            await Init();
+
+            var notes = await _db.Table<Note>()
+                .Where (i => i.CourseID == id)
+                .ToListAsync();
 
             return notes;
         }

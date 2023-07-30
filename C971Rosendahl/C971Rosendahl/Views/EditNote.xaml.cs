@@ -1,4 +1,6 @@
-﻿using System;
+﻿using C971Rosendahl.Models;
+using C971Rosendahl.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,35 +14,93 @@ namespace C971Rosendahl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EditNote : ContentPage
     {
-        public int id;
-
-        public EditNote(int noteId)
+        Note currentNote;
+        public bool nameCheck = false;
+        public bool contentsCheck = false;
+        public EditNote(Note note)
         {
-            id = noteId; 
+            //Instead of using an int, make it check for a null note.
+            //if note is null, Add Note. If note is not null, Edit note
             InitializeComponent();
-            if (id == ViewCourse.maxNoteId + 1)
+            if (note == null)
             {
+                currentNote = new Note();
                 this.Title = "Add Note";
             }
             else
             {
+                currentNote = note;
                 this.Title = "Edit Note";
             }
         }
 
-        private void CancelButton_Clicked(object sender, EventArgs e)
+        protected override void OnAppearing()
         {
-
+            base.OnAppearing();
+            if (currentNote != null)
+            {
+                noteName.Text = currentNote.Name;
+                noteContents.Text = currentNote.Contents;
+            }
+            //else
+            //{
+            //    noteName.Text = "New Note";
+            //    noteContents.Text = "Contents";
+            //}
         }
 
-        private void SaveButton_Clicked(object sender, EventArgs e)
+        private async void CancelButton_Clicked(object sender, EventArgs e)
         {
-
+            await Navigation.PopAsync();
         }
 
-        private void DeleteNote(object sender, EventArgs e)
+        private async void SaveButton_Clicked(object sender, EventArgs e)
         {
-
+            if (nameCheck == true && contentsCheck == true)
+            {
+                if (Title == "Add Note")
+                {
+                    await DatabaseService.AddNote(ViewCourse.CurrentCourseId, noteName.Text, noteContents.Text);
+                    await Navigation.PopAsync();
+                }
+                else if (Title == "Edit Note")
+                {
+                    await DatabaseService.UpdateNote(currentNote.NoteId, noteName.Text, noteContents.Text);
+                    await Navigation.PopAsync();
+                }
+            }
+            else
+            {
+                await DisplayAlert("Unable to save", "Note name and contents must not be empty", "OK");
+            }
         }
+
+        private void NameChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(noteName.Text))
+            {
+                nameCheck = true;
+            }
+            else
+            {
+                nameCheck = false;
+            }
+        }
+        private void ContentsChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(noteContents.Text))
+            {
+                contentsCheck = true;
+            }
+            else
+            {
+                contentsCheck = false;
+            }
+        }
+
+        //private void DeleteNote_Clicked(object sender, EventArgs e)
+        //{
+
+        //}
     }
 }

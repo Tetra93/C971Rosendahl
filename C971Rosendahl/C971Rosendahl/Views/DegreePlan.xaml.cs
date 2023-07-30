@@ -7,7 +7,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Xamarin.Forms;
+using Xamarin.Forms.Shapes;
 using Xamarin.Forms.Xaml;
 
 namespace C971Rosendahl.Views
@@ -43,14 +45,20 @@ namespace C971Rosendahl.Views
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            //Clearing the page of visual elements
             termList.Children.Clear();
             termCount = 0;
             Random random = new Random();
             int notificationNum = random.Next(1000);
+
+            //Loading sample data if this is the first time the app is run
+            //Otherwise, loading currently existing data from the database
+
             if (Settings.FirstRun == true)
             {
                 await DatabaseService.LoadSampleData();
-            }
+            }            
             else
             {
                 terms = await DatabaseService.GetTerms();
@@ -59,11 +67,16 @@ namespace C971Rosendahl.Views
                 notes = await DatabaseService.GetNote();
                 assessments = await DatabaseService.GetAssessment();
             }
+
+            //Constructing the page. I recycle my NewTerm_Clicked method
+            //so that I don't need to create a new method for that.
             foreach (Term term in terms)
             {
                 NewTerm_Clicked(null, null);
                 termCount++;
             }
+            //Displaying any course notifications as well as constructing courses
+            //inside of the corresponding terms. I also recycle me CourseAdd_Clicked method.
             for (int i = 0; i <= courses.Count - 1; i++)
             {
                 courseCount = i;
@@ -75,6 +88,7 @@ namespace C971Rosendahl.Views
                 courseTermId = course.TermId;
                 CourseAdd_Clicked(null, null);
             }
+            //Displaying any assessment notifications
             foreach (Assessment assessment in assessments)
             {
                 if (assessment.Notifications == true && DateTime.Now.Date == assessment.DueDate) 
@@ -84,21 +98,23 @@ namespace C971Rosendahl.Views
             }
         }
 
-        //public static async void GetData()
-        //{
-        //    terms = (List<Term>)await DatabaseService.GetTerms();
-        //    //courses = (List<Course>)await DatabaseService.GetCourse();
-        //}
 
         #region Term methods
         
+        //This is my constructor for terms visual elements. I saw that there is a part of
+        //Xamarin called Xamarin.Forms.ControlTemplates that sounded like it could allow me
+        //to dynamically generate objects, but I wasn't sure if it was allowed. I decided to
+        //play it safe and just do it all in C#.
         public async void NewTerm_Clicked(object sender, EventArgs e)
         {
             Term term;
+            //This allows the method to be used with the OnAppearing method by
+            //using term data pulled from the database
             if (sender == null)
             {
                 term = terms[termCount];
             }
+            //If not called from OnAppearing, it creates a new term object
             else
             {
                 term = new Term
@@ -208,7 +224,7 @@ namespace C971Rosendahl.Views
 
             DatePicker startDatePicker = new DatePicker()
             {
-                Date = DateTime.Now,
+                Date = term.StartDate.Date,
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
@@ -216,11 +232,13 @@ namespace C971Rosendahl.Views
             };
             Grid.SetRow(startDatePicker, 1);
             Grid.SetColumn(startDatePicker, 0);
+            startDatePicker.DateSelected += TermDateChanged;
             grid.Children.Add(startDatePicker);
 
             DatePicker endDatePicker = new DatePicker()
             {
-                Date = DateTime.Now.AddDays(14),
+                Date = term.EndDate.Date,
+                MinimumDate = startDatePicker.Date,
                 FontSize = 18,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
@@ -228,6 +246,7 @@ namespace C971Rosendahl.Views
             };
             Grid.SetRow(endDatePicker, 2);
             Grid.SetColumn(endDatePicker, 0);
+            endDatePicker.DateSelected += TermDateChanged;
             grid.Children.Add(endDatePicker);
 
             Label saveButton = new Label()
@@ -294,8 +313,38 @@ namespace C971Rosendahl.Views
             stackLayout.Children.Add(newCourse);
         }
 
+        //This method ensures that the term start date is always before the end date
+        private void TermDateChanged(object sender, EventArgs e)
+        {
+            DatePicker datePicker = (DatePicker)sender;
+            Grid parent = (Grid)datePicker.Parent;
+            DatePicker startDate = (DatePicker)parent.Children[5];
+            DatePicker endDate = (DatePicker)parent.Children[6];
+
+            if (sender == startDate)
+            {
+                endDate.MinimumDate = startDate.Date;
+
+                if (startDate.Date > endDate.Date)
+                {
+                    endDate.Date = startDate.Date.AddDays(1);
+                }
+            }
+            else if (sender == endDate)
+            {
+                startDate.MaximumDate = endDate.Date;
+
+                if (endDate.Date < startDate.Date)
+                {
+                    startDate.Date = endDate.Date.AddDays(-1);
+                }
+            }
+        }
+
         private void Term_Clicked(object sender, EventArgs e)
         {
+            //This hides and shows courses inside a term
+
             Frame term = (Frame)sender;
             StackLayout container = (StackLayout)term.Parent;
             foreach (View child in container.Children)
@@ -316,6 +365,10 @@ namespace C971Rosendahl.Views
 
         private void TermEdit_Clicked(object sender, EventArgs e)
         {
+            //This allows term information to be edited. 
+            //Editable views start off as not visible and readonly views begin as visible.
+            //This toggles the visibility to show the invisible editable views.
+
             Label edit = (Label)sender;
             Grid container = (Grid)edit.Parent;
             int row1 = -1;
@@ -368,6 +421,9 @@ namespace C971Rosendahl.Views
 
         private async void TermSave_Clicked(object sender, EventArgs e)
         {
+            //This checks for valid name and dates and saves data if all are valid.
+            //It also toggles the visibility back so readonly views are visible again
+
             Label save = (Label)sender;
             Grid container = (Grid)save.Parent;
             Frame frame = (Frame)container.Parent;
@@ -377,7 +433,14 @@ namespace C971Rosendahl.Views
             int column1 = -1;
             int column2 = -1;
             Term term = new Term();
+            Label nameLabel = new Label();
+            Label startDateLabel = new Label();
+            Label endDateLabel = new Label();
+
+
             term.Id = (termList.Children.IndexOf(stackLayout) + 1);
+            Term currentTerm = terms[term.Id - 1];
+            bool canSave = true;
 
             foreach (View child in container.Children)
             {
@@ -388,45 +451,88 @@ namespace C971Rosendahl.Views
                 {
                     row2 = Grid.GetRow(child2);
                     column2 = Grid.GetColumn(child2);
+                    
 
                     if (row1 == row2 && column1 == column2)
                     {
-                        if (child is Label Child && child2 is Entry entry)
+                        if (child is Label Child && child2 is Entry Child2)
                         {
-                            Child.Text = entry.Text;
-                            term.Name = entry.Text;
+                            Child.Text = Child2.Text;
+                            term.Name = Child2.Text;
+                            nameLabel = Child;
                             break;
                         }
                         else if (child is Grid grid)
                         {
-                            if (grid.Children[1] is Label child3 && grid.Children[0] is Label child4 && child2 is DatePicker datePicker)
+                            if (grid.Children[1] is Label startEndDateLabel && grid.Children[0] is Label startEndDateStartText && child2 is DatePicker startEndDatePicker)
                             {
-                                if(child4.Text == "Start Date: ")
+                                if(startEndDateStartText.Text == "Start Date: ")
                                 {
-                                    term.StartDate = datePicker.Date;
+                                    term.StartDate = startEndDatePicker.Date;
+                                    startDateLabel = startEndDateLabel;
                                 }
-                                else if (child4.Text == "End Date: ")
+                                else if (startEndDateStartText.Text == "End Date: ")
                                 {
-                                    term.EndDate = datePicker.Date;
+                                    term.EndDate = startEndDatePicker.Date;
+                                    endDateLabel = startEndDateLabel;
                                 }
-                                child3.Text = datePicker.Date.ToString("MM/dd/yy");
-                                break;
-                            }
+                            }                            
                         }
                     }
-                }
-                if (child.IsVisible == true)
+                }                
+            }
+
+            //These alerts "shouldn't" ever trigger, but they're there as a failsafe
+            if (term.StartDate.Date > term.EndDate.Date)
+            {
+                await DisplayAlert("Invalid Dates", "Start date must be before end date", "OK");
+                canSave = false;                
+            }
+            else if (string.IsNullOrWhiteSpace(term.Name))
+            {
+                await DisplayAlert("Invalid Name", "Please enter a term name", "OK");
+                canSave = false;
+            }
+            else
+            {
+                canSave = true;
+            }
+            //If data is all valid, the readonly views are updated to reflect
+            //the values from the editable views.
+            if (canSave == true)
+            {
+                await DatabaseService.UpdateTerm(term.Id, term.Name, term.StartDate, term.EndDate);
+
+                nameLabel.Text = term.Name;
+                startDateLabel.Text = term.StartDate.ToString("MM/dd/yyyy");
+                endDateLabel.Text = term.EndDate.ToString("MM/dd/yyyy");
+
+                //Toggling visibility of all elements to hide editable elements
+                //and show readonly ones
+                foreach (View view in container.Children)
                 {
-                    child.IsVisible = false;
-                }
-                else if (child.IsVisible == false)
-                {
-                    child.IsVisible = true;
+                    if (view.IsVisible == true)
+                    {
+                        view.IsVisible = false;
+                    }
+                    else
+                    {
+                        view.IsVisible = true;
+                    }
                 }
             }
-            await DatabaseService.UpdateTerm(term.Id, term.Name, term.StartDate, term.EndDate);
+            //If data entered is invalid when save is clicked, the data is reverted to
+            //its previous state. This is also a failsafe that should never trigger
+            else
+            {
+                nameLabel.Text = currentTerm.Name;
+                startDateLabel.Text = currentTerm.StartDate.ToString("MM/dd/yyyy");
+                endDateLabel.Text = currentTerm.EndDate.ToString("MM/dd/yyyy");
+            }
         }
 
+        //This method toggles the visibility of all the views
+        //without changing any data.
         private void TermCancel_Clicked(object sender, EventArgs e)
         {
             Label edit = (Label)sender;
@@ -444,7 +550,10 @@ namespace C971Rosendahl.Views
                 }
             }
         }
-
+        
+        //This method asks for verification and if yes, the term is deleted.
+        //This deletes it from the database as well as deleting any courses
+        //contained inside that term.
         private async void DeleteTerm_Clicked(object sender, EventArgs e)
         {
             Label delete = (Label)sender;
@@ -464,6 +573,10 @@ namespace C971Rosendahl.Views
 
         #region Course methods
 
+        //Like TermAdd_Clicked, CourseAdd_Clicked dynamically generates a new course
+        //visual object. The course is added to the term that the clicked "Add New Course"
+        //button is inside of. It is also written to be able to be used in the
+        //OnAppearing method when the page is first generated.
         private async void CourseAdd_Clicked(object sender, EventArgs e)
         {
             Course course;
@@ -504,6 +617,8 @@ namespace C971Rosendahl.Views
                 HorizontalOptions = LayoutOptions.Start
             };
 
+            //I have the sample courses set to use a 4 character course code
+            //like WGU's courses do. I don't 
             if (course.Name.Length < 4)
             {
                 courseName.Text = course.Name;

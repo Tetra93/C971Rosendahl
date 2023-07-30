@@ -5,23 +5,33 @@
              Title="Edit Note">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Clicked="SaveButton_Clicked"/>
-        <ToolbarItem Text="Delete Note" Order="Secondary" Clicked="DeleteNote"/>
+        <!--<ToolbarItem Text="Delete Note" Order="Secondary" Clicked="DeleteNote_Clicked"/>-->
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
-        <StackLayout>
-            <Entry x:Name="noteName"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand"/>
-            <Entry x:Name="noteContents"
-                   VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand"/>
-            <Label Text="Cancel"
-                       VerticalOptions="CenterAndExpand"
+        <ScrollView>
+            <StackLayout>
+                <Frame>
+                    <Editor x:Name="noteName"
+                            AutoSize="TextChanges"
+                            Placeholder="New Note"
+                            HorizontalOptions="CenterAndExpand"                            
+                   TextChanged="NameChanged"/>
+                </Frame>
+                <Frame>
+                <Editor x:Name="noteContents"
+                        AutoSize="TextChanges"
+                        Placeholder="Note Contents"
+                   HorizontalOptions="CenterAndExpand"
+                   TextChanged="ContentsChanged"/>
+                </Frame>
+                <Label Text="Cancel"
+                       VerticalOptions="Start"
                        HorizontalOptions="CenterAndExpand">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="CancelButton_Clicked"/>
                     </Label.GestureRecognizers>
                 </Label>
-        </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

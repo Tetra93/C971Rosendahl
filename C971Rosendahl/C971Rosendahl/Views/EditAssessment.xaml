@@ -18,7 +18,7 @@
                        FontSize="18"
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="FillAndExpand"
-                               Unfocused="AssessmentName_Unfocused">
+                               Unfocused="OnBlankUnfocus">
                         </Entry>
                     </StackLayout>
                 </Frame>

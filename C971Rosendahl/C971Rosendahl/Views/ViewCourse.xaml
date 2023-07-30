@@ -79,14 +79,13 @@
                 </Frame>
                 <Frame Margin="0,10">
                     <StackLayout>
-                        <StackLayout x:Name="notesList">
-                            <Grid>
-                                <Label x:Name="notes"
-                           Text="Notes"
-                           FontSize="18"
+                        <Label Text="Notes"
+                           FontSize="20"
+                                       FontAttributes="Bold"
                            VerticalOptions="CenterAndExpand" 
                            HorizontalOptions="CenterAndExpand"/>
-                            </Grid>
+                        <StackLayout x:Name="notesList">
+                            
                         </StackLayout>
                         <Label Text="Add New Note"
                                FontSize="18"

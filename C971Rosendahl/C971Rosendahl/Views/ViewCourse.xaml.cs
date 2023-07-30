@@ -3,6 +3,7 @@ using C971Rosendahl.Services;
 using Plugin.LocalNotifications;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,12 +16,15 @@ namespace C971Rosendahl.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ViewCourse : ContentPage
     {
-        public int CurrentCourseId { get; set; }
+        public static int CurrentCourseId { get; set; }
         public Course course = new Course();
         public Note currentNote = new Note();
+        public Instructor instructor = new Instructor();
         public Assessment currentAssessment = new Assessment();
         public static int maxNoteId = 0;
-        public List<Assessment> courseAssessments = new List<Assessment>();
+        public List<Assessment> assessments = new List<Assessment>();
+        public List<Note> notes = new List<Note>();
+        public List<string> noteTitles = new List<string>();
         public static readonly List<string> assessmentTypes = new List<string>() { "Objective Assessment", "Performance Assessment" };
         public static readonly List<string> completionStatus = new List<string>() { "Completed", "Not Completed" };
 
@@ -33,38 +37,41 @@ namespace C971Rosendahl.Views
 
         protected override async void OnAppearing()
         {
+            base.OnAppearing();
+            course = await DatabaseService.GetSpecificCourse(CurrentCourseId);            
+            instructor = await DatabaseService.GetInstructorById(course.InstructorId);            
+            notes.Clear();
+            notesList.Children.Clear();
+            notes = await DatabaseService.GetNotesById(course.CourseId);
+            //List<Note> currentNotes = new List<Note>();
+            assessments.Clear();
+            assessments = await DatabaseService.GetAssessment(course.CourseId);
+            //courseAssessments.Clear();
 
-            List<Course> courses = await DatabaseService.GetCourse();
-            List<Instructor> instructors = await DatabaseService.GetInstructor();
-            List<Note> allNotes = await DatabaseService.GetNote();
-            List<Note> currentNotes = new List<Note>();
-            List<Assessment> assessments = await DatabaseService.GetAssessment();
-            courseAssessments.Clear();
-
-            foreach (Course searchCourse in courses)
-            {
-                if (searchCourse.CourseId == CurrentCourseId)
-                {
-                    course = searchCourse;
-                }
-            }
-            foreach (Note note in DegreePlan.notes)
-            {
-                if (note.NoteId > maxNoteId)
-                {
-                    maxNoteId = note.NoteId;
-                }
-                if (note.CourseID == CurrentCourseId)
-                {
-                    currentNotes.Add(note);
-                }
-            }
+            //foreach (Course searchCourse in courses)
+            //{
+            //    if (searchCourse.CourseId == CurrentCourseId)
+            //    {
+            //        course = searchCourse;
+            //    }
+            //}
+            //foreach (Note note in DegreePlan.notes)
+            //{
+            //    if (note.NoteId > maxNoteId)
+            //    {
+            //        maxNoteId = note.NoteId;
+            //    }
+            //    if (note.CourseID == CurrentCourseId)
+            //    {
+            //        currentNotes.Add(note);
+            //    }
+            //}
             foreach (Assessment assessment in assessments)
             {
                 if (assessment.AssessmentId == CurrentCourseId)
                 {
                     currentAssessment = assessment;
-                    courseAssessments.Add(currentAssessment);
+                    //courseAssessments.Add(currentAssessment);
                     AddAssessment_Clicked(null, null);
                 }
             }
@@ -72,10 +79,12 @@ namespace C971Rosendahl.Views
             courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yy");
             courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yy");
             courseDescription.Text = course.Description;
-            instructorInfo.Text = instructors[course.InstructorId - 1].Name;
-            foreach (Note note in currentNotes)
+            instructorInfo.Text = instructor.Name;
+            noteTitles.Clear();
+            foreach (Note note in notes)
             {
                 currentNote = note;
+                noteTitles.Add(currentNote.Name);
                 AddNote_Clicked(null, null);
             }
         }
@@ -100,13 +109,14 @@ namespace C971Rosendahl.Views
         {
             if (sender != null)
             {
-                await Navigation.PushAsync(new EditNote(maxNoteId + 1));
+                await Navigation.PushAsync(new EditNote(null));
             }
             else
             {
                 Frame frame = new Frame();
                 frame.BorderColor = Color.Gray;
                 frame.BackgroundColor = Color.WhiteSmoke;
+                StackLayout stackLayout = new StackLayout();
                 Grid grid = new Grid();
                 Label newNoteName = new Label()
                 {
@@ -117,6 +127,19 @@ namespace C971Rosendahl.Views
                     HorizontalOptions = LayoutOptions.CenterAndExpand,
                 };
                 grid.Children.Add(newNoteName);
+                Label share = new Label()
+                {
+                    Text = "Share",
+                    FontSize = 18,
+                    VerticalOptions= LayoutOptions.CenterAndExpand,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                };
+                Grid.SetColumn(share, 1);
+                TapGestureRecognizer shareNote = new TapGestureRecognizer();
+                shareNote.Tapped += ShareNote_Clicked;
+                share.GestureRecognizers.Add(shareNote);
+                grid.Children.Add(share);
+                stackLayout.Children.Add(grid);
                 Label newNoteContents = new Label()
                 {
                     Text = currentNote.Contents,
@@ -124,16 +147,49 @@ namespace C971Rosendahl.Views
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     HorizontalOptions = LayoutOptions.CenterAndExpand,
                 };
-                Grid.SetRow(newNoteContents, 1);
-                grid.Children.Add(newNoteContents);
-                frame.Content = grid;
+                stackLayout.Children.Add(newNoteContents);
+                Picker moreOptions = new Picker()
+                {
+                    Title = "More Options",
+                    Items = {"Edit Note", "Delete Note"},
+                    FontSize = 18,
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    HorizontalOptions = LayoutOptions.CenterAndExpand,
+                };
+                moreOptions.SelectedIndexChanged += MoreOptions_SelectedIndexChanged;
+                stackLayout.Children.Add(moreOptions);
+                frame.Content = stackLayout;
                 notesList.Children.Add(frame);
+            }
+        }
+
+        private async void MoreOptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Picker picker = (Picker)sender;
+            StackLayout stackLayout = picker.Parent as StackLayout;
+            Frame frame = stackLayout.Parent as Frame;
+            int noteId = notesList.Children.IndexOf(frame);
+
+            if (picker.SelectedItem == "Edit Note")
+            {
+                currentNote = notes[noteId];
+                await Navigation.PushAsync(new EditNote(currentNote));
+            }
+            else if (picker.SelectedItem == "Delete Note")
+            {
+                bool selection = await DisplayAlert("Delete note?", "Are you sure you want to delete this note?", "Yes", "No");
+                if (selection == true)
+                {
+                    notes.RemoveAt(noteId);
+                    notesList.Children.RemoveAt(noteId);
+                    await DatabaseService.RemoveNote(currentNote.NoteId);
+                }
             }
         }
 
         private async void ShareNote_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Share Note", "Share note?", "Yes", "No");
+            bool selection = await DisplayAlert("Share Note", "Share note?", "Yes", "No");
         }
 
         private void AddAssessment_Clicked(object sender, EventArgs e)
@@ -228,7 +284,7 @@ namespace C971Rosendahl.Views
                 Grid grid = (Grid)label.Parent;
                 Frame frame = (Frame)grid.Parent;
                 int id = assessmentsView.Children.IndexOf(frame);
-                currentAssessment = courseAssessments[id];
+                currentAssessment = assessments[id];
             }
             await Navigation.PushAsync(new EditAssessment(currentAssessment));
         }
