@@ -593,6 +593,7 @@ namespace C971Rosendahl.Views
                 container = (StackLayout)button.Parent;
                 course = new Course()
                 {
+                    CourseId = courses.Last().CourseId + 1,
                     Name = "New Course - X000",
                     Description = "No description",
                     TermId = termList.Children.IndexOf(container) + 1
@@ -806,15 +807,12 @@ namespace C971Rosendahl.Views
         //Opens a new page to edit a course
         public async void CourseEdit_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Clicked", "Course Edit Clicked", "OK");
-            //List<Term> terms = (List<Term>)await DatabaseService.GetTerms();
-            //await DisplayAlert("Clicked", $"{terms[0].ToString()}", "OK");
-            //term1NameLabel.Text = terms[0].Name;
-            //term1NameEntry.Text = terms[0].Name;
+            Label label = (Label)sender;
+            Grid grid = (Grid)label.Parent;
+            Label idLabel = grid.Children.Last() as Label;
+            int id = int.Parse(idLabel.Text);
 
-            //await DatabaseService.ClearSampleData();
-
-            //On course edit page, add check for name to make sure it is at least 4 characters long
+            await Navigation.PushAsync(new EditCourse(id));
         }
 
         //Asks for verification and deletes the course if yes

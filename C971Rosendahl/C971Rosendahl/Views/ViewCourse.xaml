@@ -4,8 +4,7 @@
              x:Class="C971Rosendahl.Views.ViewCourse"
              Title="Course Name">
     <ContentPage.ToolbarItems>
-        <!--<ToolbarItem Text="Edit Course" Clicked="CourseEdit_Clicked"/>-->
-        <!--<ToolbarItem Text="Cancel" Clicked="Cancel"/>-->
+        <ToolbarItem Text="Edit Course" Clicked="CourseEdit_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
@@ -57,7 +56,7 @@
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="End">
                             <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="CourseDateNotifications_Clicked"/>
+                                <TapGestureRecognizer Tapped="CourseNotifications_Clicked"/>
                             </Label.GestureRecognizers>
                         </Label>
                     </Grid>

@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
@@ -43,43 +44,25 @@ namespace C971Rosendahl.Views
             notes.Clear();
             notesList.Children.Clear();
             notes = await DatabaseService.GetNotesById(course.CourseId);
-            //List<Note> currentNotes = new List<Note>();
+            List<Note> currentNotes = new List<Note>();
             assessments.Clear();
             assessments = await DatabaseService.GetAssessment(course.CourseId);
-            //courseAssessments.Clear();
 
-            //foreach (Course searchCourse in courses)
-            //{
-            //    if (searchCourse.CourseId == CurrentCourseId)
-            //    {
-            //        course = searchCourse;
-            //    }
-            //}
-            //foreach (Note note in DegreePlan.notes)
-            //{
-            //    if (note.NoteId > maxNoteId)
-            //    {
-            //        maxNoteId = note.NoteId;
-            //    }
-            //    if (note.CourseID == CurrentCourseId)
-            //    {
-            //        currentNotes.Add(note);
-            //    }
-            //}
             foreach (Assessment assessment in assessments)
             {
-                if (assessment.AssessmentId == CurrentCourseId)
-                {
-                    currentAssessment = assessment;
-                    //courseAssessments.Add(currentAssessment);
-                    AddAssessment_Clicked(null, null);
-                }
+                currentAssessment = assessment;
+                AddAssessment_Clicked(null, null);
             }
+
+            
             courseName.Text = course.Name;
             courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yy");
             courseEndDate.Text = course.EndDate.Date.ToString("MM/dd/yy");
             courseDescription.Text = course.Description;
-            instructorInfo.Text = instructor.Name;
+            if (instructor != null)
+            {
+                instructorInfo.Text = instructor.Name;
+            }
             noteTitles.Clear();
             foreach (Note note in notes)
             {
@@ -91,19 +74,31 @@ namespace C971Rosendahl.Views
 
         public async void CourseEdit_Clicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Clicked", "Course Edit Clicked", "OK");
+            await Navigation.PushAsync(new EditCourse(course.CourseId));
         }
 
-        private async void CourseDateNotifications_Clicked(object sender, EventArgs e)
+        //private async void CourseDateNotifications_Clicked(object sender, EventArgs e)
+        //{
+        //    bool confirmation = await DisplayAlert("Course date alerts", "Would you like notifications regarding the end date of this course?", "Yes", "No");
+        //    if (confirmation == true)
+        //    {
+        //        await DatabaseService.UpdateCourse(course.CourseId, confirmation);
+        //        CrossLocalNotifications.Current.Show("Course status", $"{course.Name} is ending today", 5);
+        //    }
+        //}
+
+        private async void CourseNotifications_Clicked(object sender, EventArgs e)
         {
-            bool confirmation = await DisplayAlert("Course date alerts", "Would you like notifications regarding the end date of this course?", "Yes", "No");
-            if (confirmation == true)
+            bool confirmation = await DisplayAlert("Enable notifications?", "Would you like notifications regarding the end date of this course?", "Yes", "No");
+            if (confirmation)
             {
-                await DatabaseService.UpdateCourse(course.CourseId, confirmation);
-                CrossLocalNotifications.Current.Show("Course status", $"{course.Name} is ending today", 5);
+                await DatabaseService.UpdateCourse(CurrentCourseId, true);
+            }
+            else
+            {
+                await DatabaseService.UpdateCourse(CurrentCourseId, false);
             }
         }
-
 
         private async void AddNote_Clicked(object sender, EventArgs e)
         {
@@ -189,7 +184,21 @@ namespace C971Rosendahl.Views
 
         private async void ShareNote_Clicked(object sender, EventArgs e)
         {
+            Label share = (Label)sender;
+            Grid grid = (Grid)share.Parent;
+            StackLayout stackLayout = (StackLayout)grid.Parent;
+            Frame frame = (Frame)stackLayout.Parent;            
+
             bool selection = await DisplayAlert("Share Note", "Share note?", "Yes", "No");
+            if (selection)
+            {
+                Note currentNote = notes[notesList.Children.IndexOf(frame)];
+                await Share.RequestAsync(new ShareTextRequest
+                {
+                    Text = currentNote.Contents,
+                    Title = "Share Text"
+                });
+            }
         }
 
         private void AddAssessment_Clicked(object sender, EventArgs e)
@@ -289,15 +298,24 @@ namespace C971Rosendahl.Views
             await Navigation.PushAsync(new EditAssessment(currentAssessment));
         }
 
-        private void CourseNotifications_Clicked(object sender, EventArgs e)
+        
+        private async void AssessmentNotifications_Clicked(object sender, EventArgs e)
         {
+            Label notificationLabel = (Label)sender;
+            Grid grid = (Grid)notificationLabel.Parent;
+            Frame frame = (Frame)grid.Parent;
+            Assessment assessment = assessments[assessmentsView.Children.IndexOf(frame)];
 
+
+            bool selection = await DisplayAlert("Enable Notifications?", "Would you like notifications regarding the due date of this assessment?", "Yes", "No");
+            if (selection)
+            {
+                await DatabaseService.UpdateAssessment(assessment.AssessmentId, true);
+            }
+            else
+            {
+                await DatabaseService.UpdateAssessment(assessment.AssessmentId, false);
+            }
         }
-
-        private async void Cancel(object sender, EventArgs e)
-        {
-            await Navigation.PopAsync();
-        }
-
     }
 }

@@ -344,6 +344,21 @@ namespace C971Rosendahl.Services
             }
         }
 
+        public static async Task UpdateAssessment(int assessmentId, bool notifications)
+        {
+            await Init();
+            var assessmentQuery = await _db.Table<Assessment>()
+                .Where(i => i.AssessmentId == assessmentId)
+                .FirstOrDefaultAsync();
+
+            if (assessmentQuery != null)
+            {
+                assessmentQuery.Notifications = notifications;
+
+                await _db.UpdateAsync(assessmentQuery);
+            }
+        }
+
         public static async Task<List<Assessment>> GetAssessment(int courseId)
         {
             await Init();
