@@ -70,11 +70,28 @@
                            HorizontalTextAlignment="Center"/>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Label x:Name="instructorInfo"
-                           Text="Instructor info"
+                    <StackLayout VerticalOptions="FillAndExpand">
+                        <Label x:Name="instructorName"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand" 
                            HorizontalOptions="CenterAndExpand"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label x:Name="instructorEmail"
+                                   TextColor="Blue"
+                                   FontSize="18"
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="CenterAndExpand"/>
+                            <Label x:Name="instructorPhone"
+                                   Grid.Column="1"
+                                   FontSize="18"
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="CenterAndExpand"/>
+                        </Grid>
+                    </StackLayout>
                 </Frame>
                 <Frame Margin="0,10">
                     <StackLayout>

@@ -7,18 +7,20 @@
         <ScrollView>
             <StackLayout>
                 <Frame Margin="0,10">
-                    <Entry     x:Name="courseName"
+                    <Editor     x:Name="courseName"
+                                Placeholder="Course Name"
                                FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="CenterAndExpand"/>
+                                AutoSize="TextChanges"
+                               VerticalOptions="FillAndExpand" 
+                               HorizontalOptions="FillAndExpand"/>
                 </Frame>
                 <Frame Margin="0,10">
                     <Grid>
-                        <Grid.ColumnDefinitions>
+                        <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid>
+                        </Grid.ColumnDefinitions>-->
+                        <!--<Grid>-->
                             <Label Text="Start Date: "
                                    FontSize="18"
                                    VerticalOptions="Start"
@@ -28,19 +30,21 @@
                                FontSize="18"
                                VerticalOptions="CenterAndExpand"
                                HorizontalOptions="Start"/>
-                        </Grid>
-                        <Grid Grid.Row="1">
+                        <!--</Grid>-->
+                        <!--<Grid Grid.Row="1">-->
                             <Label Text="End Date: "
+                                   Grid.Row="1"                                   
                                    FontSize="18"
                                    VerticalOptions="Start"
                                    HorizontalOptions="Start"/>
                             <DatePicker x:Name="courseEndDate"
+                                        Grid.Row="1"
                                    Grid.Column="1"
                                FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"/>
-                        </Grid>
-                        <Label Grid.Row="1"
+                        <!--</Grid>-->
+                        <!--<Label Grid.Row="1"
                                Grid.Column="1"
                                Text="Notifications"
                                FontSize="18"
@@ -49,23 +53,25 @@
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="CourseDateNotifications_Clicked"/>
                             </Label.GestureRecognizers>
-                        </Label>
+                        </Label>-->
                     </Grid>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Entry x:Name="courseDescription" 
+                    <Editor x:Name="courseDescription" 
+                           Placeholder="Course Description"
+                            AutoSize="TextChanges"
                            FontSize="18"
-                           VerticalOptions="CenterAndExpand" 
-                           HorizontalOptions="CenterAndExpand"/>
+                           VerticalOptions="FillAndExpand" 
+                           HorizontalOptions="FillAndExpand"/>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Label x:Name="instructorInfo"
+                    <Label x:Name="instructorName"
                            Text="Instructor info"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand" 
                            HorizontalOptions="CenterAndExpand"/>
                 </Frame>
-                <Frame Margin="0,10">
+                <!--<Frame Margin="0,10">
                     <Grid>
                         <StackLayout x:Name="notes">
                             <Label
@@ -75,8 +81,8 @@
                            HorizontalOptions="CenterAndExpand"/>
                         </StackLayout>
                     </Grid>
-                </Frame>
-                <Frame Margin="0,10">
+                </Frame>-->
+                <!--<Frame Margin="0,10">
                     <Grid>
                         <Label Text="Objective Assessment 1"
                                FontSize="18"
@@ -133,7 +139,7 @@
                                HorizontalOptions="End">
                         </Label>
                     </Grid>
-                </Frame>
+                </Frame>-->
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

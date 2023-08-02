@@ -83,16 +83,19 @@ namespace C971Rosendahl.Views
                 Course course = courses[i];
                 if (course.DateNotifications == true && course.EndDate.Date == DateTime.Now.Date)
                 {
+                    notificationNum = random.Next(1000);
                     CrossLocalNotifications.Current.Show("Course ending soon", $"{course.Name} is ending today", notificationNum);
                 }
                 courseTermId = course.TermId;
                 CourseAdd_Clicked(null, null);
             }
             //Displaying any assessment notifications
-            foreach (Assessment assessment in assessments)
+            for (int i = 0; i<= assessments.Count - 1; i++)
             {
-                if (assessment.Notifications == true && DateTime.Now.Date == assessment.DueDate) 
+                Assessment assessment = assessments[i];
+                if (assessment.Notifications == true && assessment.DueDate == DateTime.Now.Date) 
                 {
+                    notificationNum = random.Next(1000);
                     CrossLocalNotifications.Current.Show("Assessment due today", $"{assessment.Name} is due today", notificationNum);
                 }
             }
@@ -580,25 +583,12 @@ namespace C971Rosendahl.Views
         private async void CourseAdd_Clicked(object sender, EventArgs e)
         {
             Course course;
-            string selection = string.Empty;
             StackLayout container = new StackLayout();
             if (sender == null)
             {
                 course = courses[courseCount];
                 container = (StackLayout)termList.Children[course.TermId - 1];
-            }
-            else
-            {
-                Label button = (Label)sender;
-                container = (StackLayout)button.Parent;
-                course = new Course()
-                {
-                    CourseId = courses.Last().CourseId + 1,
-                    Name = "New Course - X000",
-                    Description = "No description",
-                    TermId = termList.Children.IndexOf(container) + 1
-                };
-            }
+            
             Frame frame = new Frame();
             frame.Margin = new Thickness(25, 3);
             Grid grid = new Grid();
@@ -738,6 +728,24 @@ namespace C971Rosendahl.Views
                 await DatabaseService.AddCourse(course.TermId, course.InstructorId, course.Name, course.StartDate, course.EndDate, course.DateNotifications, course.Description);
             }
             container.Children.Insert((container.Children.Count() - 1), frame);
+
+            }
+            else
+            {
+                Label button = (Label)sender;
+                container = (StackLayout)button.Parent;
+                //course = new Course()
+                //{
+                //    CourseId = courses.Last().CourseId + 1,
+                //    Name = "New Course - X000",
+                //    Description = "No description",
+                //    TermId = termList.Children.IndexOf(container) + 1
+                //};
+                EditCourse.courseId = courses.Last().CourseId + 1;
+                EditCourse.termId = termList.Children.IndexOf(container) + 1;
+                await Navigation.PushAsync(new EditCourse(-1));
+                return;
+            }
         }
 
         //Status Picker for course completion status. It is a Label that, when clicked

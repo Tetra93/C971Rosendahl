@@ -7,19 +7,19 @@
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout VerticalOptions="StartAndExpand">
+            <StackLayout>
                 <Frame>
                     <StackLayout>
                         <Label Text="Assessment Name"
                        FontSize="18"
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="CenterAndExpand"/>
-                        <Entry x:Name="assessmentName"
+                        <Editor x:Name="assessmentName"
                        FontSize="18"
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="FillAndExpand"
                                Unfocused="OnBlankUnfocus">
-                        </Entry>
+                        </Editor>
                     </StackLayout>
                 </Frame>
                 <Frame>
@@ -31,7 +31,8 @@
                         <DatePicker x:Name="dueDate"
                                     FontSize="18"
                                     HorizontalOptions="CenterAndExpand"
-                                    VerticalOptions="CenterAndExpand"/>
+                                    VerticalOptions="CenterAndExpand"
+                                    PropertyChanged="DateChanged"/>
                     </StackLayout>
                 </Frame>
                 <Frame>
@@ -47,13 +48,11 @@
                     </StackLayout>
                 </Frame>
                 <Frame>
-                    <Label Text="Save"
+                    <Button Text="Save"
                            FontSize="18"
-                           HorizontalOptions="CenterAndExpand">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="SaveButton_Clicked"/>
-                        </Label.GestureRecognizers>
-                    </Label>
+                           HorizontalOptions="CenterAndExpand"
+                            Clicked="SaveButton_Clicked">
+                    </Button>
                 </Frame>
             </StackLayout>
         </ScrollView>

@@ -46,6 +46,7 @@ namespace C971Rosendahl.Views
             notes = await DatabaseService.GetNotesById(course.CourseId);
             List<Note> currentNotes = new List<Note>();
             assessments.Clear();
+            assessmentsView.Children.Clear();
             assessments = await DatabaseService.GetAssessment(course.CourseId);
 
             foreach (Assessment assessment in assessments)
@@ -61,7 +62,9 @@ namespace C971Rosendahl.Views
             courseDescription.Text = course.Description;
             if (instructor != null)
             {
-                instructorInfo.Text = instructor.Name;
+                instructorName.Text = instructor.Name;
+                instructorEmail.Text = instructor.Email;
+                instructorPhone.Text = instructor.Phone;
             }
             noteTitles.Clear();
             foreach (Note note in notes)
@@ -89,7 +92,16 @@ namespace C971Rosendahl.Views
 
         private async void CourseNotifications_Clicked(object sender, EventArgs e)
         {
-            bool confirmation = await DisplayAlert("Enable notifications?", "Would you like notifications regarding the end date of this course?", "Yes", "No");
+            string notificationState = string.Empty;
+            if (course.DateNotifications == true)
+            {
+                notificationState = "on";
+            }
+            else
+            {
+                notificationState = "off";
+            }
+            bool confirmation = await DisplayAlert("Update notifications?", $"Notifications are currently turned {notificationState}. Would you like notifications regarding the end date of this course?", "Yes", "No");
             if (confirmation)
             {
                 await DatabaseService.UpdateCourse(CurrentCourseId, true);
@@ -98,6 +110,7 @@ namespace C971Rosendahl.Views
             {
                 await DatabaseService.UpdateCourse(CurrentCourseId, false);
             }
+            course = await DatabaseService.GetSpecificCourse(CurrentCourseId);
         }
 
         private async void AddNote_Clicked(object sender, EventArgs e)
@@ -232,9 +245,9 @@ namespace C971Rosendahl.Views
                     HorizontalOptions = LayoutOptions.End,
                 };
                 Grid.SetColumn(notifications, 1);
-                TapGestureRecognizer courseNotifications = new TapGestureRecognizer();
-                courseNotifications.Tapped += CourseNotifications_Clicked;
-                notifications.GestureRecognizers.Add(courseNotifications);
+                TapGestureRecognizer assessmentNotifications = new TapGestureRecognizer();
+                assessmentNotifications.Tapped += AssessmentNotifications_Clicked;
+                notifications.GestureRecognizers.Add(assessmentNotifications);
                 grid.Children.Add(notifications);
 
                 Grid startDateGrid = new Grid();
@@ -305,9 +318,17 @@ namespace C971Rosendahl.Views
             Grid grid = (Grid)notificationLabel.Parent;
             Frame frame = (Frame)grid.Parent;
             Assessment assessment = assessments[assessmentsView.Children.IndexOf(frame)];
+            string notificationState = string.Empty;
+            if (assessment.Notifications == true)
+            {
+                notificationState = "on";
+            }
+            else
+            {
+                notificationState = "off";
+            }
 
-
-            bool selection = await DisplayAlert("Enable Notifications?", "Would you like notifications regarding the due date of this assessment?", "Yes", "No");
+            bool selection = await DisplayAlert("Update Notifications?", $"Notifications are currently turned {notificationState}. Would you like notifications regarding the due date of this assessment?", "Yes", "No");
             if (selection)
             {
                 await DatabaseService.UpdateAssessment(assessment.AssessmentId, true);

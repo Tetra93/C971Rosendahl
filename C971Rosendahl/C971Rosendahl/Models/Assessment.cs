@@ -22,7 +22,7 @@ namespace C971Rosendahl.Models
 
         public DateTime DueDate { get; set;}
 
-        public bool Notifications { get; set; }
+        public bool Notifications { get; set; } = false;
 
         public string SubmissionStatus { get; set; }
 

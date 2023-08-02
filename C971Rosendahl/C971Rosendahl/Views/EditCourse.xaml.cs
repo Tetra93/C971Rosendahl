@@ -15,19 +15,33 @@ namespace C971Rosendahl.Views
     public partial class EditCourse : ContentPage
     {
         public static int courseId;
+        public static int termId;
 
         public EditCourse(int id)
         {
             InitializeComponent();
-            courseId = id;
+            if (id != -1)
+            {
+                courseId = id;
+            }
 
         }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            Course course = await DatabaseService.GetSpecificCourse(courseId);
-            courseName.Text = course.Name;
+            if (courseId != -1)
+            {
+                Course course = await DatabaseService.GetSpecificCourse(courseId);
+                courseName.Text = course.Name;
+                courseDescription.Text = course.Description;
+            }
+            else
+            {
+                Course course = new Course()
+                {
+                };
+            }
         }
         private async void CourseDateNotifications_Clicked(object sender, EventArgs e)
         {

@@ -17,6 +17,7 @@ namespace C971Rosendahl.Views
         Assessment currentAssessment = new Assessment();
         public bool nameCheck = false;
         public bool descriptionCheck = false;
+        
 
         public EditAssessment(Assessment assessment)
         {
@@ -24,6 +25,8 @@ namespace C971Rosendahl.Views
             if (assessment.Name == "New Assessment")
             {
                 Title = "New Assessment";
+                nameCheck = false;
+                descriptionCheck = false;
             }
             else
             {
@@ -32,8 +35,16 @@ namespace C971Rosendahl.Views
                 descriptionCheck = true;
             }
             InitializeComponent();
+            dueDate.MinimumDate = DateTime.Now;
             assessmentName.Text = currentAssessment.Name;
-            dueDate.Date = currentAssessment.DueDate.Date;
+            if (currentAssessment.DueDate.Date < dueDate.MinimumDate)
+            {
+                currentAssessment.DueDate = dueDate.MinimumDate.Date;
+            }
+            else
+            {
+                dueDate.Date = currentAssessment.DueDate.Date;
+            }
             assessmentDescription.Text = currentAssessment.Description;
         }
         
@@ -44,20 +55,27 @@ namespace C971Rosendahl.Views
                 if (nameCheck == true && descriptionCheck == true)
                 {
                     await DatabaseService.AddAssessment(currentAssessment.AssessmentId, currentAssessment.Name, currentAssessment.Type, currentAssessment.Description, currentAssessment.DueDate, false, "Not Submitted", "Not Completed");
+                    await Navigation.PopAsync();
                 }
             }
             else if (Title == "Edit Assessment")
             {
                 if (nameCheck == true && descriptionCheck == true)
                 {
-                    await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, currentAssessment.Name, currentAssessment.Description, currentAssessment.DueDate, currentAssessment.Notifications, currentAssessment.SubmissionStatus, currentAssessment.CompletionStatus);
+                    await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, currentAssessment.Name, currentAssessment.Description, currentAssessment.DueDate.Date, currentAssessment.SubmissionStatus, currentAssessment.CompletionStatus);
+                    await Navigation.PopAsync();
                 }
             }
         }
 
+        private void DateChanged(object sender, EventArgs e)
+        {
+            currentAssessment.DueDate = dueDate.Date;
+        }
+
         private async void CancelButton_Clicked(object sender, EventArgs e)
         {
-            bool check = await DisplayAlert("Discard changes?", "Are you sure you want to go back without saving? All changes will be lost.", "Yes", "No");
+            bool check = await DisplayAlert("Discard changes?", "Are you sure you want to go back? Any changes made will be lost.", "Yes", "No");
             if (check == true)
             {
                 await Navigation.PopAsync();
