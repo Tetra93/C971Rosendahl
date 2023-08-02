@@ -3,10 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="C971Rosendahl.Views.ViewAssessment">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout>
+                <Frame>
+                    <Label x:Name="assessmentName"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                </Frame>
+                <Frame>
+                    <Label x:Name="dueDate"
+                           FontSize="18"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="CenterAndExpand"/>
+                </Frame>
+                <Frame>
+                    <Label x:Name="description"
+                           FontSize="18"
+                           VerticalOptions="FillAndExpand"
+                           HorizontalOptions="CenterAndExpand"/>                    
+                </Frame>
+                    
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

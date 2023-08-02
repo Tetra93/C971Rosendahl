@@ -107,6 +107,7 @@ namespace C971Rosendahl.Views
             {
                 notificationState = "off";
             }
+
             bool confirmation = await DisplayAlert("Update notifications?", $"Notifications are currently turned {notificationState}. Would you like notifications regarding the end date of this course?", "Yes", "No");
             if (confirmation)
             {
@@ -343,6 +344,8 @@ namespace C971Rosendahl.Views
             {
                 await DatabaseService.UpdateAssessment(assessment.AssessmentId, false);
             }
+            assessments.Clear();
+            assessments = await DatabaseService.GetAssessment(course.CourseId);
         }
     }
 }
