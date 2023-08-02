@@ -21,7 +21,6 @@ namespace C971Rosendahl
 
         protected override void OnStart()
         {
-
         }
 
         protected override void OnSleep()

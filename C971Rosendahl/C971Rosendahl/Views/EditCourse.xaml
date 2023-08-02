@@ -3,24 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="C971Rosendahl.Views.EditCourse"
              Title="Edit Course">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Clicked="Save_Clicked"/>
+        <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked"/>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
                 <Frame Margin="0,10">
-                    <Editor     x:Name="courseName"
+                    <StackLayout>
+                        <Label Text="Course Name"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                        <Editor     x:Name="courseName"
                                 Placeholder="Course Name"
                                FontSize="18"
                                 AutoSize="TextChanges"
                                VerticalOptions="FillAndExpand" 
                                HorizontalOptions="FillAndExpand"/>
+                    </StackLayout>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Grid>
-                        <!--<Grid.ColumnDefinitions>
+                    <StackLayout>
+                        <Label Text="Start and End Dates"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                        <Grid>
+                            <!--<Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>-->
-                        <!--<Grid>-->
+                            <!--<Grid>-->
                             <Label Text="Start Date: "
                                    FontSize="18"
                                    VerticalOptions="Start"
@@ -29,9 +44,10 @@
                                 x:Name="courseStartDate"
                                FontSize="18"
                                VerticalOptions="CenterAndExpand"
-                               HorizontalOptions="Start"/>
-                        <!--</Grid>-->
-                        <!--<Grid Grid.Row="1">-->
+                               HorizontalOptions="Start"
+                                        DateSelected="StartDate_Changed"/>
+                            <!--</Grid>-->
+                            <!--<Grid Grid.Row="1">-->
                             <Label Text="End Date: "
                                    Grid.Row="1"                                   
                                    FontSize="18"
@@ -42,9 +58,10 @@
                                    Grid.Column="1"
                                FontSize="18"
                                VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="Start"/>
-                        <!--</Grid>-->
-                        <!--<Label Grid.Row="1"
+                               HorizontalOptions="Start"
+                                        DateSelected="EndDate_Changed"/>
+                            <!--</Grid>-->
+                            <!--<Label Grid.Row="1"
                                Grid.Column="1"
                                Text="Notifications"
                                FontSize="18"
@@ -54,22 +71,58 @@
                                 <TapGestureRecognizer Tapped="CourseDateNotifications_Clicked"/>
                             </Label.GestureRecognizers>
                         </Label>-->
-                    </Grid>
+                        </Grid>
+                    </StackLayout>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Editor x:Name="courseDescription" 
+                    <StackLayout>
+                        <Label Text="Course Description"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                        <Editor x:Name="courseDescription" 
                            Placeholder="Course Description"
                             AutoSize="TextChanges"
                            FontSize="18"
                            VerticalOptions="FillAndExpand" 
                            HorizontalOptions="FillAndExpand"/>
+                    </StackLayout>
                 </Frame>
                 <Frame Margin="0,10">
-                    <Label x:Name="instructorName"
-                           Text="Instructor info"
+                    <StackLayout>
+                        <Label Text="Course Instructor"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                        <Picker x:Name="selectedInstructor"
+                                FontSize="18"                                
+                                VerticalOptions="FillAndExpand"
+                                HorizontalOptions="FillAndExpand"
+                                SelectedIndexChanged="SelectedInstructor_Changed"/>
+                        <!--<Label x:Name="instructorName"
+                               Text="instructor name"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand" 
-                           HorizontalOptions="CenterAndExpand"/>
+                           HorizontalOptions="CenterAndExpand"
+                               IsVisible="False"/>-->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label x:Name="instructorEmail"
+                                   FontSize="18"
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="CenterAndExpand"
+                                   IsVisible="False"/>
+                            <Label x:Name="instructorPhone"
+                                   Grid.Column="1"
+                                   FontSize="18"
+                                   VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="CenterAndExpand"
+                                   IsVisible="False"/>
+                        </Grid>
+                    </StackLayout>
                 </Frame>
                 <!--<Frame Margin="0,10">
                     <Grid>

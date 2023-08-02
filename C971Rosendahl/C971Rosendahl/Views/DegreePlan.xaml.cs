@@ -58,7 +58,7 @@ namespace C971Rosendahl.Views
             if (Settings.FirstRun == true)
             {
                 await DatabaseService.LoadSampleData();
-            }            
+            }
             else
             {
                 terms = await DatabaseService.GetTerms();
@@ -723,10 +723,6 @@ namespace C971Rosendahl.Views
 
 
             frame.Content = grid;
-            if (sender != null)
-            {
-                await DatabaseService.AddCourse(course.TermId, course.InstructorId, course.Name, course.StartDate, course.EndDate, course.DateNotifications, course.Description);
-            }
             container.Children.Insert((container.Children.Count() - 1), frame);
 
             }
@@ -743,6 +739,7 @@ namespace C971Rosendahl.Views
                 //};
                 EditCourse.courseId = courses.Last().CourseId + 1;
                 EditCourse.termId = termList.Children.IndexOf(container) + 1;
+                EditCourse.editNew = true;
                 await Navigation.PushAsync(new EditCourse(-1));
                 return;
             }
@@ -820,6 +817,7 @@ namespace C971Rosendahl.Views
             Label idLabel = grid.Children.Last() as Label;
             int id = int.Parse(idLabel.Text);
 
+            EditCourse.editNew = false;
             await Navigation.PushAsync(new EditCourse(id));
         }
 

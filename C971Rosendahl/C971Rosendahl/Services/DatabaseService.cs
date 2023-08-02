@@ -72,7 +72,7 @@ namespace C971Rosendahl.Services
 
         #region Courses
 
-        public static async Task AddCourse(int termId, int instructorId, string name,  DateTime StartDate, DateTime EndDate, bool notifications, string description)
+        public static async Task AddCourse(int termId, int instructorId, string name,  DateTime StartDate, DateTime EndDate, string description)
         {
             await Init();
             var course = new Course()
@@ -82,7 +82,6 @@ namespace C971Rosendahl.Services
                 Name = name,
                 StartDate = StartDate,
                 EndDate = EndDate,
-                DateNotifications = notifications,
                 Description = description
 
             };
@@ -90,7 +89,7 @@ namespace C971Rosendahl.Services
 
         }
 
-        public static async Task UpdateCourse(int courseId, int instructorId, string name, DateTime StartDate, DateTime EndDate, bool notifications, string description)
+        public static async Task UpdateCourse(int courseId, int instructorId, string name, DateTime StartDate, DateTime EndDate, string description)
         {
             await Init();
             var courseQuery = await _db.Table<Course>()
@@ -103,7 +102,6 @@ namespace C971Rosendahl.Services
                 courseQuery.Name = name;
                 courseQuery.StartDate = StartDate;
                 courseQuery.EndDate = EndDate;
-                courseQuery.DateNotifications = notifications;
                 courseQuery.Description = description;
 
                 await _db.UpdateAsync(courseQuery);
@@ -426,7 +424,7 @@ namespace C971Rosendahl.Services
                 "local database; and consuming REST-based web services. There are several " +
                 "prerequisites for this course: Software I and II, and UI Design.",
                 StartDate = DateTime.Now,
-                EndDate = DateTime.Now,//DateTime.Now.AddDays(30),
+                EndDate = DateTime.Now.AddDays(30),
                 DateNotifications = true,
                 TermId = 1,
                 InstructorId = 1
@@ -448,7 +446,7 @@ namespace C971Rosendahl.Services
                 "Scripting and Programming: Foundations and Scripting and " +
                 "Programming: Applications are prerequisites for this course.",
                 StartDate = DateTime.Now.AddDays(30),
-                EndDate = DateTime.Now,//DateTime.Now.AddDays(60),
+                EndDate = DateTime.Now.AddDays(60),
                 DateNotifications = true,
                 TermId = 1,
                 InstructorId = 1
@@ -469,7 +467,7 @@ namespace C971Rosendahl.Services
                 "intermediate expertise in object-oriented programming and " +
                 "the C# language. The prerequisite for this course is Software I - C#.",
                 StartDate = DateTime.Now.AddDays(60),
-                EndDate = DateTime.Now,//DateTime.Now.AddDays(90),
+                EndDate = DateTime.Now.AddDays(90),
                 DateNotifications = true,
                 TermId = 1,
                 InstructorId = 1
