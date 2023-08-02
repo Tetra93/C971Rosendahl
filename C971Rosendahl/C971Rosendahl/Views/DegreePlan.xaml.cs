@@ -408,11 +408,15 @@ namespace C971Rosendahl.Views
                                 entry.Text = childText;
                                 break;
                             }
-                            else if (child2 is DatePicker datePicker)
+                        }
+                        else if (child is Grid grid)
+                        {
+                            Label label = (Label)grid.Children[1];
+                            string childText = label.Text;
+                            if (child2 is DatePicker datePicker)
                             {
                                 datePicker.Date = DateTime.ParseExact(childText, "MM/dd/yy", CultureInfo.InvariantCulture);
                                 break;
-
                             }
                         }
                     }
