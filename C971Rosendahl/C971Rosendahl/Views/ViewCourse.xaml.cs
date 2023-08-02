@@ -40,7 +40,13 @@ namespace C971Rosendahl.Views
         {
             base.OnAppearing();
             course = await DatabaseService.GetSpecificCourse(CurrentCourseId);            
-            instructor = await DatabaseService.GetInstructorById(course.InstructorId);            
+            instructor = await DatabaseService.GetInstructorById(course.InstructorId);
+            if (instructor == null)
+            {
+                EditCourse.editNew = false;
+                await Navigation.PushAsync(new EditCourse(CurrentCourseId));
+                return;
+            }
             notes.Clear();
             notesList.Children.Clear();
             notes = await DatabaseService.GetNotesById(course.CourseId);
@@ -63,7 +69,7 @@ namespace C971Rosendahl.Views
             if (instructor != null)
             {
                 instructorName.Text = instructor.Name;
-                instructorEmail.Text = instructor.Email;
+                instructorEmail.Text = instructor.EmailAddress;
                 instructorPhone.Text = instructor.Phone;
             }
             noteTitles.Clear();
@@ -77,7 +83,7 @@ namespace C971Rosendahl.Views
 
         public async void CourseEdit_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new EditCourse(course.CourseId));
+            await Navigation.PushAsync(new EditCourse(CurrentCourseId));
         }
 
         //private async void CourseDateNotifications_Clicked(object sender, EventArgs e)

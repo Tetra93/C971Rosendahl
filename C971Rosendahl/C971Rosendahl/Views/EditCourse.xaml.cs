@@ -48,17 +48,23 @@ namespace C971Rosendahl.Views
             {
                 Course course = await DatabaseService.GetSpecificCourse(courseId);
                 Instructor currentInstructor = await DatabaseService.GetInstructorById(course.InstructorId);
-                
+                if (currentInstructor == null)
+                {
+                    await DisplayAlert("Instructor deleted", "The instructor for this course has been removed. Please select a new instructor", "OK");
+                }
+                else
+                {
+                    selectedInstructor.SelectedIndex = course.InstructorId;
+                    instructorEmail.Text = currentInstructor.EmailAddress;
+                    instructorEmail.IsVisible = true;
+                    instructorPhone.Text = currentInstructor.Phone;
+                    instructorPhone.IsVisible = true;
+                }
 
                 courseName.Text = course.Name;
                 courseDescription.Text = course.Description;
                 courseStartDate.Date = course.StartDate.Date;
                 courseEndDate.Date = course.EndDate.Date;
-                selectedInstructor.SelectedIndex = course.InstructorId;
-                instructorEmail.Text = currentInstructor.Email;
-                instructorEmail.IsVisible = true;
-                instructorPhone.Text = currentInstructor.Phone;
-                instructorPhone.IsVisible = true;
 
             }
             else
@@ -80,9 +86,13 @@ namespace C971Rosendahl.Views
         private async void Cancel_Clicked(object sender, EventArgs e)
         {
             bool confirmation = await DisplayAlert("Cancel changes?", "Are you sure you wish to go back? Any changes made will be lost", "Yes", "No");
-            if (confirmation == true)
+            if (confirmation == true && selectedInstructor.SelectedIndex != -1)
             {
                 await Navigation.PopAsync();
+            }
+            else
+            {
+                await Navigation.PopToRootAsync();
             }
         }
 
@@ -96,7 +106,7 @@ namespace C971Rosendahl.Views
                 course.EndDate = courseEndDate.Date;
                 if (editNew == true)
                 {
-                    await DatabaseService.AddCourse(course.TermId, course.InstructorId, course.Name, course.StartDate, course.EndDate, course.Description);
+                    await DatabaseService.AddCourse(termId, course.InstructorId, course.Name, course.StartDate, course.EndDate, course.Description);
                     await Navigation.PopAsync();
                 }
                 else
@@ -148,7 +158,7 @@ namespace C971Rosendahl.Views
                 currentInstructor = instructors[selectedInstructor.SelectedIndex - 1];
                 //instructorName.Text = currentInstructor.Name;
                 //instructorName.IsVisible = true;
-                instructorEmail.Text = currentInstructor.Email;
+                instructorEmail.Text = currentInstructor.EmailAddress;
                 instructorEmail.IsVisible = true;
                 instructorPhone.Text = currentInstructor.Phone;
                 instructorPhone.IsVisible = true;

@@ -187,7 +187,7 @@ namespace C971Rosendahl.Services
             {
                 Name = name,
                 Phone = phone,
-                Email = email
+                EmailAddress = email
 
             };
             await _db.InsertAsync(instructor);
@@ -205,7 +205,7 @@ namespace C971Rosendahl.Services
             {
                 instructorQuery.Name = name;
                 instructorQuery.Phone = phone;
-                instructorQuery.Email = email;
+                instructorQuery.EmailAddress = email;
 
                 await _db.UpdateAsync(instructorQuery);
             }
@@ -395,7 +395,7 @@ namespace C971Rosendahl.Services
             {
                 Name = "Jacob Rosendahl",
                 Phone = "123-456-7890",
-                Email = "jrosendahl@fakemail.com"
+                EmailAddress = "jrosendahl@fakemail.com"
             };
 
             await _db.InsertAsync(instructor1);
@@ -427,7 +427,7 @@ namespace C971Rosendahl.Services
                 EndDate = DateTime.Now.AddDays(30),
                 DateNotifications = true,
                 TermId = 1,
-                InstructorId = 1
+                InstructorId = 3
             };
 
             await _db.InsertAsync(course1);

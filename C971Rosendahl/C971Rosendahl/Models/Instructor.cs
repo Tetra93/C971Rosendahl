@@ -14,6 +14,6 @@ namespace C971Rosendahl.Models
 
         public string Phone { set; get; }
 
-        public string Email { set; get; }
+        public string EmailAddress { set; get; }
     }
 }

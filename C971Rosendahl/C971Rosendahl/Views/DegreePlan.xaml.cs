@@ -27,6 +27,8 @@ namespace C971Rosendahl.Views
 
         public static List<string> dataOptions = new List<string> { "Clear All Data", "Load Sample Data" };
 
+        public static List<string> instructorList = new List<string>();
+
         public static List<Term> terms = new List<Term>();
 
         public static List<Course> courses = new List<Course>();
@@ -67,7 +69,12 @@ namespace C971Rosendahl.Views
                 notes = await DatabaseService.GetNote();
                 assessments = await DatabaseService.GetAssessment();
             }
-
+            instructorList.Clear();
+            instructorList.Add("New Instructor");
+            foreach (Instructor instructor in instructors)
+            {
+                instructorList.Add(instructor.Name);
+            }
             //Constructing the page. I recycle my NewTerm_Clicked method
             //so that I don't need to create a new method for that.
             foreach (Term term in terms)
@@ -858,6 +865,21 @@ namespace C971Rosendahl.Views
             termCount = 0;
             OnAppearing();
             }
+        }
+
+        private async void EditInstructor_Clicked(object sender, EventArgs e)
+        {
+            string selection = await DisplayActionSheet("Select Instructor", "Cancel", null, instructorList.ToArray());
+            int index = instructorList.IndexOf(selection);
+            if (index == 0)
+            {
+                EditInstructor.instructorId = instructorList.Count + 1;
+            }
+            else
+            {
+                EditInstructor.instructorId = index;
+            }
+            await Navigation.PushAsync(new EditInstructor());
         }
     }
 

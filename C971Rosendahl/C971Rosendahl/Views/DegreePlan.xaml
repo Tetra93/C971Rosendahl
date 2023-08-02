@@ -6,7 +6,8 @@
              Title="Degree Plan">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Delete Data" Order="Secondary" Clicked="DeleteData"/>
-        <ToolbarItem Text="Load Sample Data" Order="Secondary" Clicked="LoadData"/>        
+        <ToolbarItem Text="Load Sample Data" Order="Secondary" Clicked="LoadData"/>
+        <ToolbarItem Text="Edit Instructor Data" Order="Secondary" Clicked="EditInstructor_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>        
         <ScrollView>

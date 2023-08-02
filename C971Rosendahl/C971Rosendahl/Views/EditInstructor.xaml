@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="C971Rosendahl.Views.EditInstructor">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Save" Clicked="Save_Clicked"/>
+        <ToolbarItem Text="Cancel" Clicked="Cancel_Clicked"/>
+        <ToolbarItem Text="Delete Instructor" Order="Secondary" Clicked="Delete_Clicked"/>
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>        
+        <ScrollView>
+            <StackLayout>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Instructor Name"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                        <Editor x:Name="instructorName"
+                                AutoSize="TextChanges"
+                                Placeholder="Instructor Name"
+                                FontSize="18"
+                                VerticalOptions="FillAndExpand"                                
+                                HorizontalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </Frame>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Email Address"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                        <Editor x:Name="emailAddress"
+                                AutoSize="TextChanges"
+                                Placeholder="Email Address"
+                                FontSize="18"
+                                VerticalOptions="FillAndExpand"
+                                HorizontalOptions="CenterAndExpand"/>
+                    </StackLayout>                    
+                </Frame>
+                <Frame>
+                    <StackLayout>
+                        <Label Text="Phone Number"
+                               FontSize="18"
+                               VerticalOptions="CenterAndExpand"
+                               HorizontalOptions="CenterAndExpand"/>
+                        <Editor x:Name="phoneNumber"
+                                AutoSize="TextChanges"
+                                Placeholder="Phone Number"
+                                FontSize="18"
+                                VerticalOptions="FillAndExpand"
+                                HorizontalOptions="CenterAndExpand"/>
+                    </StackLayout>
+                </Frame>                    
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>
