@@ -27,6 +27,7 @@ namespace C971Rosendahl.Views
                 Title = "New Assessment";
                 nameCheck = false;
                 descriptionCheck = false;
+                ToolbarItems.Remove(deleteButton);
             }
             else
             {
@@ -37,6 +38,10 @@ namespace C971Rosendahl.Views
             InitializeComponent();
             dueDate.MinimumDate = DateTime.Now;
             assessmentName.Text = currentAssessment.Name;
+            if (Title == "Edit Assessment")
+            {
+                assessmentDescription.Text = currentAssessment.Description;
+            }
             if (currentAssessment.DueDate.Date < dueDate.MinimumDate)
             {
                 currentAssessment.DueDate = dueDate.MinimumDate.Date;
@@ -45,7 +50,6 @@ namespace C971Rosendahl.Views
             {
                 dueDate.Date = currentAssessment.DueDate.Date;
             }
-            assessmentDescription.Text = currentAssessment.Description;
         }
         
         private async void SaveButton_Clicked(object sender, EventArgs e)
@@ -105,6 +109,16 @@ namespace C971Rosendahl.Views
                 {
                     descriptionCheck = false;
                 }
+            }
+        }
+
+        private async void Delete_Clicked(object sender, EventArgs e)
+        {
+            bool confirmation = await DisplayAlert("Delete Assessment?", "Are you sure you would like to delete this assessment?", "Yes", "No");
+            if (confirmation == true)
+            {
+                await DatabaseService.RemoveAssessment(currentAssessment.AssessmentId);
+                await Navigation.PopAsync();
             }
         }
     }

@@ -21,6 +21,8 @@ namespace C971Rosendahl.Views
         public Instructor currentInstructor = new Instructor();
         public List<Instructor> instructors = new List<Instructor>();
         public List<string> instructorNames = new List<string>();
+        public List<Assessment> assessments = new List<Assessment>();
+        public Assessment currentAssessment = new Assessment();
 
         public EditCourse(int id)
         {
@@ -44,6 +46,14 @@ namespace C971Rosendahl.Views
                 instructorNames.Add(instructor.Name);
             }
             selectedInstructor.ItemsSource = instructorNames;
+            assessmentsList.Children.Clear();
+            assessments.Clear();
+            assessments = await DatabaseService.GetAssessment(courseId);
+            foreach (Assessment assessment in assessments)
+            {
+                currentAssessment = assessment;
+                AddAssessment();
+            }
             if (editNew == false)
             {
                 Course course = await DatabaseService.GetSpecificCourse(courseId);
@@ -163,6 +173,79 @@ namespace C971Rosendahl.Views
                 instructorPhone.Text = currentInstructor.Phone;
                 instructorPhone.IsVisible = true;
             }
+        }
+        private void AddAssessment()
+        {
+            Frame frame = new Frame();
+            frame.Margin = new Thickness(0, 10);
+            Grid grid = new Grid();
+            ColumnDefinition column0 = new ColumnDefinition();
+            ColumnDefinition column1 = new ColumnDefinition();
+            column0.Width = new GridLength(2, GridUnitType.Star);
+            column1.Width = new GridLength(1, GridUnitType.Star);
+            grid.ColumnDefinitions.Add(column0);
+            grid.ColumnDefinitions.Add(column1);
+            Label name = new Label
+            {
+                Text = currentAssessment.Name,
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Start,
+            };
+
+            grid.Children.Add(name);
+
+            Grid startDateGrid = new Grid();
+            Grid.SetRow(startDateGrid, 1);
+            Label startDateLabel1 = new Label
+            {
+                Text = "Due Date: ",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Start,
+            };
+            startDateGrid.Children.Add(startDateLabel1);
+
+            Label startDateLabel2 = new Label
+            {
+                Text = currentAssessment.DueDate.Date.ToString("MM/dd/yy"),
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalTextAlignment = TextAlignment.Start,
+                HorizontalOptions = LayoutOptions.Start,
+            };
+            Grid.SetColumn(startDateLabel2, 1);
+            startDateGrid.Children.Add(startDateLabel2);
+            grid.Children.Add(startDateGrid);
+
+            Label edit = new Label
+            {
+                Text = "Edit",
+                FontSize = 18,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.End,
+            };
+            Grid.SetColumn(edit, 1);
+            Grid.SetRow(edit, 1);
+            TapGestureRecognizer editAssessment = new TapGestureRecognizer();
+            editAssessment.Tapped += EditAssessment_Clicked;
+            edit.GestureRecognizers.Add(editAssessment);
+            grid.Children.Add(edit);
+            frame.Content = grid;
+            assessmentsList.Children.Add(frame);
+        }
+
+        private async void EditAssessment_Clicked(object sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                Label label = (Label)sender;
+                Grid grid = (Grid)label.Parent;
+                Frame frame = (Frame)grid.Parent;
+                int id = assessmentsList.Children.IndexOf(frame);
+                currentAssessment = assessments[id];
+            }
+            await Navigation.PushAsync(new EditAssessment(currentAssessment));
         }
     }
 }

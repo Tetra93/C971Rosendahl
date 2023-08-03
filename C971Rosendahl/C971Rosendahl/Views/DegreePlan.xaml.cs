@@ -877,11 +877,19 @@ namespace C971Rosendahl.Views
             int index = instructorList.IndexOf(selection);
             if (index == 0)
             {
-                EditInstructor.instructorId = instructorList.Count + 1;
+                int lastId = -1;
+                foreach (Instructor instructor in instructors)
+                {
+                    if (instructor.InstructorId > lastId)
+                    {
+                        lastId = instructor.InstructorId;
+                    }
+                }
+                EditInstructor.instructorId = lastId + 1;
             }
             else
             {
-                EditInstructor.instructorId = index;
+                EditInstructor.instructorId = instructors[index - 1].InstructorId;
             }
             await Navigation.PushAsync(new EditInstructor());
         }

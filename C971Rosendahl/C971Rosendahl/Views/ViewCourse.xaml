@@ -184,11 +184,9 @@
                             Title="Add Assessment"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand"
-                           HorizontalOptions="CenterAndExpand">
-                    <Picker.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="AddAssessment_Clicked"/>
-                    </Picker.GestureRecognizers>
-                </Picker>
+                           HorizontalOptions="CenterAndExpand"
+                        SelectedIndexChanged="AddAssessment_Clicked"/>
+
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

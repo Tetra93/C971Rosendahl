@@ -124,6 +124,9 @@
                         </Grid>
                     </StackLayout>
                 </Frame>
+                <StackLayout x:Name="assessmentsList">
+                    
+                </StackLayout>
                 <!--<Frame Margin="0,10">
                     <Grid>
                         <StackLayout x:Name="notes">

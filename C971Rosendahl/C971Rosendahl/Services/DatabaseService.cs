@@ -108,6 +108,21 @@ namespace C971Rosendahl.Services
             }
         }
 
+        public static async Task UpdateCourseInstructor(int courseId, int instructorId)
+        {
+            await Init();
+            var courseQuery = await _db.Table<Course>()
+                .Where(i => i.CourseId == courseId)
+                .FirstOrDefaultAsync();
+
+            if (courseQuery != null)
+            {
+                courseQuery.InstructorId = instructorId;
+
+                await _db.UpdateAsync(courseQuery);
+            }
+        }
+
         public static async Task UpdateCourse(int courseId, int completionStatus)
         {
             await Init();

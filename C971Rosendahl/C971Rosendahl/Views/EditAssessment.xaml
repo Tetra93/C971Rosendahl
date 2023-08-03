@@ -4,6 +4,7 @@
              x:Class="C971Rosendahl.Views.EditAssessment">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Cancel" Clicked="CancelButton_Clicked"/>
+        <ToolbarItem x:Name="deleteButton" Text="Delete" Order="Secondary" Clicked="Delete_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
@@ -15,6 +16,7 @@
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="CenterAndExpand"/>
                         <Editor x:Name="assessmentName"
+                                Placeholder="Assessment Name"
                        FontSize="18"
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="FillAndExpand"
@@ -42,7 +44,8 @@
                                FontSize="18"
                                HorizontalOptions="CenterAndExpand"
                                VerticalOptions="CenterAndExpand"/>
-                        <Editor x:Name="assessmentDescription"                               
+                        <Editor x:Name="assessmentDescription"     
+                                Placeholder="Assessment Description"
                                FontSize="18"
                                 Unfocused="OnBlankUnfocus"/>                        
                     </StackLayout>

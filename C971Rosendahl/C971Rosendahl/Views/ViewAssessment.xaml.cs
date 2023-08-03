@@ -1,4 +1,5 @@
-﻿using System;
+﻿using C971Rosendahl.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,9 @@ namespace C971Rosendahl.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ViewAssessment : ContentPage
 	{
-		public ViewAssessment ()
+		public Assessment currentAssessment = new Assessment();
+
+		public ViewAssessment (Assessment assessment)
 		{
 			InitializeComponent ();
 		}

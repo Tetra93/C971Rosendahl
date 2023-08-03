@@ -27,6 +27,7 @@ namespace C971Rosendahl.Views
             instructor = await DatabaseService.GetInstructorById(instructorId);
             if (instructor != null)
             {
+                await DisplayAlert("Oops", $"{instructor.Name} {instructor.Phone} {instructor.EmailAddress}", "OK");
                 instructorName.Text = instructor.Name;
                 phoneNumber.Text = instructor.Phone;
                 emailAddress.Text = instructor.EmailAddress;
@@ -77,6 +78,13 @@ namespace C971Rosendahl.Views
             {
                 if (instructor != null)
                 {
+                    foreach (Course course in DegreePlan.courses)
+                    {
+                        if (course.InstructorId == instructorId)
+                        {
+                            await DatabaseService.UpdateCourseInstructor(course.CourseId, -1);
+                        }
+                    }
                     await DatabaseService.RemoveInstructor(instructorId);
                 }
                 await Navigation.PopAsync();
