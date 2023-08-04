@@ -41,6 +41,10 @@ namespace C971Rosendahl.Views
             base.OnAppearing();
             course = await DatabaseService.GetSpecificCourse(CurrentCourseId);            
             instructor = await DatabaseService.GetInstructorById(course.InstructorId);
+
+            //If no valid instructor is assigned to the course, open the edit course
+            //page for the current course to select a new instructor
+
             if (instructor == null)
             {
                 EditCourse.editNew = false;
@@ -51,6 +55,13 @@ namespace C971Rosendahl.Views
             notesList.Children.Clear();
             notes = await DatabaseService.GetNotesById(course.CourseId);
             List<Note> currentNotes = new List<Note>();
+
+            //This allows the addAssessment picker to clear its value without
+            //throwing an exception
+
+            addAssessment.SelectedIndexChanged -= AddAssessment_Clicked;
+            addAssessment.SelectedItem = null;
+            addAssessment.SelectedIndexChanged += AddAssessment_Clicked;
             assessments.Clear();
             assessmentsView.Children.Clear();
             assessments = await DatabaseService.GetAssessment(course.CourseId);
@@ -60,7 +71,6 @@ namespace C971Rosendahl.Views
                 currentAssessment = assessment;
                 AddAssessment_Clicked(null, null);
             }
-
             
             courseName.Text = course.Name;
             courseStartDate.Text = course.StartDate.Date.ToString("MM/dd/yy");
@@ -86,15 +96,7 @@ namespace C971Rosendahl.Views
             await Navigation.PushAsync(new EditCourse(CurrentCourseId));
         }
 
-        //private async void CourseDateNotifications_Clicked(object sender, EventArgs e)
-        //{
-        //    bool confirmation = await DisplayAlert("Course date alerts", "Would you like notifications regarding the end date of this course?", "Yes", "No");
-        //    if (confirmation == true)
-        //    {
-        //        await DatabaseService.UpdateCourse(course.CourseId, confirmation);
-        //        CrossLocalNotifications.Current.Show("Course status", $"{course.Name} is ending today", 5);
-        //    }
-        //}
+        //This is where course end date notifications are set.
 
         private async void CourseNotifications_Clicked(object sender, EventArgs e)
         {
@@ -119,6 +121,11 @@ namespace C971Rosendahl.Views
             }
             course = await DatabaseService.GetSpecificCourse(CurrentCourseId);
         }
+
+        //This adds notes to the list of notes on the page. I reused the event handler
+        //by giving it the condition of if the sender is not null. If it is null, 
+        //it simply adds the note to the page. If it is not null, it opens the 
+        //edit note page so you can write the details of the note.
 
         private async void AddNote_Clicked(object sender, EventArgs e)
         {
@@ -178,6 +185,9 @@ namespace C971Rosendahl.Views
             }
         }
 
+        //This is the picker options for each note. It allows you to edit and delete
+        //the note.
+
         private async void MoreOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
             Picker picker = (Picker)sender;
@@ -202,6 +212,9 @@ namespace C971Rosendahl.Views
             }
         }
 
+        //This is for the note sharing function. Each individual note has a button
+        //that allows it to be shared.
+
         private async void ShareNote_Clicked(object sender, EventArgs e)
         {
             Label share = (Label)sender;
@@ -221,6 +234,12 @@ namespace C971Rosendahl.Views
             }
         }
 
+        //This is where new assessments are added. I also reused the event handler here.
+        //If called during OnAppearing, it simple adds assessments to the assessment list.
+        //If the add assessment picker is clicked, it pops up two options: "Objective Assessment"
+        //and "Performance Assessment". The type of assessment created is determined by
+        //this selection.
+
         private void AddAssessment_Clicked(object sender, EventArgs e)
         {
             if (sender == null)
@@ -234,6 +253,10 @@ namespace C971Rosendahl.Views
                 column1.Width = new GridLength(1, GridUnitType.Star);
                 grid.ColumnDefinitions.Add(column0);
                 grid.ColumnDefinitions.Add(column1);
+                TapGestureRecognizer viewAssessment = new TapGestureRecognizer();
+                viewAssessment.Tapped += ViewAssessment_Clicked;
+                grid.GestureRecognizers.Add(viewAssessment);
+
                 Label name = new Label
                 {
                     Text = currentAssessment.Name,
@@ -244,18 +267,23 @@ namespace C971Rosendahl.Views
 
                 grid.Children.Add(name);
 
-                Label notifications = new Label
+                Label notificationOrComplete = new Label
                 {
                     Text = "Notifications",
                     FontSize = 18,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     HorizontalOptions = LayoutOptions.End,
                 };
-                Grid.SetColumn(notifications, 1);
+                Grid.SetColumn(notificationOrComplete, 1);
                 TapGestureRecognizer assessmentNotifications = new TapGestureRecognizer();
                 assessmentNotifications.Tapped += AssessmentNotifications_Clicked;
-                notifications.GestureRecognizers.Add(assessmentNotifications);
-                grid.Children.Add(notifications);
+                notificationOrComplete.GestureRecognizers.Add(assessmentNotifications);
+                grid.Children.Add(notificationOrComplete);               
+                if (currentAssessment.CompletionStatus == "Completed")
+                {
+                    notificationOrComplete.GestureRecognizers.Remove(assessmentNotifications);
+                    notificationOrComplete.Text = "Completed";
+                }
 
                 Grid startDateGrid = new Grid();
                 Grid.SetRow(startDateGrid, 1);
@@ -299,11 +327,25 @@ namespace C971Rosendahl.Views
             else
             {
                 string selection = addAssessment.SelectedItem.ToString();
+                currentAssessment = new Assessment();
+                currentAssessment.CourseId = CurrentCourseId;
                 currentAssessment.Type = selection;
-                currentAssessment.Name = "New Assessment";
+                currentAssessment.Name = string.Empty;
                 EditAssessment_Clicked(null, null);
             }
         }
+
+        //This opens the detailed assessment page.
+
+        private async void ViewAssessment_Clicked(object sender, EventArgs e)
+        {
+            Grid grid = (Grid)sender;
+            Frame frame = (Frame)grid.Parent;
+            int assessmentIndex = assessmentsView.Children.IndexOf(frame);
+            await Navigation.PushAsync(new ViewAssessment(assessments[assessmentIndex]));
+        }
+
+        //This opens the edit assessment page.
 
         private async void EditAssessment_Clicked(object sender, EventArgs e)
         {
@@ -314,11 +356,13 @@ namespace C971Rosendahl.Views
                 Frame frame = (Frame)grid.Parent;
                 int id = assessmentsView.Children.IndexOf(frame);
                 currentAssessment = assessments[id];
+                await Navigation.PushAsync(new EditAssessment(currentAssessment));
             }
-            await Navigation.PushAsync(new EditAssessment(currentAssessment));
         }
 
-        
+        //This allows you to enable and disable assessment due date notifications.
+        //Each individual assessment has a notification button tied to it.
+
         private async void AssessmentNotifications_Clicked(object sender, EventArgs e)
         {
             Label notificationLabel = (Label)sender;

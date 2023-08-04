@@ -58,6 +58,10 @@ namespace C971Rosendahl.Views
             {
                 Course course = await DatabaseService.GetSpecificCourse(courseId);
                 Instructor currentInstructor = await DatabaseService.GetInstructorById(course.InstructorId);
+
+                //This message displays if an invalid instructor is assigned to the course. This
+                //would typically only happen if the instructor data was deleted.
+
                 if (currentInstructor == null)
                 {
                     await DisplayAlert("Instructor deleted", "The instructor for this course has been removed. Please select a new instructor", "OK");
@@ -100,11 +104,14 @@ namespace C971Rosendahl.Views
             {
                 await Navigation.PopAsync();
             }
-            else
+            else if (confirmation == true && selectedInstructor.SelectedIndex == -1)
             {
                 await Navigation.PopToRootAsync();
             }
         }
+
+        //This verifies that no data blanks are empty. If all blanks are filled
+        //with valid data, then data is saved.
 
         private async void Save_Clicked(object sender, EventArgs e)
         {
@@ -130,6 +137,11 @@ namespace C971Rosendahl.Views
                 await DisplayAlert("Invalid data", "Please enter a course name and course description and select a course instructor", "OK");
             }
         }
+
+        //These are to prevent invalid start and end dates. If the start date is later than
+        //the end date or the end date is earlier than the start date, then the other
+        //changes. It changes both the current date and the minimum or maximum date
+        //to prevent future invalid date selections.
 
         private void StartDate_Changed(object sender, EventArgs e)
         {
@@ -158,7 +170,6 @@ namespace C971Rosendahl.Views
             if (selectedInstructor.SelectedIndex == 0)
             {
                 course.InstructorId = -1;
-                //instructorName.IsVisible = false;
                 instructorEmail.IsVisible = false;
                 instructorPhone.IsVisible = false;
             }
@@ -166,14 +177,13 @@ namespace C971Rosendahl.Views
             {
                 course.InstructorId = selectedInstructor.SelectedIndex;
                 currentInstructor = instructors[selectedInstructor.SelectedIndex - 1];
-                //instructorName.Text = currentInstructor.Name;
-                //instructorName.IsVisible = true;
                 instructorEmail.Text = currentInstructor.EmailAddress;
                 instructorEmail.IsVisible = true;
                 instructorPhone.Text = currentInstructor.Phone;
                 instructorPhone.IsVisible = true;
             }
         }
+
         private void AddAssessment()
         {
             Frame frame = new Frame();

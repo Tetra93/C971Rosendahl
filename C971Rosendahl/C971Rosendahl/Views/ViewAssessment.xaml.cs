@@ -1,4 +1,5 @@
 ﻿using C971Rosendahl.Models;
+using C971Rosendahl.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,57 @@ namespace C971Rosendahl.Views
 	{
 		public Assessment currentAssessment = new Assessment();
 
-		public ViewAssessment (Assessment assessment)
+		public ViewAssessment(Assessment assessment)
 		{
-			InitializeComponent ();
+			InitializeComponent();
+			currentAssessment = assessment;
+			assessmentName.Text = currentAssessment.Name;
+			dueDate.Text = currentAssessment.DueDate.ToString("MM/dd/yyyy");
+			description.Text = currentAssessment.Description;
+			if (currentAssessment.Type == "Objective Assessment")
+			{
+				startButton.Text = "Start Exam";
+			}
+			else if (currentAssessment.Type == "Performance Assessment")
+			{
+				startButton.Text = "Submit project";
+			}
+		}
+
+		private async void Button_Clicked(object sender, EventArgs e)
+		{
+
+			if (currentAssessment.CompletionStatus == "Not Completed")
+			{
+				if (startButton.Text == "Start Exam")
+				{
+					bool confirmation = await DisplayAlert("Start exam?", "Would you like to start your exam now? It is recommended that you take the exam on a computer.", "Yes", "No");
+					if (confirmation)
+					{
+						await DisplayAlert("Exam started", "There is no actual exam implemented. Click yes or no to complete.", "Yes", "No");
+						await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, false);
+						await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, "Completed");
+						await Navigation.PopAsync();
+					}
+				}
+
+				else if (startButton.Text == "Submit project")
+				{
+					bool confirmation = await DisplayAlert("Submit project?", "Are you ready to submit your project?", "Yes", "No");
+					if (confirmation)
+					{
+						await DisplayAlert("Project submitted", "Your project has been successfully submitted.", "OK");
+						await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, false);
+						await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, "Completed");
+						await Navigation.PopAsync();
+					}
+				}
+			}
+			else
+			{
+				await DisplayAlert("Assessment complete", "This assessment has already been completed", "OK");
+				await Navigation.PopAsync();
+			}
 		}
 	}
 }

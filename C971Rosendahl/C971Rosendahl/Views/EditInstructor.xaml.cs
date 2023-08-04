@@ -27,7 +27,6 @@ namespace C971Rosendahl.Views
             instructor = await DatabaseService.GetInstructorById(instructorId);
             if (instructor != null)
             {
-                await DisplayAlert("Oops", $"{instructor.Name} {instructor.Phone} {instructor.EmailAddress}", "OK");
                 instructorName.Text = instructor.Name;
                 phoneNumber.Text = instructor.Phone;
                 emailAddress.Text = instructor.EmailAddress;

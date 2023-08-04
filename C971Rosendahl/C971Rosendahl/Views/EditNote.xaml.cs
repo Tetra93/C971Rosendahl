@@ -19,8 +19,6 @@ namespace C971Rosendahl.Views
         public bool contentsCheck = false;
         public EditNote(Note note)
         {
-            //Instead of using an int, make it check for a null note.
-            //if note is null, Add Note. If note is not null, Edit note
             InitializeComponent();
             if (note == null)
             {
@@ -42,11 +40,6 @@ namespace C971Rosendahl.Views
                 noteName.Text = currentNote.Name;
                 noteContents.Text = currentNote.Contents;
             }
-            //else
-            //{
-            //    noteName.Text = "New Note";
-            //    noteContents.Text = "Contents";
-            //}
         }
 
         private async void CancelButton_Clicked(object sender, EventArgs e)
@@ -97,10 +90,5 @@ namespace C971Rosendahl.Views
                 contentsCheck = false;
             }
         }
-
-        //private void DeleteNote_Clicked(object sender, EventArgs e)
-        //{
-
-        //}
     }
 }

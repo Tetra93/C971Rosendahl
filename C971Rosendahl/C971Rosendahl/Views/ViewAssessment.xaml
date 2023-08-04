@@ -23,7 +23,12 @@
                            VerticalOptions="FillAndExpand"
                            HorizontalOptions="CenterAndExpand"/>                    
                 </Frame>
-                    
+                <Button x:Name="startButton"
+                    Text="Start Exam"
+                        FontSize="18"
+                        VerticalOptions="CenterAndExpand"
+                        HorizontalOptions="CenterAndExpand"
+                        Clicked="Button_Clicked"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

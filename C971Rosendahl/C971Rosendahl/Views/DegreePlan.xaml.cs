@@ -52,7 +52,7 @@ namespace C971Rosendahl.Views
             termList.Children.Clear();
             termCount = 0;
             Random random = new Random();
-            int notificationNum = random.Next(1000);
+            int notificationNum;
 
             //Loading sample data if this is the first time the app is run
             //Otherwise, loading currently existing data from the database
@@ -100,7 +100,7 @@ namespace C971Rosendahl.Views
             for (int i = 0; i<= assessments.Count - 1; i++)
             {
                 Assessment assessment = assessments[i];
-                if (assessment.Notifications == true && assessment.DueDate == DateTime.Now.Date) 
+                if (assessment.Notifications == true && assessment.DueDate.Date == DateTime.Now.Date) 
                 {
                     notificationNum = random.Next(1000);
                     CrossLocalNotifications.Current.Show("Assessment due today", $"{assessment.Name} is due today", notificationNum);
@@ -832,7 +832,8 @@ namespace C971Rosendahl.Views
             await Navigation.PushAsync(new EditCourse(id));
         }
 
-        //Asks for verification and deletes the course if yes
+        //Asks for verification and deletes the course if yes. Also deletes assessments
+        //that are tied to that course.
         private async void CourseDelete_Clicked(object sender, EventArgs e)
         {
             Label label = (Label)sender;
@@ -847,6 +848,13 @@ namespace C971Rosendahl.Views
                 StackLayout stackLayout = (StackLayout)frame.Parent;
                 stackLayout.Children.Remove(frame);
                 await DatabaseService.RemoveCourse(id);
+                foreach (Assessment assessment in assessments)
+                {
+                    if (assessment.CourseId == id)
+                    {
+                        await DatabaseService.RemoveAssessment(assessment.AssessmentId);
+                    }
+                }
             }
         }
 
@@ -871,6 +879,7 @@ namespace C971Rosendahl.Views
             }
         }
 
+        //This method allows you to add, edit, and remove instructor data.
         private async void EditInstructor_Clicked(object sender, EventArgs e)
         {
             string selection = await DisplayActionSheet("Select Instructor", "Cancel", null, instructorList.ToArray());

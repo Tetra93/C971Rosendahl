@@ -15,7 +15,6 @@ namespace C971Rosendahl.Services
     public static class DatabaseService
     {
         private static SQLiteAsyncConnection _db;
-        //private static SQLiteConnection _dbConnection;
 
         #region Terms
 
@@ -318,7 +317,7 @@ namespace C971Rosendahl.Services
 
         #region Assessment
 
-        public static async Task AddAssessment(int courseId, string name, string type, string description, DateTime dueDate, bool notifications, string submissionStatus, string completionStatus)
+        public static async Task AddAssessment(int courseId, string name, string type, string description, DateTime dueDate, bool notifications, string completionStatus)
         {
             await Init();
             var assessment = new Assessment()
@@ -329,7 +328,6 @@ namespace C971Rosendahl.Services
                 Description = description,
                 DueDate = dueDate,
                 Notifications = notifications,
-                SubmissionStatus = submissionStatus,
                 CompletionStatus = completionStatus
 
             };
@@ -337,7 +335,7 @@ namespace C971Rosendahl.Services
 
         }
 
-        public static async Task UpdateAssessment(int assessmentId, string name, string description, DateTime dueDate, string submissionStatus, string completionStatus)
+        public static async Task UpdateAssessment(int assessmentId, string name, string description, DateTime dueDate, string completionStatus)
         {
             await Init();
             var assessmentQuery = await _db.Table<Assessment>()
@@ -349,7 +347,6 @@ namespace C971Rosendahl.Services
                 assessmentQuery.Name = name;
                 assessmentQuery.Description = description;
                 assessmentQuery.DueDate = dueDate;
-                assessmentQuery.SubmissionStatus = submissionStatus;
                 assessmentQuery.CompletionStatus = completionStatus;
 
                 await _db.UpdateAsync(assessmentQuery);
@@ -366,6 +363,21 @@ namespace C971Rosendahl.Services
             if (assessmentQuery != null)
             {
                 assessmentQuery.Notifications = notifications;
+
+                await _db.UpdateAsync(assessmentQuery);
+            }
+        }
+
+        public static async Task UpdateAssessment(int assessmentId, string completionStatus)
+        {
+            await Init();
+            var assessmentQuery = await _db.Table<Assessment>()
+                .Where(i => i.AssessmentId == assessmentId)
+                .FirstOrDefaultAsync();
+
+            if (assessmentQuery != null)
+            {
+                assessmentQuery.CompletionStatus = completionStatus;
 
                 await _db.UpdateAsync(assessmentQuery);
             }
@@ -442,7 +454,7 @@ namespace C971Rosendahl.Services
                 EndDate = DateTime.Now.AddDays(30),
                 DateNotifications = true,
                 TermId = 1,
-                InstructorId = 3
+                InstructorId = 1
             };
 
             await _db.InsertAsync(course1);
@@ -582,8 +594,7 @@ namespace C971Rosendahl.Services
                 Type = "Objective Assesment",
                 Description = "This is an exam to demonstrate your understanding of Xamarin.Forms.",
                 DueDate = DateTime.Now,
-                Notifications = true,
-                SubmissionStatus = "Not Submitted",
+                Notifications = false,
                 CompletionStatus = "Not Completed"
             };
 
@@ -596,8 +607,7 @@ namespace C971Rosendahl.Services
                 Type = "Performance Assessment",
                 Description = "This performance assessment will demonstrate your understanding of Xamarin.Forms through the creation of your own mobile application.",
                 DueDate = DateTime.Now.AddDays(21),
-                Notifications = true,
-                SubmissionStatus = "Submitted",
+                Notifications = false,
                 CompletionStatus = "Not Completed"
             };
 
@@ -633,7 +643,6 @@ namespace C971Rosendahl.Services
             var databasePath = Path.Combine(FileSystem.AppDataDirectory, "DegreePlan.db");
 
             _db = new SQLiteAsyncConnection(databasePath);
-           // _dbConnection = new SQLiteConnection(databasePath);
 
             await _db.CreateTableAsync<Term>();
             await _db.CreateTableAsync<Course>();

@@ -22,12 +22,11 @@ namespace C971Rosendahl.Views
         public EditAssessment(Assessment assessment)
         {
             currentAssessment = assessment;
-            if (assessment.Name == "New Assessment")
+            if (assessment.Name == string.Empty)
             {
                 Title = "New Assessment";
                 nameCheck = false;
                 descriptionCheck = false;
-                ToolbarItems.Remove(deleteButton);
             }
             else
             {
@@ -54,19 +53,26 @@ namespace C971Rosendahl.Views
         
         private async void SaveButton_Clicked(object sender, EventArgs e)
         {
+            assessmentName.Unfocus();
+            assessmentDescription.Unfocus();
+
             if (Title == "New Assessment")
             {
                 if (nameCheck == true && descriptionCheck == true)
                 {
-                    await DatabaseService.AddAssessment(currentAssessment.AssessmentId, currentAssessment.Name, currentAssessment.Type, currentAssessment.Description, currentAssessment.DueDate, false, "Not Submitted", "Not Completed");
+                    await DatabaseService.AddAssessment(currentAssessment.CourseId, currentAssessment.Name, currentAssessment.Type, currentAssessment.Description, currentAssessment.DueDate, false, "Not Completed");
                     await Navigation.PopAsync();
+                }
+                else
+                {
+                    await DisplayAlert("Invalid Data", "Please enter a valid name and description", "OK");
                 }
             }
             else if (Title == "Edit Assessment")
             {
                 if (nameCheck == true && descriptionCheck == true)
                 {
-                    await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, currentAssessment.Name, currentAssessment.Description, currentAssessment.DueDate.Date, currentAssessment.SubmissionStatus, currentAssessment.CompletionStatus);
+                    await DatabaseService.UpdateAssessment(currentAssessment.AssessmentId, currentAssessment.Name, currentAssessment.Description, currentAssessment.DueDate.Date, currentAssessment.CompletionStatus);
                     await Navigation.PopAsync();
                 }
             }
@@ -88,26 +94,31 @@ namespace C971Rosendahl.Views
 
         private void OnBlankUnfocus(object sender, FocusEventArgs e)
         {
-            if (sender is Entry entry)
+            if (sender is Editor editor)
             {
-                if (!string.IsNullOrWhiteSpace(entry.Text))
+                if (editor == assessmentName)
                 {
-                    nameCheck = true;
+                    if (!string.IsNullOrWhiteSpace(assessmentName.Text))
+                    {
+                        nameCheck = true;
+                        currentAssessment.Name = assessmentName.Text;
+                    }
+                    else
+                    {
+                        nameCheck = false;
+                    }
                 }
-                else
+                if (editor == assessmentDescription)
                 {
-                    nameCheck = false;
-                }
-            }
-            else if (sender is Editor editor)
-            {
-                if (!string.IsNullOrWhiteSpace(editor.Text))
-                {
-                    descriptionCheck = true;
-                }
-                else
-                {
-                    descriptionCheck = false;
+                    if (!string.IsNullOrWhiteSpace(assessmentDescription.Text))
+                    {
+                        descriptionCheck = true;
+                        currentAssessment.Description = assessmentDescription.Text;
+                    }
+                    else
+                    {
+                        descriptionCheck = false;
+                    }
                 }
             }
         }
@@ -117,8 +128,15 @@ namespace C971Rosendahl.Views
             bool confirmation = await DisplayAlert("Delete Assessment?", "Are you sure you would like to delete this assessment?", "Yes", "No");
             if (confirmation == true)
             {
+                if (Title == "Edit Assessment")
+                {
                 await DatabaseService.RemoveAssessment(currentAssessment.AssessmentId);
                 await Navigation.PopAsync();
+                }
+                else
+                {
+                    await Navigation.PopAsync();
+                }
             }
         }
     }

@@ -24,8 +24,6 @@ namespace C971Rosendahl.Models
 
         public bool Notifications { get; set; } = false;
 
-        public string SubmissionStatus { get; set; }
-
         public string CompletionStatus { get; set; }
     }
 }

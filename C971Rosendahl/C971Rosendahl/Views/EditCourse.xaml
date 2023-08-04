@@ -31,11 +31,6 @@
                                VerticalOptions="CenterAndExpand"
                                HorizontalOptions="CenterAndExpand"/>
                         <Grid>
-                            <!--<Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>-->
-                            <!--<Grid>-->
                             <Label Text="Start Date: "
                                    FontSize="18"
                                    VerticalOptions="Start"
@@ -45,9 +40,7 @@
                                FontSize="18"
                                VerticalOptions="CenterAndExpand"
                                HorizontalOptions="Start"
-                                        DateSelected="StartDate_Changed"/>
-                            <!--</Grid>-->
-                            <!--<Grid Grid.Row="1">-->
+                                        DateSelected="StartDate_Changed"/>                          
                             <Label Text="End Date: "
                                    Grid.Row="1"                                   
                                    FontSize="18"
@@ -59,18 +52,7 @@
                                FontSize="18"
                                VerticalOptions="CenterAndExpand" 
                                HorizontalOptions="Start"
-                                        DateSelected="EndDate_Changed"/>
-                            <!--</Grid>-->
-                            <!--<Label Grid.Row="1"
-                               Grid.Column="1"
-                               Text="Notifications"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="End">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="CourseDateNotifications_Clicked"/>
-                            </Label.GestureRecognizers>
-                        </Label>-->
+                                        DateSelected="EndDate_Changed"/>                           
                         </Grid>
                     </StackLayout>
                 </Frame>
@@ -98,13 +80,7 @@
                                 FontSize="18"                                
                                 VerticalOptions="FillAndExpand"
                                 HorizontalOptions="FillAndExpand"
-                                SelectedIndexChanged="SelectedInstructor_Changed"/>
-                        <!--<Label x:Name="instructorName"
-                               Text="instructor name"
-                           FontSize="18"
-                           VerticalOptions="CenterAndExpand" 
-                           HorizontalOptions="CenterAndExpand"
-                               IsVisible="False"/>-->
+                                SelectedIndexChanged="SelectedInstructor_Changed"/>                        
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*"/>
@@ -126,76 +102,7 @@
                 </Frame>
                 <StackLayout x:Name="assessmentsList">
                     
-                </StackLayout>
-                <!--<Frame Margin="0,10">
-                    <Grid>
-                        <StackLayout x:Name="notes">
-                            <Label
-                           Text="Notes"
-                           FontSize="18"
-                           VerticalOptions="CenterAndExpand" 
-                           HorizontalOptions="CenterAndExpand"/>
-                        </StackLayout>
-                    </Grid>
-                </Frame>-->
-                <!--<Frame Margin="0,10">
-                    <Grid>
-                        <Label Text="Objective Assessment 1"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="Start"/>
-                        <Label Grid.Column="1"
-                               Text="Notifications"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="End">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="OANotifications_Clicked"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Grid.Row="1"
-                               Text="Dates"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="Start"/>
-                        <Label Grid.Row="1"
-                               Grid.Column="1"
-                               Text="Edit"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="End">
-                        </Label>
-                    </Grid>
-                </Frame>
-                <Frame Margin="0,10">
-                    <Grid>
-                        <Label Text="Performance Assessment 1"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="Start"/>
-                        <Label Grid.Column="1"
-                               Text="Notifications"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="End">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="PANotifications_Clicked"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Grid.Row="1"
-                               Text="Dates"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="Start"/>
-                        <Label Grid.Row="1"
-                               Grid.Column="1"
-                               Text="Edit"
-                               FontSize="18"
-                               VerticalOptions="CenterAndExpand" 
-                               HorizontalOptions="End">
-                        </Label>
-                    </Grid>
-                </Frame>-->
+                </StackLayout>                
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

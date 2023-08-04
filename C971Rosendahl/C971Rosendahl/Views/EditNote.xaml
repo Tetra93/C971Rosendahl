@@ -5,7 +5,6 @@
              Title="Edit Note">
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Clicked="SaveButton_Clicked"/>
-        <!--<ToolbarItem Text="Delete Note" Order="Secondary" Clicked="DeleteNote_Clicked"/>-->
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <ScrollView>
