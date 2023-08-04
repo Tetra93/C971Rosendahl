@@ -32,6 +32,11 @@ namespace C971Rosendahl.Views
 				startButton.Text = "Submit project";
 			}
 		}
+		
+		//This is what would "complete" a course if it was a real fully functional app.
+		//If it's an objective assessment, it prompts as if you are about to take an exam.
+		//If it's a performance assessment, it prompts as if you are submitting a project.
+		//"Completing" the project removes notifications for it and displays it as complete, instead.
 
 		private async void Button_Clicked(object sender, EventArgs e)
 		{

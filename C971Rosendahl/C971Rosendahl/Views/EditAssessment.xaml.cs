@@ -91,6 +91,8 @@ namespace C971Rosendahl.Views
                 await Navigation.PopAsync();
             }
         }
+        //This checks to make sure my blanks are not empty. If they are, it toggles
+        //off a flag that will not allow saving.
 
         private void OnBlankUnfocus(object sender, FocusEventArgs e)
         {
@@ -122,6 +124,10 @@ namespace C971Rosendahl.Views
                 }
             }
         }
+
+        //This deletes the current assessment. If it is an existing assessment,
+        //it is deleted and you go to the previous page. If it is not,
+        //then it just takes you to the previous page
 
         private async void Delete_Clicked(object sender, EventArgs e)
         {

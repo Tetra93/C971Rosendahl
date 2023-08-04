@@ -32,6 +32,10 @@ namespace C971Rosendahl.Views
                 emailAddress.Text = instructor.EmailAddress;
             }
         }
+        
+        //This checks for valid names, emails, and phone numbers. The email
+        //is the only one that does any kind of validation other than simply testing
+        //for null values.
 
         private async void Save_Clicked(object sender, EventArgs e)
         {
@@ -69,6 +73,10 @@ namespace C971Rosendahl.Views
                 await Navigation.PopAsync();
             }
         }
+
+        //This deletes the current instructor. If the instructor is assigned to a course,
+        //then that course is set to essentially a null instructor. The user will be 
+        //prompted to change the instructor next time they view that course.
 
         private async void Delete_Clicked(object sender, EventArgs e)
         {
