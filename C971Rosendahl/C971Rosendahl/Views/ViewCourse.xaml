@@ -121,7 +121,7 @@
                            FontSize="18"
                            VerticalOptions="CenterAndExpand"
                            HorizontalOptions="CenterAndExpand"
-                        SelectedIndexChanged="AddAssessment_Clicked"/>
+                           SelectedIndexChanged="AddAssessment_Clicked"/>
 
             </StackLayout>
         </ScrollView>

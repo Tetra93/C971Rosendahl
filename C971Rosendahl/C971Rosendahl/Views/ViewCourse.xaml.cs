@@ -356,8 +356,8 @@ namespace C971Rosendahl.Views
                 Frame frame = (Frame)grid.Parent;
                 int id = assessmentsView.Children.IndexOf(frame);
                 currentAssessment = assessments[id];
-                await Navigation.PushAsync(new EditAssessment(currentAssessment));
             }
+            await Navigation.PushAsync(new EditAssessment(currentAssessment));
         }
 
         //This allows you to enable and disable assessment due date notifications.

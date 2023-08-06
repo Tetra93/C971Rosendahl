@@ -20,6 +20,7 @@ namespace C971Rosendahl.Views
 		{
 			InitializeComponent();
 			currentAssessment = assessment;
+			Title = $"View {currentAssessment.Type}";
 			assessmentName.Text = currentAssessment.Name;
 			dueDate.Text = currentAssessment.DueDate.ToString("MM/dd/yyyy");
 			description.Text = currentAssessment.Description;
