@@ -40,7 +40,6 @@ namespace C971Rosendahl.Views
             instructors.Clear();
             instructors = await DatabaseService.GetInstructor();
             instructorNames.Clear();
-            instructorNames.Add("New Instructor");
             foreach (Instructor instructor in instructors)
             {
                 instructorNames.Add(instructor.Name);
@@ -68,7 +67,15 @@ namespace C971Rosendahl.Views
                 }
                 else
                 {
-                    selectedInstructor.SelectedIndex = course.InstructorId;
+                    for (int i = 0; i < instructors.Count; i++)
+                    {
+                        if (course.InstructorId == instructors[i].InstructorId)
+                        {
+                            currentInstructor = instructors[i];
+                            selectedInstructor.SelectedIndex = i;
+                            break;
+                        }
+                    }
                     instructorEmail.Text = currentInstructor.EmailAddress;
                     instructorEmail.IsVisible = true;
                     instructorPhone.Text = currentInstructor.Phone;
@@ -167,7 +174,7 @@ namespace C971Rosendahl.Views
 
         private void SelectedInstructor_Changed(object sender, EventArgs e)
         {
-            if (selectedInstructor.SelectedIndex == 0)
+            if (selectedInstructor.SelectedIndex == -1)
             {
                 course.InstructorId = -1;
                 instructorEmail.IsVisible = false;
@@ -175,8 +182,8 @@ namespace C971Rosendahl.Views
             }
             else
             {
-                course.InstructorId = selectedInstructor.SelectedIndex;
-                currentInstructor = instructors[selectedInstructor.SelectedIndex - 1];
+                course.InstructorId = instructors[selectedInstructor.SelectedIndex].InstructorId;
+                currentInstructor = instructors[selectedInstructor.SelectedIndex];
                 instructorEmail.Text = currentInstructor.EmailAddress;
                 instructorEmail.IsVisible = true;
                 instructorPhone.Text = currentInstructor.Phone;

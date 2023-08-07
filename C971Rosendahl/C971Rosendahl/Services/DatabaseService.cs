@@ -234,12 +234,12 @@ namespace C971Rosendahl.Services
             return instructors;
         }
 
-        public static async Task<Instructor> GetInstructorById(int id)
+        public static async Task<Instructor> GetInstructorById(int instructorId)
         {
             await Init();
 
             Instructor instructorSearch = await _db.Table<Instructor>()
-                .Where (i => i.InstructorId == id)
+                .Where (i => i.InstructorId == instructorId)
                 .FirstOrDefaultAsync();
 
             return instructorSearch;

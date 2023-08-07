@@ -882,8 +882,12 @@ namespace C971Rosendahl.Views
         //This method allows you to add, edit, and remove instructor data.
         private async void EditInstructor_Clicked(object sender, EventArgs e)
         {
-            string selection = await DisplayActionSheet("Select Instructor", "Cancel", null, instructorList.ToArray());
+            string selection = await DisplayActionSheet("Select Instructor", "Cancel", null, instructorList.ToArray());            
             int index = instructorList.IndexOf(selection);
+            if (selection == "Cancel" || index == -1)
+            {
+                return;
+            }
             if (index == 0)
             {
                 int lastId = -1;

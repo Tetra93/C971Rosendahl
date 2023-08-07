@@ -15,6 +15,7 @@ namespace C971Rosendahl.Views
 	public partial class EditInstructor : ContentPage
 	{
         public static int instructorId;
+        public static int courseId;
         public Instructor instructor = new Instructor();
 		public EditInstructor ()
 		{
@@ -50,7 +51,7 @@ namespace C971Rosendahl.Views
                     }
                     else
                     {
-                        await DatabaseService.UpdateInstructor(instructorId, instructorName.Text, emailAddress.Text, phoneNumber.Text);
+                        await DatabaseService.UpdateInstructor(instructorId, instructorName.Text, phoneNumber.Text, emailAddress.Text);
                         await Navigation.PopAsync();
                     }
                 }
