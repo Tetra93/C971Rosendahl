@@ -33,7 +33,7 @@ namespace C971Rosendahl.Views
         {
             CurrentCourseId = id;
             InitializeComponent();
-            addAssessment.ItemsSource = assessmentTypes;
+            //addAssessment.ItemsSource = assessmentTypes;
         }
 
         protected override async void OnAppearing()
@@ -59,9 +59,9 @@ namespace C971Rosendahl.Views
             //This allows the addAssessment picker to clear its value without
             //throwing an exception
 
-            addAssessment.SelectedIndexChanged -= AddAssessment_Clicked;
-            addAssessment.SelectedItem = null;
-            addAssessment.SelectedIndexChanged += AddAssessment_Clicked;
+            //addAssessment.SelectedIndexChanged -= AddAssessment_Clicked;
+            //addAssessment.SelectedItem = null;
+            //addAssessment.SelectedIndexChanged += AddAssessment_Clicked;
             assessments.Clear();
             assessmentsView.Children.Clear();
             assessments = await DatabaseService.GetAssessment(course.CourseId);
@@ -240,7 +240,7 @@ namespace C971Rosendahl.Views
         //and "Performance Assessment". The type of assessment created is determined by
         //this selection.
 
-        private void AddAssessment_Clicked(object sender, EventArgs e)
+        private async void AddAssessment_Clicked(object sender, EventArgs e)
         {
             if (sender == null)
             {
@@ -326,12 +326,30 @@ namespace C971Rosendahl.Views
             }
             else
             {
-                string selection = addAssessment.SelectedItem.ToString();
-                currentAssessment = new Assessment();
-                currentAssessment.CourseId = CurrentCourseId;
-                currentAssessment.Type = selection;
-                currentAssessment.Name = string.Empty;
-                EditAssessment_Clicked(null, null);
+                string selection = await DisplayActionSheet("Select Assessment Type", "Cancel", null, assessmentTypes.ToArray());
+                bool assessmentExists = false;
+                if (selection == "Cancel")
+                {
+                    assessmentExists = true;
+                    return;
+                }
+                foreach (Assessment assessment in assessments)
+                {
+                    if (selection == assessment.Type.ToString())
+                    {
+                        assessmentExists = true;
+                        await DisplayAlert("Invalid selection", $"Each course may only have one assessment of each type. One {selection} already exists for the current course", "OK");
+                        return;
+                    }                    
+                }
+                if (assessmentExists == false)
+                {
+                    currentAssessment = new Assessment();
+                    currentAssessment.CourseId = CurrentCourseId;
+                    currentAssessment.Type = selection;
+                    currentAssessment.Name = string.Empty;
+                    EditAssessment_Clicked(null, null);
+                }
             }
         }
 

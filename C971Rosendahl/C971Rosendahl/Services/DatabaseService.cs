@@ -591,7 +591,7 @@ namespace C971Rosendahl.Services
             {
                 CourseId = 1,
                 Name = "Objective Assessment 1",
-                Type = "Objective Assesment",
+                Type = "Objective Assessment",
                 Description = "This is an exam to demonstrate your understanding of Xamarin.Forms.",
                 DueDate = DateTime.Now,
                 Notifications = false,

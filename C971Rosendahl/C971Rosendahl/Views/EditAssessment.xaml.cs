@@ -44,6 +44,7 @@ namespace C971Rosendahl.Views
             if (currentAssessment.DueDate.Date < dueDate.MinimumDate)
             {
                 currentAssessment.DueDate = dueDate.MinimumDate.Date;
+                dueDate.Date = DateTime.Now;
             }
             else
             {

@@ -116,12 +116,12 @@
                 </Frame>
                 <StackLayout x:Name="assessmentsView">
                 </StackLayout>
-                <Picker x:Name="addAssessment"
-                            Title="Add Assessment"
+                <Button x:Name="addAssessment"
+                            Text="Add Assessment"
                            FontSize="18"
                            VerticalOptions="CenterAndExpand"
                            HorizontalOptions="CenterAndExpand"
-                           SelectedIndexChanged="AddAssessment_Clicked"/>
+                           Clicked="AddAssessment_Clicked"/>
 
             </StackLayout>
         </ScrollView>
